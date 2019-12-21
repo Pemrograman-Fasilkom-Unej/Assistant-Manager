@@ -53,6 +53,9 @@
                             <h3 class="mt-4 mb-0">Format Pengumpulan</h3>
                             <h6 class="" style="color: blue">{{ str_replace('|', ',', $task->data_types) }}</h6>
 
+                            <h3 class="mt-4 mb-0">Token</h3>
+                            <h6 class="" style="color: blue">{{ $task->token }}</h6>
+
                             <a class="btn btn-info mt-3 p-15 pl-4 pr-4 mb-3" href="javascript:void(0)"
                                data-toggle="modal" data-target="#share-modal">Share Link</a>
                         </div>
@@ -195,7 +198,7 @@
                         <!-- row -->
                         <div class="row mt-4 mb-3">
                             <!-- column -->
-                            <div class="col-4 border-right text-left">
+                            <div class="col-4 border-right">
                                 <h3 class="mb-0 font-medium">{{ $task->submissions->where('score', '<>', null)->count() }}</h3>
                                 Sudah Dinilai
                             </div>
@@ -232,7 +235,7 @@
                             <div class="comment-text w-100">
                                 <h6 class="font-medium">{{ $submission->student->name }}</h6>
                                 <span class="mb-3 d-block">{{ $submission->comment ?? 'No comment' }}</span>
-                                <div class="comment-footer">
+                                <div class="comment-footer" data-id="{{ $submission->nim }}">
                                     <span class="text-muted float-right">{{ $submission->created_at->format('F d, Y - h:i') }}</span>
                                     @if(!is_null($submission->files))
                                         <a href="{{ $submission->files }}" target="_blank">
@@ -242,19 +245,22 @@
                                         </a>
                                     @endif
                                     @if(is_null($submission->score))
-                                        <span class="label label-rounded label-primary">Pending</span>
+                                        <span class="label label-rounded label-primary pending--label">Pending</span>
                                         <span class="action-icons">
-                                            <a href="javascript:void(0)" data-toggle="modal"
-                                               data-id="{{ $submission->nim }}" data-target="#score-modal"
-                                               id="add-score-btn"><i class="ti-check"></i></a>
+                                            <a href="javascript:void(0)" data-toggle="modal" class="add-score-btn"
+                                               data-id="{{ $submission->id }}" data-target="#score-modal">
+                                                <i class="ti-check"></i>
+                                            </a>
                                         </span>
                                     @else
-                                        <span class="label label-rounded label-success">Nilai : {{ $submission->score }}</span>
+                                        <span class="label label-rounded label-success scored--label">Nilai : {{ $submission->score }}</span>
                                         <span class="action-icons">
-                                            <a href="javascript:void(0)"><i class="ti-pencil-alt"></i></a>
+                                            <a href="javascript:void(0)" data-toggle="modal" class="edit-score-btn"
+                                               data-id="{{ $submission->id }}" data-target="#score-modal">
+                                                <i class="ti-pencil-alt"></i>
+                                            </a>
                                         </span>
                                     @endif
-
                                 </div>
                             </div>
                         </div>
@@ -292,23 +298,25 @@
     <div id="score-modal" class="modal" role="dialog" aria-labelledby="score-modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="">Tambah Penilaian</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <h4 class="card-title" id="student-info"></h4>
-                    <form id="score-form">
+                <form id="score-form" method="post">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="title--">Tambah Penilaian</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="card-title" id="student-info"></h4>
+                        @csrf
+                        <input type="hidden" id="student-nim" name="nim">
                         <div class="form-group">
                             <label for="">Nilai</label>
                             <input type="number" min="0" max="100" class="form-control" name="score" id="student-score">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info waves-effect">Submit</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-info waves-effect" id="score-submit">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -400,16 +408,52 @@
                 document.execCommand('copy');
             });
 
-            $('#add-score-btn').click(function () {
+            $('.add-score-btn').click(function () {
+                $('#student-score').val('');
                 $.get({
-                    url: '{{ url('/ajax/admin/student/info') }}/' + $(this).data('id'),
+                    url: '{{ url('/ajax/admin/task/student/info') }}/' + $(this).data('id'),
                     success: (r) => {
-                        console.log(r);
-                        $('#student-info').text(r.name + " - " + r.nim);
+                        $('#student-info').text(r.student.name + " - " + r.nim);
+                        $('#student-nim').val(r.nim);
+                        $('#score-form').attr('action', '{{ route('admin.task.score.store', $task) }}')
                     }
                 })
-                // $('#student-info');
-            })
+            });
+
+            $('.edit-score-btn').click(function () {
+                $.get({
+                    url: '{{ url('/ajax/admin/task/student/info') }}/' + $(this).data('id'),
+                    success: (r) => {
+                        $('#student-info').text(r.student.name + " - " + r.nim);
+                        $('#student-nim').val(r.nim);
+                        $('#student-score').val(r.score);
+                        $('#score-form').attr('action', '{{ route('admin.task.score.store', $task) }}')
+                    }
+                })
+            });
+
+            $('#score-submit').on('click', function (e) {
+                e.preventDefault();
+                $('#score-form').ajaxSubmit((response) => {
+                    if (response.success == 0) { // IF ERROR VALIDATION
+                        $.each(response.errors, (key, val) => {
+                            $.each(val, (_key, _val) => {
+                                toastr.error(val);
+                            });
+                        });
+                    } else { // Its success
+                        $('.comment-footer[data-id="' + response.data.nim + '"]').find('.pending--label').remove();
+                        $('.comment-footer[data-id="' + response.data.nim + '"]').find('.scored--label').remove();
+                        $('.comment-footer[data-id="' + response.data.nim + '"]').prepend(
+                            '<span class="label label-rounded label-success scored--label">' +
+                            'Nilai : ' + response.data.score +
+                            '</span>'
+                        );
+                        toastr.success("Nilai " + response.data.nim + " berhasil dirubah");
+                        $('#score-modal').modal('hide');
+                    }
+                })
+            });
         });
     </script>
 @endsection

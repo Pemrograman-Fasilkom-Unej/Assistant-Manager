@@ -14,6 +14,11 @@ use Mockery\Exception;
 
 class ClassController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Classes::class, 'class');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -94,9 +99,8 @@ class ClassController extends Controller
      * @param  \App\Classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Classes $class)
     {
-        $class = Classes::findOrFail($id);
         return view('dashboard.admin.class.show', compact('class'));
     }
 
@@ -106,7 +110,7 @@ class ClassController extends Controller
      * @param  \App\Classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function edit(Classes $classes)
+    public function edit(Classes $class)
     {
         //
     }
@@ -118,7 +122,7 @@ class ClassController extends Controller
      * @param  \App\Classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Classes $classes)
+    public function update(Request $request, Classes $class)
     {
         //
     }
@@ -129,7 +133,7 @@ class ClassController extends Controller
      * @param  \App\Classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Classes $classes)
+    public function destroy(Classes $class)
     {
         //
     }

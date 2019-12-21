@@ -6,6 +6,7 @@ use App\Classes;
 use App\Http\Controllers\Controller;
 use App\Student;
 use App\Task;
+use App\TaskSubmission;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +49,7 @@ class AdminController extends Controller
                 return $q->tasks->count();
             })
             ->addColumn('action', function($q){
-                return '-';
+                return "<a class='btn btn-primary' href='". route('admin.class.show', $q) ."'>Detail</a>";
             })
             ->make(true);
     }
@@ -76,7 +77,30 @@ class AdminController extends Controller
             ->make(true);
     }
 
-    public function getStudentInfo($nim){
-        return Student::find($nim);
+    public function getClassDetail(Classes $class){
+        $class->students->map(function($q, $i){
+            $q->no = $i + 1;
+            return $q;
+        });
+        return DataTables::of($class->students)
+            ->addColumn('_name', function($q){
+                return $q->student->name;
+            })
+            ->addColumn('_jumlah_tugas', function($q)use ($class){
+                return $q->student->submissions->map(function($q) use ($class){
+                    if($q->task->class_id == $class->id){
+                        return $q;
+                    }
+                })->count();
+            })
+            ->addColumn('action', function($q){
+                return ' - ';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    public function getStudentInfo($id){
+        return TaskSubmission::with('student')->find($id);
     }
 }

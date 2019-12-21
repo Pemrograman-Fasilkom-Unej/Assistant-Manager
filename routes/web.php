@@ -31,8 +31,9 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], funct
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:admin']], function(){
         Route::get('assistants', 'AdminController@getAssistants')->name('assistant.index');
         Route::get('classes', 'AdminController@getClasses')->name('class.index');
+        Route::get('classes/{class}', 'AdminController@getClassDetail')->name('class.detail');
         Route::get('tasks', 'AdminController@getTasks')->name('task.index');
-        Route::get('student/info/{nim}', 'AdminController@getStudentInfo')->name('student.info');
+        Route::get('task/student/info/{id}', 'AdminController@getStudentInfo')->name('student.info');
     });
 });
 
@@ -48,14 +49,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     Route::post('/task/store/{class}', 'TaskController@store')
         ->middleware('can:view,class')
         ->name('task.store');
+    Route::post('/task/{task}/score/store', 'TaskController@storeScore')
+        ->middleware('can:view,task')
+        ->name('task.score.store');
 });
 
 Route::get('test', function (){
-    $students = \App\Student::get();
-    foreach ($students as $student){
-        $student->update([
-            'name' => ucwords(strtolower($student->name))
-        ]);
-    }
-    return "Done";
+    return \Illuminate\Support\Facades\Storage::disk('minio')->makeDirectory('task/911a314da634e8cf8dd16902e3fc4689');
 });

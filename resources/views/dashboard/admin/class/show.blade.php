@@ -36,7 +36,7 @@
 
                         </div>
                     </div>
-                    <button data-toggle="modal" data-target="#penilaian-modal" class="btn btn-primary mb-2"><i class="fas fa-plus"></i>Tambah Penilaian</button>
+{{--                    <button data-toggle="modal" data-target="#penilaian-modal" class="btn btn-primary mb-2"><i class="fas fa-plus"></i>Tambah Penilaian</button>--}}
                     <div class="table-responsive">
                         <table id="students-table" class="table table-striped table-bordered display">
                             <thead>
@@ -45,7 +45,6 @@
                                 <th>NIM</th>
                                 <th>Nama</th>
                                 <th>Jumlah Tugas</th>
-                                <th>Nilai</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -109,7 +108,16 @@
     @include('components.script-select2')
     <script>
         $('#students-table').DataTable({
-
+            processing: true,
+            ajax: '{{ route('ajax.admin.class.detail', $class) }}',
+            serverSide: true,
+            columns: [
+                { data: 'no' },
+                { data: 'nim' },
+                { data: '_name' },
+                { data: '_jumlah_tugas' },
+                { data: 'action' },
+            ]
         })
     </script>
 @endsection
