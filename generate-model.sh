@@ -1,0 +1,11 @@
+php artisan krlove:generate:model Classes --table-name=classes
+php artisan krlove:generate:model ClassAssistant --table-name=class_assistants
+php artisan krlove:generate:model ClassStudent --table-name=class_students
+php artisan krlove:generate:model Role --table-name=roles
+php artisan krlove:generate:model Score --table-name=scores
+php artisan krlove:generate:model Student --table-name=students
+php artisan krlove:generate:model StudentScore --table-name=student_scores
+php artisan krlove:generate:model Task --table-name=tasks
+php artisan krlove:generate:model TaskSubmission --table-name=task_submissions
+#php artisan krlove:generate:model User --table-name=users
+php artisan krlove:generate:model UserConfig --table-name=user_configs
