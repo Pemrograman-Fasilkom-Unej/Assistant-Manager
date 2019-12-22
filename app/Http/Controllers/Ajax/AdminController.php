@@ -93,8 +93,8 @@ class AdminController extends Controller
                     }
                 })->count();
             })
-            ->addColumn('action', function($q){
-                return ' - ';
+            ->addColumn('action', function($q) use ($class){
+                return "<a class='btn btn-primary' href='". route('admin.class.student.detail', ['class' => $class, 'student' => $q->student]) ."'>Detail</a>";
             })
             ->rawColumns(['action'])
             ->make(true);

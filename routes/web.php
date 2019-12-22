@@ -41,6 +41,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     Route::redirect('/', '/admin/dashboard');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     Route::resource('/class', 'ClassController');
+    Route::get('/class/{class}/{student}', 'ClassController@detailStudent')->name('class.student.detail');
     Route::resource('/assistant', 'AssistantController');
     Route::resource('/task', 'TaskController')->except(['create', 'store']);
     Route::get('/task/create/{class}', 'TaskController@create')
