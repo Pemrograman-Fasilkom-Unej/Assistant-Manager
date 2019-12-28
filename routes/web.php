@@ -53,6 +53,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     Route::post('/task/{task}/score/store', 'TaskController@storeScore')
         ->middleware('can:view,task')
         ->name('task.score.store');
+    Route::resource('/ticket', 'TicketController');
 });
 
 Route::get('test', function (){

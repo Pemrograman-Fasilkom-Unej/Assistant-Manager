@@ -22,7 +22,7 @@ class AdminController extends Controller
         });
         return DataTables::of($assistants)
             ->addColumn('action', function ($q) {
-                return "-";
+                return "<a class='btn btn-primary' href='". route('admin.assistant.show', $q) ."'>Detail</a>";
             })
             ->make(true);
     }

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -23,7 +24,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
     /**
      * The "type" of the auto-incrementing ID.
      * 
@@ -34,7 +35,7 @@ class User extends Authenticatable
     /**
      * @var array
      */
-    protected $fillable = ['role_id', 'name', 'nim', 'username', 'email', 'password', 'token', 'remember_token', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['role_id', 'name', 'nim', 'username', 'avatar', 'email', 'password', 'token', 'remember_token', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -58,6 +59,14 @@ class User extends Authenticatable
     public function tasks()
     {
         return $this->hasMany('App\Task');
+    }
+
+    public function tickets(){
+        return $this->hasMany('App\Ticket');
+    }
+
+    public function activities(){
+        return $this->hasMany('App\LogActivity', 'user_id');
     }
 
     public function is($role){
