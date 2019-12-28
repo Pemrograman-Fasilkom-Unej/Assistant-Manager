@@ -141,15 +141,15 @@ class ClassController extends Controller
     public function detailStudent(Classes $class, Student $student)
     {
         $student_detail = ClassStudent::whereClassId($class->id)->whereNim($student->nim)->firstOrFail();
-        $submissions = $student->submissions->map(function($q) use ($class){
-            if($q->task->class_id == $class->id){
+        $submissions = $student->submissions->map(function ($q) use ($class) {
+            if ($q->task->class_id == $class->id) {
                 return $q;
             }
         });
 
         $current_tasks = $submissions->pluck('task_id')->toArray();
-        $unsubmited_tasks = $class->tasks->map(function($q) use ($current_tasks){
-            if(!in_array($q->id, $current_tasks)){
+        $unsubmited_tasks = $class->tasks->map(function ($q) use ($current_tasks) {
+            if (!in_array($q->id, $current_tasks)) {
                 return $q;
             }
         })->filter();

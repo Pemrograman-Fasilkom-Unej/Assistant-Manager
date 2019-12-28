@@ -49,7 +49,7 @@ class AdminController extends Controller
                 return $q->tasks->count();
             })
             ->addColumn('action', function($q){
-                return "<a class='btn btn-primary' href='". route('admin.class.show', $q) ."'>Detail</a>";
+                return "<a class='btn btn-primary btn-sm has-ripple' href='". route('admin.class.show', $q) ."'>Detail</a>";
             })
             ->make(true);
     }
@@ -71,7 +71,7 @@ class AdminController extends Controller
                 return "<a href='$q->url' target='_blank'>$q->url</a>";
             })
             ->addColumn('action', function($q){
-                return "<a class='btn btn-primary' href='". route('admin.task.show', $q) ."'>Detail</a>";
+                return "<a class='btn btn-primary btn-sm has-ripple' href='". route('admin.task.show', $q) ."'>Detail</a>";
             })
             ->rawColumns(['_url', 'action'])
             ->make(true);

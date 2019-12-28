@@ -57,5 +57,5 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
 });
 
 Route::get('test', function (){
-    return \Illuminate\Support\Facades\Storage::disk('minio')->makeDirectory('task/911a314da634e8cf8dd16902e3fc4689');
+    return view('dashboard.admin.layouts.app');
 });

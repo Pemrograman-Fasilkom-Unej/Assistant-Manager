@@ -7,20 +7,17 @@
 @endsection
 
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-5 align-self-center">
-            <h4 class="page-title">Kelas</h4>
-            <div class="d-flex align-items-center">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.class.index') }}">Kelas</a></li>
-                        <li class="breadcrumb-item"><a
-                                    href="{{ route('admin.class.show', $class) }}">{{ $class->title }}</a></li>
-                        <li class="breadcrumb-item">{{ $student->name }}</li>
-                    </ol>
-                </nav>
-            </div>
+    <div class="col-md-12">
+        <div class="page-header-title">
+            <h5 class="m-b-10">Kelas</h5>
         </div>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a>
+            </li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.class.index') }}">Daftar Kelas</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.class.show', $class) }}">Detail Kelas - {{ $class->title }}</a></li>
+            <li class="breadcrumb-item"><a href="#!">{{ $student->name }}</a></li>
+        </ul>
     </div>
 @endsection
 
@@ -80,21 +77,14 @@
         </div>
 
         <div class="col-lg-8 col-xl-8">
-            <div class="card card-hover">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Daftar Tugas Mahasiswa di {{ $class->title }}</h5>
+                </div>
                 <div class="card-body">
-                    <div class="d-md-flex align-items-center">
-                        <div>
-                            <h4 class="card-title">Detail Mahasiswa</h4>
-                            <h5 class="card-subtitle">Daftar Tugas Mahasiswa di {{ $class->title }}</h5>
-                        </div>
-                        <div class="ml-auto d-flex no-block align-items-center">
-
-                        </div>
-                    </div>
-                    {{--                    <button data-toggle="modal" data-target="#penilaian-modal" class="btn btn-primary mb-2"><i class="fas fa-plus"></i>Tambah Penilaian</button>--}}
-                    <div class="table-responsive">
-                        <table id="students-table" class="table table-striped table-bordered display">
-                            <thead class="bg-info text-white">
+                    <div class="dt-responsive table-responsive">
+                        <table id="student-table" class="table table-striped table-bordered nowrap">
+                            <thead>
                             <tr>
                                 <th width="10%">#</th>
                                 <th>Nama Tugas</th>
@@ -113,7 +103,7 @@
                                     <td>{{ $submission->comment }}</td>
                                     <td>
                                         @if(is_null($submission->files ))
-                                            <a href="{{ $submission->files }}" target="_blank" class="btn btn-success">
+                                            <a href="{{ $submission->files }}" target="_blank" class="btn btn-success btn-sm has-ripple">
                                                 Download
                                             </a>
                                         @else
@@ -122,7 +112,7 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.task.show', $submission->task) }}"
-                                           class="btn btn-info">Tugas</a>
+                                           class="btn btn-info btn-sm has-ripple">Tugas</a>
                                     </td>
                                 </tr>
                             @empty
