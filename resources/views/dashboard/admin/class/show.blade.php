@@ -26,7 +26,7 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Daftar Kelas</h5>
+                    <h5>Daftar Mahasiswa di {{ $class->title }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="dt-responsive table-responsive">

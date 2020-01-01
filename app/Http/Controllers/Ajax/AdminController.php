@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Student;
 use App\Task;
 use App\TaskSubmission;
+use App\Ticket;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class AdminController extends Controller
         });
         return DataTables::of($assistants)
             ->addColumn('action', function ($q) {
-                return "<a class='btn btn-primary' href='". route('admin.assistant.show', $q) ."'>Detail</a>";
+                return "<a class='btn btn-sm has-ripple btn-primary' href='". route('admin.assistant.show', $q) ."'>Detail</a>";
             })
             ->make(true);
     }
@@ -102,5 +103,34 @@ class AdminController extends Controller
 
     public function getStudentInfo($id){
         return TaskSubmission::with('student')->find($id);
+    }
+
+    public function getTickets(){
+        $tickets = Ticket::orderBy('created_at')->get();
+        return DataTables::of($tickets)
+            ->addColumn('_status', function($q){
+                if($q->status == 0){
+                    return '<label class="badge badge-light-primary">Pending</label>';
+                } else if($q->status == 1){
+                    return '<label class="badge badge-light-warning">In Progress</label>';
+                } else if($q->status == 2){
+                    return '<label class="badge badge-light-success">Accepted</label>';
+                } else if($q->status == 3){
+                    return '<label class="badge badge-light-danger">Declined</label>';
+                }
+
+                return '-';
+            })
+            ->addColumn('_assistant', function($q){
+                return $q->user->name;
+            })
+            ->addColumn('_date', function($q){
+                return $q->created_at->format('F d Y');
+            })
+            ->addColumn('action', function($q){
+                return "asdasdasd";
+            })
+            ->rawColumns(['_status'])
+            ->make(true);
     }
 }

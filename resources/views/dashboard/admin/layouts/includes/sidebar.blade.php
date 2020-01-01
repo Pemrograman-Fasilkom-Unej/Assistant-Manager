@@ -44,7 +44,7 @@
                     <label>Others</label>
                 </li>
                 <li class="nav-item"><a href="{{ route('admin.ticket.index') }}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-bookmark"></i></span><span class="pcoded-mtext">Tickets</span></a></li>
-                <li class="nav-item"><a href="#" class="nav-link "><span class="pcoded-micon"><i class="feather icon-calendar"></i></span><span class="pcoded-mtext">Kalender</span></a></li>
+                <li class="nav-item"><a href="{{ route('admin.calendar.index') }}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-calendar"></i></span><span class="pcoded-mtext">Kalender</span></a></li>
                 <li class="nav-item"><a href="#" class="nav-link "><span class="pcoded-micon"><i class="feather icon-link"></i></span><span class="pcoded-mtext">Shortlink</span></a></li>
                 <li class="nav-item"><a href="#" class="nav-link "><span class="pcoded-micon"><i class="feather icon-book"></i></span><span class="pcoded-mtext">Notes</span></a></li>
                 <li class="nav-item"><a href="#" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Pengaturan</span></a></li>

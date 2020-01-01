@@ -3,130 +3,98 @@
 @section('title', 'Detail Tugas')
 
 @section('_css')
-    @include('components.style-c3_chart')
+
 @endsection
 
 @section('css')
     @include('components.style-datatables')
     <link rel="stylesheet" href="{{ asset('dist/css/countdown.css') }}">
+    <style>
+        .btn-icon {
+            width: 25px !important;
+            height: 25px !important;
+            font-size: 15px !important;
+        }
+    </style>
 @endsection
 
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-5 align-self-center">
-            <h4 class="page-title">Tugas - {{ $task->title }}</h4>
-            <div class="d-flex align-items-center">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.class.index') }}">Tugas</a></li>
-                        <li class="breadcrumb-item">Detail Tugas - {{ $task->title }}</li>
-                    </ol>
-                </nav>
-            </div>
+    <div class="col-md-12">
+        <div class="page-header-title">
+            <h5 class="m-b-10">Kelas</h5>
         </div>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a>
+            </li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.task.index') }}">Daftar Tugas</a></li>
+            <li class="breadcrumb-item"><a href="#!">Detail Tugas - {{ $task->title }}</a></li>
+        </ul>
     </div>
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-md-flex align-items-center">
-                        <div>
-                            <h4 class="card-title">Tugas {{ $task->title }}</h4>
-                            <h5 class="card-subtitle">Kelas - {{ $class->title }}</h5>
-                        </div>
-                        <div class="ml-auto d-flex no-block align-items-center">
 
-                        </div>
-                    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card support-bar overflow-hidden">
+                <div class="card-header">
+                    <h2 class="m-0">Tugas {{ $task->title }}</h2>
+                    <a href="{{ route('admin.class.show', $task->classes) }}"><span
+                                class="text-c-blue">{{ $task->classes->title }}</span></a>
+                </div>
+                <div class="card-body pb-0">
                     <div class="row">
                         <!-- column -->
                         <div class="col-lg-4">
-                            <h1 class="mb-0 mt-4">Deadline</h1>
+                            <h3 class="mb-0">Deadline</h3>
                             <div class="deadline-time"
                                  style="color: {{ $task->due_time < \Carbon\Carbon::now() ? 'red' : 'green' }}">
-
                             </div>
-                            {{--<h6 class="font-light text-muted">Deadline</h6>--}}
-                            <h3 class="mt-4 mb-0">Format Pengumpulan</h3>
-                            <h6 class="" style="color: blue">{{ str_replace('|', ',', $task->data_types) }}</h6>
+                            <h4 class="mt-4 mb-0">Format Pengumpulan</h4>
+                            <div>
+                                @foreach(explode('|', $task->data_types) as $type)
+                                    <label class="badge badge-light-primary">{{ $type }}</label>
+                                @endforeach
+                            </div>
 
-                            <h3 class="mt-4 mb-0">Token</h3>
+                            <h4 class="mt-4 mb-0">Token</h4>
                             <h6 class="" style="color: blue">{{ $task->token }}</h6>
 
-                            <a class="btn btn-info mt-3 p-15 pl-4 pr-4 mb-3" href="javascript:void(0)"
-                               data-toggle="modal" data-target="#share-modal">Share Link</a>
+                            <button type="button" class="btn btn-icon btn-success has-ripple mt-2 mb-4"
+                                    data-toggle="modal" data-target="#share-modal"><i
+                                        class="feather icon-link"></i><span class="ripple ripple-animate"
+                                                                            style="height: 45px; width: 45px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -13.875px; left: 5.25px;"></span>
+                            </button>
+                            {{--<a class="btn btn-info mt-3 p-15 pl-4 pr-4 mb-3" href="javascript:void(0)"--}}
+                            {{--data-toggle="modal" data-target="#share-modal">Share Link</a>--}}
                         </div>
                         <!-- column -->
                         <div class="col-lg-8">
-                            <div>
-                                <canvas id="line-chart" height="150"></canvas>
+                            <div id="line-chart">
+
                             </div>
                         </div>
                         <!-- column -->
                     </div>
                 </div>
-                <!-- ============================================================== -->
-                <!-- Info Box -->
-                <!-- ============================================================== -->
-                <div class="card-body border-top">
-                    <div class="row mb-0">
-                        <!-- col -->
-                        <div class="col-lg-3 col-md-6">
-                            <div class="d-flex align-items-center">
-                                <div class="mr-2">
-                                    <span class="text-cyan display-5">
-                                        <i class="mdi mdi-calendar"></i>
-                                    </span>
-                                </div>
-                                <div>
-                                    <span>Tanggal Pembuatan Tugas</span>
-                                    <h3 class="font-medium mb-0">{{ $task->created_at->format('d/m/Y') }}</h3>
-                                </div>
-                            </div>
+                <div class="card-footer bg-primary text-white">
+                    <div class="row text-center">
+                        <div class="col">
+                            <h4 class="m-0 text-white">{{ $task->created_at->format('d/m/Y') }}</h4>
+                            <span>Tanggal Pembuatan Tugas</span>
                         </div>
-                        <!-- col -->
-                        <!-- col -->
-                        <div class="col-lg-3 col-md-6">
-                            <div class="d-flex align-items-center">
-                                <div class="mr-2"><span class="text-cyan display-5"><i class="mdi mdi-clock"></i></span>
-                                </div>
-                                <div><span>Waktu Pembuatan Tugas</span>
-                                    <h3 class="font-medium mb-0">{{ $task->created_at->format('H:i') }}</h3>
-                                </div>
-                            </div>
+                        <div class="col">
+                            <h4 class="m-0 text-white">{{ $task->created_at->format('H:i') }}</h4>
+                            <span>Waktu Pembuatan Tugas</span>
                         </div>
-                        <!-- col -->
-                        <!-- col -->
-                        <div class="col-lg-3 col-md-6">
-                            <div class="d-flex align-items-center">
-                                <div class="mr-2">
-                                    <span class="text-danger display-5">
-                                        <i class="mdi mdi-calendar"></i>
-                                    </span>
-                                </div>
-                                <div><span>Tanggal Deadline Tugas</span>
-                                    <h3 class="font-medium mb-0">{{ $task->due_time->format('d/m/Y') }}</h3>
-                                </div>
-                            </div>
+                        <div class="col">
+                            <h4 class="m-0 text-white">{{ $task->due_time->format('d/m/Y') }}</h4>
+                            <span>Tanggal Deadline Tugas</span>
                         </div>
-                        <!-- col -->
-                        <!-- col -->
-                        <div class="col-lg-3 col-md-6">
-                            <div class="d-flex align-items-center">
-                                <div class="mr-2">
-                                    <span class="text-danger display-5">
-                                        <i class="mdi mdi-clock"></i>
-                                    </span>
-                                </div>
-                                <div><span>Waktu Deadline Tugas</span>
-                                    <h3 class="font-medium mb-0">{{ $task->due_time->format('H:i') }}</h3>
-                                </div>
-                            </div>
+                        <div class="col">
+                            <h4 class="m-0 text-white">{{ $task->due_time->format('H:i') }}</h4>
+                            <span>Waktu Deadline Tugas</span>
                         </div>
-                        <!-- col -->
                     </div>
                 </div>
             </div>
@@ -134,84 +102,79 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-8 col-xl-6">
-            <div class="card card-hover">
-                <div class="card-body">
-                    <div class="d-md-flex align-items-center">
-                        <div>
-                            <h4 class="card-title">Submission</h4>
-                            <h5 class="card-subtitle">Chart Pengumpulan Tugas</h5>
-                        </div>
-                        <div class="ml-auto align-items-center">
-                            <div class="dl">
+        <div class="col-sm-7">
+            <div class="card support-bar overflow-hidden">
+                <div class="card-header">
+                    <h2 class="m-0">Submission</h2>
+                    <span class="text-c-blue">Chart Pengumpulan Tugas</span>
+                </div>
+                <div class="card-body pb-0">
+                    <div class="row">
+                        <!-- column -->
+                        <div id="pie-chart-submission" class="mt-2 mb-4" style="width:100%"></div>
+                        <!-- column -->
+                    </div>
+                </div>
 
-                            </div>
+                <div class="card-footer bg-info text-white">
+                    <div class="row text-center">
+                        <div class="col">
+                            <h4 class="m-0 text-white">{{ $not_submit_count }}</h4>
+                            <span>Tidak Mengumpulkan</span>
+                        </div>
+                        <div class="col">
+                            <h4 class="m-0 text-white">{{ $submit_count }}</h4>
+                            <span>Mengumpulkan</span>
                         </div>
                     </div>
-
-                    <!-- column -->
-                    <div class="row mt-5">
-                        <!-- column -->
-                        <div class="col-lg-6">
-                            <div id="visitor" style="height:290px; width:100%;" class="mt-3"></div>
-                        </div>
-                        <!-- column -->
-                        <div class="col-lg-6">
-                            <h1 class="display-6 mb-0 font-medium">{{ number_format($submit_count / $student_count * 100, 2) }}
-                                %</h1>
-                            <span>Presentase Pengumpulan Tugas</span>
-                            <ul class="list-style-none">
-                                <li class="mt-3"><i class="fas fa-circle mr-1 text-cyan font-12"></i> Mengumpulkan
-                                    <span class="float-right">{{ $submit_count }}</span>
-                                </li>
-                                <li class="mt-3"><i class="fas fa-circle mr-1 text-danger font-12"></i> Tidak
-                                    Mengumpulkan
-                                    <span class="float-right">{{ $not_submit_count }}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- column -->
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-xl-6">
-            <div class="card card-hover">
-                <div class="card-body"
-                     style="background:url(../../assets/images/background/active-bg.png) no-repeat top center;">
-                    <div class="pt-3 text-center">
-                        <i class="mdi mdi-file-chart display-4 text-orange d-block"></i>
-                        <span class="display-4 d-block font-medium">{{ $task->submissions->count() }}</span>
-                        <span>Total Mahasiswa yang Mengumpulkan Tugas</span>
-                        <!-- Progress -->
-                        <div class="progress mt-5" style="height:4px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 33%"
-                                 aria-valuenow="{{ $task->submissions->where('score', '<>', null)->count() / $student_count * 100 }}"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                            <div class="progress-bar bg-warning" role="progressbar" style="width: 33%"
-                                 aria-valuenow="{{ $task->submissions->where('score', null)->count() / $student_count * 100 }}"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 33%"
-                                 aria-valuenow="{{ $not_submit_count / $student_count * 100 }}"
-                                 aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <!-- Progress -->
-                        <!-- row -->
-                        <div class="row mt-4 mb-3">
-                            <!-- column -->
-                            <div class="col-4 border-right">
-                                <h3 class="mb-0 font-medium">{{ $task->submissions->where('score', '<>', null)->count() }}</h3>
-                                Sudah Dinilai
-                            </div>
-                            <!-- column -->
-                            <div class="col-4 border-right">
-                                <h3 class="mb-0 font-medium">{{ $task->submissions->where('score', null)->count() }}</h3>
-                                Belum Dinilai
-                            </div>
 
-                            <div class="col-4 border-right">
-                                <h3 class="mb-0 font-medium">{{ $not_submit_count }}</h3>Tidak Mengumpulkan
-                            </div>
+        <div class="col-sm-5">
+            <div class="card bg-c-yellow text-white widget-visitor-card">
+                <div class="card-body text-center">
+                    <h2 class="text-white">{{ $task->submissions->sortByDesc('score')->first()->score }}</h2>
+                    <h6 class="text-white">Nilai Tertinggi</h6>
+                    <i class="feather icon-bar-chart"></i>
+                </div>
+            </div>
+            <div class="card bg-c-blue text-white widget-visitor-card">
+                <div class="card-body text-center">
+                    <h2 class="text-white">{{ $task->submissions->avg('score') }}</h2>
+                    <h6 class="text-white">Nilai Rata-Rata</h6>
+                    <i class="feather icon-award"></i>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-auto">
+                            <h4>Penilaian</h4>
                         </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col">
+                            <h3 class="m-0"><i
+                                        class="fas fa-circle text-success f-10 m-r-5"></i>{{ $task->submissions->where('score', '<>', null)->count() / $submit_count * 100 }}
+                                %</h3>
+                            <span class="ml-3">Sudah Dinilai</span>
+                        </div>
+                        <div class="col">
+                            <h3 class="m-0"><i
+                                        class="fas fa-circle text-danger f-10 m-r-5"></i>{{ $task->submissions->where('score', null)->count() / $submit_count * 100 }}
+                                %</h3>
+                            <span class="ml-3">Belum Dinilai</span>
+                        </div>
+                    </div>
+                    <div class="progress mt-4" style="height:8px;">
+                        <div class="progress-bar bg-success rounded mr-1" role="progressbar"
+                             style="width: {{ $task->submissions->where('score', '<>', null)->count() / $submit_count * 100 }}%;"
+                             aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-danger rounded" role="progressbar"
+                             style="width: {{ $task->submissions->where('score', null)->count() / $submit_count * 100 }}%;"
+                             aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
@@ -222,49 +185,78 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Recent Submissions</h4>
-                </div>
-                <div class="comment-widgets scrollable" style="height:560px;">
-                    <!-- Comment Row -->
-                    @foreach($task->submissions->sortByDesc('created_at') as $submission)
-                        <div class="d-flex flex-row comment-row mt-0">
-                            <div class="p-2">
-                                <img src="{{ asset('assets/images/users/1.jpg') }}" alt="user" width="50"
-                                     class="rounded-circle">
-                            </div>
-                            <div class="comment-text w-100">
-                                <h6 class="font-medium">{{ $submission->student->name }}</h6>
-                                <span class="mb-3 d-block">{{ $submission->comment ?? 'No comment' }}</span>
-                                <div class="comment-footer" data-id="{{ $submission->nim }}">
-                                    <span class="text-muted float-right">{{ $submission->created_at->format('F d, Y - h:i') }}</span>
-                                    @if(!is_null($submission->files))
-                                        <a href="{{ $submission->files }}" target="_blank">
-                                            <span class="label label-rounded label-success">
-                                                Download
-                                            </span>
-                                        </a>
-                                    @endif
-                                    @if(is_null($submission->score))
-                                        <span class="label label-rounded label-primary pending--label">Pending</span>
-                                        <span class="action-icons">
-                                            <a href="javascript:void(0)" data-toggle="modal" class="add-score-btn"
-                                               data-id="{{ $submission->id }}" data-target="#score-modal">
-                                                <i class="ti-check"></i>
-                                            </a>
-                                        </span>
-                                    @else
-                                        <span class="label label-rounded label-success scored--label">Nilai : {{ $submission->score }}</span>
-                                        <span class="action-icons">
-                                            <a href="javascript:void(0)" data-toggle="modal" class="edit-score-btn"
-                                               data-id="{{ $submission->id }}" data-target="#score-modal">
-                                                <i class="ti-pencil-alt"></i>
-                                            </a>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                    <div class="dt-responsive table-responsive">
+                        <table id="user-list-table" class="table">
+                            <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>NIM</th>
+                                <th>Nama</th>
+                                <th>File</th>
+                                <th>Comment</th>
+                                <th>Tanggal Submit</th>
+                                <th>Nilai</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($task->submissions->sortByDesc('created_at') as $submission)
+                                <tr>
+                                    <td data-order="{{ !is_null($submission->score) ? 1 : 0 }}">
+                                        @if(!is_null($submission->score))
+                                            <span class="badge badge-light-success">Done</span>
+                                        @else
+                                            <span class="badge badge-light-warning">Pending</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="d-inline-block align-middle">
+                                            <div class="d-inline-block">
+                                                <h6 class="m-b-0">{{ $submission->student->nim }}</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-inline-block align-middle">
+                                            <div class="d-inline-block">
+                                                <h6 class="m-b-0">{{ $submission->student->name }}</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if(!is_null($submission->files))
+                                            <div class="overlay-edit">
+                                                <a href="{{ $submission->files }}" target="_blank"
+                                                   class="btn btn-sm btn-icon btn-success">
+                                                    <i class="feather icon-download"></i>
+                                                </a>
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td>{{ $submission->comment ?? 'No comment' }}</td>
+                                    <td data-order="{{ $submission->created_at }}">{{ $submission->created_at->format('F d Y') }}</td>
+                                    <td>{{ $submission->score ?? ' - ' }}</td>
+                                    <td>
+                                        @if(is_null($submission->score))
+                                            <div class="overlay-edit">
+                                                <button type="button" class="btn btn-sm btn-icon btn-success add-score-btn" data-toggle="modal"
+                                                        data-id="{{ $submission->id }}" data-target="#score-modal">
+                                                    <i class="feather icon-check-circle"></i>
+                                                </button>
+                                            </div>
+                                        @else
+                                            <div class="overlay-edit">
+                                                <button type="button" class="btn btn-sm btn-icon btn-primary edit-score-btn" data-toggle="modal"
+                                                        data-id="{{ $submission->id }}" data-target="#score-modal">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -272,7 +264,7 @@
 @endsection
 
 @section('modals')
-    <div id="share-modal" class="modal" role="dialog" aria-labelledby="share-modal" aria-hidden="true">
+    <div id="share-modal" class="modal fade" role="dialog" aria-labelledby="share-modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -280,7 +272,6 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
-                    <h4 class="card-title">Bagikan Tugas</h4>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-link"></i></span>
@@ -295,7 +286,7 @@
         </div>
     </div>
 
-    <div id="score-modal" class="modal" role="dialog" aria-labelledby="score-modal" aria-hidden="true">
+    <div id="score-modal" class="modal fade" role="dialog" aria-labelledby="score-modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form id="score-form" method="post">
@@ -325,29 +316,100 @@
 @section('js')
     @include('components.script-datatables')
     @include('components.script-select2')
-    @include('components.script-c3_chart')
-    <script src="{{ asset('assets/libs/chart.js/dist/Chart.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
     <script src="{{ asset('dist/js/countdown.js') }}"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
     <script>
         $(document).ready(function () {
-            new Chart(document.getElementById("line-chart"), {
-                type: 'line',
-                data: {
-                    labels: {!! json_encode(array_keys($task_submission->toArray())) !!},
-                    datasets: [{
-                        data: {!! json_encode(array_values($task_submission->toArray())) !!},
-                        label: "Jumlah Mahasiswa",
-                        borderColor: "#07b107",
-                        fill: false
-                    }
-                    ]
-                },
-                options: {
+            $(function () {
+                var options = {
+                    chart: {
+                        height: 300,
+                        type: 'line',
+                        zoom: {
+                            enabled: false
+                        },
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        width: [5],
+                        curve: 'straight',
+                        dashArray: [0]
+                    },
+                    colors: ["#0e9e4a"],
+                    series: [{
+                        name: "Jumlah Pengumpulan",
+                        data: {!! json_encode(array_values($task_submission->toArray())) !!}
+                    }],
                     title: {
-                        display: true,
-                        text: 'Trafik pengumpulan tugas'
+                        text: 'Submission Statistic',
+                        align: 'left'
+                    },
+                    markers: {
+                        size: 0,
+
+                        hover: {
+                            sizeOffset: 6
+                        }
+                    },
+                    xaxis: {
+                        categories: {!! json_encode(array_keys($task_submission->toArray())) !!},
+                    },
+                    tooltip: {
+                        y: [{
+                            title: {
+                                formatter: function (val) {
+                                    return val + " (mahasiswa)"
+                                }
+                            }
+                        }]
+                    },
+                    grid: {
+                        borderColor: '#f1f1f1',
                     }
-                }
+                };
+                var chart = new ApexCharts(
+                    document.querySelector("#line-chart"),
+                    options
+                );
+                chart.render();
+            });
+
+            $(function () {
+                var options = {
+                    chart: {
+                        height: 320,
+                        type: 'pie',
+                    },
+                    labels: ['Mengumpulkan', 'Tidak Mengumpulkan'],
+                    series: [{{ $submit_count }}, {{ $not_submit_count }}],
+                    colors: ["#0e9e4a", "#f62d51"],
+                    legend: {
+                        show: true,
+                        position: 'bottom',
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        dropShadow: {
+                            enabled: false,
+                        }
+                    },
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }]
+                };
+                var chart = new ApexCharts(
+                    document.querySelector("#pie-chart-submission"),
+                    options
+                );
+                chart.render();
             });
 
             simplyCountdown('.deadline-time', {
@@ -372,37 +434,6 @@
 
             });
 
-            var chart = c3.generate({
-                bindto: '#visitor',
-                data: {
-                    columns: [
-                        ['Mengumpulkan', {{ $submit_count }}],
-                        ['Tidak Mengumpulkan', {{ $not_submit_count }}],
-                    ],
-
-                    type: 'donut',
-                    tooltip: {
-                        show: true
-                    }
-                },
-                donut: {
-                    label: {
-                        show: false
-                    },
-                    title: "Submission",
-                    width: 50,
-                },
-                legend: {
-                    hide: true
-                    //or hide: 'data1'
-                    //or hide: ['data1', 'data2']
-
-                },
-                color: {
-                    pattern: ['#40c4ff', '#f62d51']
-                }
-            });
-
             $('#copy-btn').click(function () {
                 $('#url-input').select();
                 document.execCommand('copy');
@@ -413,6 +444,7 @@
                 $.get({
                     url: '{{ url('/ajax/admin/task/student/info') }}/' + $(this).data('id'),
                     success: (r) => {
+                        console.log(r);
                         $('#student-info').text(r.student.name + " - " + r.nim);
                         $('#student-nim').val(r.nim);
                         $('#score-form').attr('action', '{{ route('admin.task.score.store', $task) }}')
@@ -454,6 +486,10 @@
                     }
                 })
             });
+
+            $('#user-list-table').DataTable({
+                order: [[5, 'desc']]
+            })
         });
     </script>
 @endsection

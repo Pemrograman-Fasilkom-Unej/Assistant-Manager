@@ -7,17 +7,15 @@
 @endsection
 
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-5 align-self-center">
-            <h4 class="page-title">Ticket</h4>
-            <div class="d-flex align-items-center">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Ticket</a></li>
-                    </ol>
-                </nav>
-            </div>
+    <div class="col-md-12">
+        <div class="page-header-title">
+            <h5 class="m-b-10">Kelas</h5>
         </div>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a>
+            </li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.ticket.index') }}">Daftar Ticket</a></li>
+        </ul>
     </div>
 @endsection
 
@@ -25,8 +23,10 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
+                <div class="card-header">
+                    <h4>Tickets</h4>
+                </div>
                 <div class="card-body">
-                    <h4 class="card-title">Tickets</h4>
                     <div class="row mt-5">
                         <!-- Column -->
                         <div class="col-md-6 col-lg-3 col-xlg-3">
@@ -78,135 +78,35 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td><span class="label label-warning">In Progress</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">Elegant Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">276377</a></td>
-                                <td>Elegant Admin</td>
-                                <td>Eric Pratt</td>
-                                <td>2018/05/01</td>
-                                <td>Fazz</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-danger">Closed</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">AdminX Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">1234251</a></td>
-                                <td>AdminX Admin</td>
-                                <td>Nirav Joshi</td>
-                                <td>2018/05/11</td>
-                                <td>Steve</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-success">Opened</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">Admin-Pro Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">1020345</a></td>
-                                <td>Admin-Pro</td>
-                                <td>Vishal Bhatt</td>
-                                <td>2018/04/01</td>
-                                <td>John</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-warning">In Progress</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">Elegant Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">7810203</a></td>
-                                <td>Elegant Admin</td>
-                                <td>Eric Pratt</td>
-                                <td>2018/01/01</td>
-                                <td>Fazz</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-warning">In Progress</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">AdminX Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">2103450</a></td>
-                                <td>AdminX Admin</td>
-                                <td>Nirav Joshi</td>
-                                <td>2018/05/01</td>
-                                <td>John</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-warning">In Progress</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">Admin-Pro Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">2140530</a></td>
-                                <td>Admin-Pro</td>
-                                <td>Vishal Bhatt</td>
-                                <td>2018/07/01</td>
-                                <td>Steve</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-success">Opened</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">Elegant Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">4500123</a></td>
-                                <td>Elegant Admin</td>
-                                <td>Eric Pratt</td>
-                                <td>2018/05/10</td>
-                                <td>Fazz</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-danger">Closed</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">Elegant Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">1230450</a></td>
-                                <td>Elegant Admin</td>
-                                <td>Eric Pratt</td>
-                                <td>2018/05/14</td>
-                                <td>John</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-danger">Closed</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">AdminX Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">1240503</a></td>
-                                <td>AdminX Admin</td>
-                                <td>Nirav Joshi</td>
-                                <td>2018/02/01</td>
-                                <td>Steve</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-success">Opened</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">Admin-Pro Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">1250304</a></td>
-                                <td>Admin-Pro</td>
-                                <td>Vishal Bhatt</td>
-                                <td>2018/05/21</td>
-                                <td>Fazz</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-success">Opened</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">Elegant Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">1470250</a></td>
-                                <td>Elegant Admin</td>
-                                <td>Eric Pratt</td>
-                                <td>2018/05/11</td>
-                                <td>John</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-danger">Closed</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">Admin-Pro Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">1450023</a></td>
-                                <td>Admin-Pro</td>
-                                <td>Vishal Bhatt</td>
-                                <td>2018/05/13</td>
-                                <td>Steve</td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-warning">In Progress</span></td>
-                                <td><a href="ticket-detail.html" class="font-medium link">AdminX Theme Side Menu Open OnClick</a></td>
-                                <td><a href="ticket-detail.html" class="font-bold link">1420530</a></td>
-                                <td>AdminX Admin</td>
-                                <td>Nirav Joshi</td>
-                                <td>2018/10/01</td>
-                                <td>Fazz</td>
-                            </tr>
+                            {{--<tr>--}}
+                                {{--<td><label class="badge badge-light-success">Solved</label></td>--}}
+                                {{--<td><a href="ticket-detail.html" class="font-medium link">Elegant Theme Side Menu Open OnClick</a></td>--}}
+                                {{--<td>Eric Pratt</td>--}}
+                                {{--<td>2018/05/01</td>--}}
+                                {{--<td>Fazz</td>--}}
+                            {{--</tr>--}}
+                            {{--<tr>--}}
+                                {{--<td><label class="badge badge-light-primary">Pending</label></td>--}}
+                                {{--<td><a href="ticket-detail.html" class="font-medium link">AdminX Theme Side Menu Open OnClick</a></td>--}}
+                                {{--<td>Nirav Joshi</td>--}}
+                                {{--<td>2018/05/11</td>--}}
+                                {{--<td>Steve</td>--}}
+                            {{--</tr>--}}
+                            {{--<tr>--}}
+                                {{--<td><label class="badge badge-light-danger">Canceled</label></td>--}}
+                                {{--<td><a href="ticket-detail.html" class="font-medium link">Admin-Pro Theme Side Menu Open OnClick</a></td>--}}
+                                {{--<td>Vishal Bhatt</td>--}}
+                                {{--<td>2018/04/01</td>--}}
+                                {{--<td>John</td>--}}
+                            {{--</tr>--}}
+                            {{--<tr>--}}
+                                {{--<td><label class="badge badge-light-warning">In Progress</label></td>--}}
+                                {{--<td><a href="ticket-detail.html" class="font-medium link">Elegant Theme Side Menu Open OnClick</a></td>--}}
+                                {{--<td>Eric Pratt</td>--}}
+                                {{--<td>2018/01/01</td>--}}
+                                {{--<td>Fazz</td>--}}
+                            {{--</tr>--}}
                             </tbody>
-                            <tfoot>
-                            <tr>
-                                <th>Status</th>
-                                <th>Title</th>
-                                <th>ID</th>
-                                <th>Product</th>
-                                <th>Created by</th>
-                                <th>Date</th>
-                                <th>Agent</th>
-                            </tr>
-                            </tfoot>
                         </table>
                         <ul class="pagination float-right">
                             <li class="page-item disabled">
@@ -231,16 +131,15 @@
 @section('js')
     @include('components.script-datatables')
     <script>
-        $('#task-table').DataTable({
+        $('#ticket-table').DataTable({
             serverSide: true,
             processing: true,
-            ajax: '{{ route('ajax.admin.task.index') }}',
+            ajax: '{{ route('ajax.admin.ticket.index') }}',
             columns: [
-                { data: 'no' },
-                { data: '_class' },
+                { data: '_status' },
                 { data: 'title' },
-                { data: '_url' },
-                { data: '_deadline' },
+                { data: '_assistant' },
+                { data: '_date' },
                 { data: 'action' },
             ]
         })

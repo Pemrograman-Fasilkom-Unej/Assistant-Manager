@@ -7,14 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property integer $id
  * @property integer $user_id
+ * @property string $start
+ * @property string $end
  * @property string $title
- * @property int $status
+ * @property int $url
+ * @property string $type
  * @property string $created_at
  * @property string $updated_at
  * @property string $deleted_at
  * @property User $user
  */
-class Ticket extends Model
+class Schedule extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
@@ -26,8 +29,7 @@ class Ticket extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'title', 'status'];
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['user_id', 'start', 'end', 'title', 'url', 'type', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

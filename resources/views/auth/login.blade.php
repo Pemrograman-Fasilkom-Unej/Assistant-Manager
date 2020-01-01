@@ -1,118 +1,68 @@
 <!DOCTYPE html>
-<html dir="ltr">
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
     <title>Assistant Manager - Login</title>
-    <!-- Custom CSS -->
-    <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/extra-libs/toastr/dist/build/toastr.min.css') }}" rel="stylesheet">
-    <!--[if lt IE 9]>
+    <!--[if lt IE 11]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Favicon icon -->
+    <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
+
+    <!-- vendor css -->
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+
+
+
+
 </head>
 
-<body>
-<div class="main-wrapper">
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <div class="preloader">
-        <div class="lds-ripple">
-            <div class="lds-pos"></div>
-            <div class="lds-pos"></div>
+<!-- [ signin-img ] start -->
+<div class="auth-wrapper align-items-stretch aut-bg-img">
+    <div class="flex-grow-1">
+        <div class="h-100 d-md-flex align-items-center auth-side-img">
+            <div class="col-sm-10 auth-content w-auto">
+                <img src="{{ asset('assets/images/auth/auth-logo.png') }}" alt="" class="img-fluid">
+                <h1 class="text-white my-4">Welcome Back!</h1>
+                <h4 class="text-white font-weight-normal">Signin to your account and get explore the Able pro Dashboard Template.<br/>Do not forget to play with live customizer</h4>
+            </div>
         </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Login box.scss -->
-    <!-- ============================================================== -->
-    <div class="auth-wrapper d-flex no-block justify-content-center align-items-center"
-         style="background:url(../../assets/images/big/auth-bg.jpg) no-repeat center center;">
-        <div class="auth-box">
-            <div id="loginform">
-                <div class="logo">
-                    <span class="db"><img src="{{ asset('assets/images/logo-icon.png') }}" alt="logo"/></span>
-                    <h5 class="font-medium mb-3">Sign In</h5>
-                </div>
-                <!-- Form -->
-                <div class="row">
-                    <div class="col-12">
-                        <form class="form-horizontal mt-3" id="loginform" action="{{ route('login') }}" method="post">
-                            @csrf
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1"><i class="ti-user"></i></span>
-                                </div>
-                                <input type="text" class="form-control form-control-lg" placeholder="Username"
-                                       aria-label="Username" aria-describedby="basic-addon1" name="username" required
-                                       value="{{ Request::old('username') }}">
-                            </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon2"><i class="ti-pencil"></i></span>
-                                </div>
-                                <input type="password" class="form-control form-control-lg" placeholder="Password"
-                                       aria-label="Password" aria-describedby="basic-addon1" name="password" required>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1"
-                                               name="remember">
-                                        <label class="custom-control-label" for="customCheck1">Remember me</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group text-center">
-                                <div class="col-xs-12 pb-3">
-                                    <button class="btn btn-block btn-lg btn-info" type="submit">Log In</button>
-                                </div>
-                            </div>
-                        </form>
+        <div class="auth-side-form">
+            <div class=" auth-content">
+                <img src="{{ asset('assets/images/auth/auth-logo-dark.png') }}" alt="" class="img-fluid mb-4 d-block d-xl-none d-lg-none">
+                <form action="{{ route('login') }}" method="post">
+                    @csrf
+                    <h3 class="mb-4 f-w-400">Signin</h3>
+                    <div class="form-group mb-3">
+                        <label class="floating-label" for="Email">Username</label>
+                        <input type="text" class="form-control" id="Username" placeholder="" name="username" value="{{ old('username') }}">
                     </div>
-                </div>
+                    <div class="form-group mb-4">
+                        <label class="floating-label" for="Password">Password</label>
+                        <input type="password" class="form-control" id="Password" placeholder="" name="password">
+                    </div>
+                    <div class="custom-control custom-checkbox text-left mb-4 mt-2">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
+                        <label class="custom-control-label" for="customCheck1">Save credentials.</label>
+                    </div>
+                    <button class="btn btn-block btn-primary mb-4">Signin</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
-<script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
-<!-- Bootstrap tether Core JavaScript -->
-<script src="{{ asset('assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
-<script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<!-- [ signin-img ] end -->
 
-<script src="{{ asset('assets/extra-libs/toastr/dist/build/toastr.min.js') }}"></script>
-<script src="{{ asset('assets/extra-libs/toastr/toastr-init.js') }}"></script>
+<!-- Required Js -->
+<script src="{{ asset('assets/js/vendor-all.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/ripple.js') }}"></script>
+<script src="{{ asset('assets/js/pcoded.min.js') }}"></script>
 
-<script>
-    $('[data-toggle="tooltip"]').tooltip();
-    $(".preloader").fadeOut();
-    $('#to-recover').on("click", function () {
-        $("#loginform").slideUp();
-        $("#recoverform").fadeIn();
-    });
-</script>
-@toastr_render
-<script>
-    toastr.options = {
-        "preventDuplicates": true
-    }
-    @if(count($errors) > 0)
-    @foreach($errors->all() as $error)
-    toastr.error("{{ $error }}");
-    @endforeach
-    @endif
-</script>
 </body>
 
 </html>

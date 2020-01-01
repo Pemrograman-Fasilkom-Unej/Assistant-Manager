@@ -33,6 +33,7 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], funct
         Route::get('classes', 'AdminController@getClasses')->name('class.index');
         Route::get('classes/{class}', 'AdminController@getClassDetail')->name('class.detail');
         Route::get('tasks', 'AdminController@getTasks')->name('task.index');
+        Route::get('tickets', 'AdminController@getTickets')->name('ticket.index');
         Route::get('task/student/info/{id}', 'AdminController@getStudentInfo')->name('student.info');
     });
 });
@@ -54,6 +55,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         ->middleware('can:view,task')
         ->name('task.score.store');
     Route::resource('/ticket', 'TicketController');
+    Route::resource('/calendar', 'CalendarController');
 });
 
 Route::get('test', function (){
