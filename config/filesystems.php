@@ -63,6 +63,7 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
         ],
+
         'minio' => [
             'driver' => 'minio',
             'key' => env('MINIO_ACCESS_KEY'),

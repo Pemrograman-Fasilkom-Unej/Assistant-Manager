@@ -50,6 +50,7 @@ class TaskController extends Controller
      */
     public function store(Request $request, Classes $class)
     {
+        return $request;
         $datatypes = ['zip', 'pdf', 'docx', 'rar', 'txt'];
         $this->validate($request, [
             'title' => 'required|min:5|max:64',

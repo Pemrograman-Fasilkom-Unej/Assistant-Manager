@@ -14,7 +14,7 @@
         <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a>
             </li>
-            <li class="breadcrumb-item"><a href="#!">Daftar Tugas</a></li>
+            <li class="breadcrumb-item"><a href="#!">Tugas</a></li>
         </ul>
     </div>
 @endsection

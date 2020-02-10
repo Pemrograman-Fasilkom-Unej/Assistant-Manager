@@ -133,4 +133,8 @@ class AdminController extends Controller
             ->rawColumns(['_status'])
             ->make(true);
     }
+
+    public function uploadFile(Request $request){
+        return $request;
+    }
 }

@@ -35,6 +35,7 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], funct
         Route::get('tasks', 'AdminController@getTasks')->name('task.index');
         Route::get('tickets', 'AdminController@getTickets')->name('ticket.index');
         Route::get('task/student/info/{id}', 'AdminController@getStudentInfo')->name('student.info');
+        Route::post('file/upload', 'AdminController@uploadFile')->name('file.upload');
     });
 });
 
@@ -59,5 +60,5 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
 });
 
 Route::get('test', function (){
-    return view('dashboard.admin.layouts.app');
+    return \App\AssistantShortlink::getNotes();
 });
