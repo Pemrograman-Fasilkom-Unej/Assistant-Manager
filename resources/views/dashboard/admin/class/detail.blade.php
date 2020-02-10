@@ -1,6 +1,6 @@
 @extends('dashboard.admin.layouts.app')
 
-@section('title', 'Dashboard')
+    @section('title', 'Kelas ' . $class->name)
 
 @section('css')
 

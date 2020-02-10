@@ -58,6 +58,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     Route::resource('/calendar', 'CalendarController');
 });
 
+Route::get('/task/{token}', 'TaskController@show')->name('task.show');
+Route::post('/task/{token}', 'TaskController@uploadSubmission')->name('task.upload');
+Route::post('/task/{token}/check', 'TaskController@checkStudent')->name('task.check');
+
+
 Route::get('test', function (){
-    return view('dashboard.admin.layouts.app');
+    $task = \App\Task::first();
+    return $task->file_type_format;
 });
