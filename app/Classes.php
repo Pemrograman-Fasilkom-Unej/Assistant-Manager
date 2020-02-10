@@ -28,7 +28,7 @@ class Classes extends Model
     /**
      * @var array
      */
-    protected $fillable = ['title', 'semester', 'year', 'status', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['title', 'semester', 'year', 'day', 'time', 'status', 'created_at', 'updated_at', 'deleted_at'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**

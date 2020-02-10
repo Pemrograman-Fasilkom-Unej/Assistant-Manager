@@ -50,14 +50,23 @@ class AdminController extends Controller
                 return $q->tasks->count();
             })
             ->addColumn('action', function($q){
-                return "<a class='btn btn-primary btn-sm has-ripple' href='". route('admin.class.show', $q) ."'>Detail</a>";
+                if($q->status === 0){
+                    $status = "<button class='btn btn-success btn-sm has-ripple' onclick='enableClass($q->id)'>Aktifkan</button>";
+                } else {
+                    $status = "<button class='btn btn-danger btn-sm has-ripple' onclick='disableClass($q->id)'>Nonaktifkan</button>";
+                }
+                return "
+                    <a class='btn btn-primary btn-sm has-ripple' href='". route('admin.class.show', $q) ."'>Detail</a>
+                    <a class='btn btn-info btn-sm has-ripple' href='". route('admin.class.edit', $q) ."'>Edit</a>
+                    $status    
+                ";
             })
             ->make(true);
     }
 
     public function getTasks(Request $request){
         $my_classes = Auth::user()->classes->pluck('class_id')->toArray();
-        $tasks = Task::whereIn('class_id', $my_classes)->get()->map(function($q, $i){
+        $tasks = Task::get()->map(function($q, $i){
             $q->no = $i + 1;
             return $q;
         });

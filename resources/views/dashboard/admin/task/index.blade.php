@@ -29,7 +29,7 @@
                         <button class="btn btn-danger btn-sm dropdown-toggle has-ripple" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span><i class="feather icon-plus"></i></span> Tambah Tugas<span class="ripple ripple-animate" style="height: 99.7813px; width: 99.7813px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -29.2657px; left: -15.1563px;"></span></button>
                         <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 43px, 0px); top: 0px; left: 0px; will-change: transform;">
                             @foreach($classes as $class)
-                                <a class="dropdown-item" href="{{ route('admin.task.create', $class->classes) }}">{{ $class->classes->title }}</a>
+                                <a class="dropdown-item" href="{{ route('admin.task.create', $class) }}">{{ $class->title }}</a>
                             @endforeach
                         </div>
                     </div>

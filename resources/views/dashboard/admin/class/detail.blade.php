@@ -1,6 +1,6 @@
 @extends('dashboard.admin.layouts.app')
 
-@section('title', 'Dashboard')
+    @section('title', 'Kelas ' . $class->name)
 
 @section('css')
 
@@ -102,8 +102,8 @@
                                     <td>{{ $submission->score }}</td>
                                     <td>{{ $submission->comment }}</td>
                                     <td>
-                                        @if(is_null($submission->files ))
-                                            <a href="{{ $submission->files }}" target="_blank" class="btn btn-success btn-sm has-ripple">
+                                        @if(!is_null($submission->files ))
+                                            <a href="{{ route('admin.task.submission.download', $submission) }}" target="_blank" class="btn btn-success btn-sm has-ripple">
                                                 Download
                                             </a>
                                         @else

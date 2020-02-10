@@ -35,7 +35,68 @@
 @section('content')
 
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body bg-c-green" id="timer-body">
+                    <div class="counter text-center">
+                        <h4 id="timer" class="text-white m-0"></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-lg-12 task-detail-right">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Tugas - {{ $task->title }}</h5>
+                    <p class="text-c-red"><b>{{ $task->token }}</b></p>
+                </div>
+                <div class="card-body task-details">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td><i class="far fa-calendar-alt"></i> Dibuat :</td>
+                            <td class="text-right">{{ $task->created_at->format('d M Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="far fa-clock"></i> Dibuat :</td>
+                            <td class="text-right">{{ $task->created_at->format('H:i:s') }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="far fa-calendar-times"></i> Deadline:</td>
+                            <td class="text-right">{{ $task->due_time->format('d M Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="far fa-clock"></i> Deadline:</td>
+                            <td class="text-right">{{ $task->due_time->format('H:i:s') }}</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-file"></i> Format Pengumpulan:</td>
+                            <td class="text-right">
+                                @foreach(explode('|', $task->data_types) as $type)
+                                    <label class="badge badge-light-primary">{{ $type }}</label>
+                                @endforeach
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-link"></i> Link:</td>
+                            <td class="text-right">
+                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#share-modal">Show</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-plus"></i> Edit:</td>
+                            <td class="text-right">
+                                <a class="btn btn-sm btn-info text-white" href="{{ route('admin.task.edit', $task) }}">Edit</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-xl-8 col-lg-12">
             <div class="card support-bar overflow-hidden">
                 <div class="card-header">
                     <h2 class="m-0">Tugas {{ $task->title }}</h2>
@@ -45,31 +106,7 @@
                 <div class="card-body pb-0">
                     <div class="row">
                         <!-- column -->
-                        <div class="col-lg-4">
-                            <h3 class="mb-0">Deadline</h3>
-                            <div class="deadline-time"
-                                 style="color: {{ $task->due_time < \Carbon\Carbon::now() ? 'red' : 'green' }}">
-                            </div>
-                            <h4 class="mt-4 mb-0">Format Pengumpulan</h4>
-                            <div>
-                                @foreach(explode('|', $task->data_types) as $type)
-                                    <label class="badge badge-light-primary">{{ $type }}</label>
-                                @endforeach
-                            </div>
-
-                            <h4 class="mt-4 mb-0">Token</h4>
-                            <h6 class="" style="color: blue">{{ $task->token }}</h6>
-
-                            <button type="button" class="btn btn-icon btn-success has-ripple mt-2 mb-4"
-                                    data-toggle="modal" data-target="#share-modal"><i
-                                        class="feather icon-link"></i><span class="ripple ripple-animate"
-                                                                            style="height: 45px; width: 45px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -13.875px; left: 5.25px;"></span>
-                            </button>
-                            {{--<a class="btn btn-info mt-3 p-15 pl-4 pr-4 mb-3" href="javascript:void(0)"--}}
-                            {{--data-toggle="modal" data-target="#share-modal">Share Link</a>--}}
-                        </div>
-                        <!-- column -->
-                        <div class="col-lg-8">
+                        <div class="col-lg-12">
                             <div id="line-chart">
 
                             </div>
@@ -134,7 +171,7 @@
         <div class="col-sm-5">
             <div class="card bg-c-yellow text-white widget-visitor-card">
                 <div class="card-body text-center">
-                    <h2 class="text-white">{{ $task->submissions->sortByDesc('score')->first()->score }}</h2>
+                    <h2 class="text-white">{{ $task->submissions->count() === 0 ? 0 : $task->submissions->sortByDesc('score')->first()->score }}</h2>
                     <h6 class="text-white">Nilai Tertinggi</h6>
                     <i class="feather icon-bar-chart"></i>
                 </div>
@@ -156,24 +193,24 @@
                     </div>
                     <div class="row mt-4">
                         <div class="col">
-                            <h3 class="m-0"><i
-                                        class="fas fa-circle text-success f-10 m-r-5"></i>{{ $task->submissions->where('score', '<>', null)->count() / $submit_count * 100 }}
-                                %</h3>
+                            <h3 class="m-0">
+                                <i class="fas fa-circle text-success f-10 m-r-5"></i>{{ $task->submissions->count() === 0 ? 0 : $task->submissions->where('score', '<>', null)->count() / $submit_count * 100 }}%
+                            </h3>
                             <span class="ml-3">Sudah Dinilai</span>
                         </div>
                         <div class="col">
                             <h3 class="m-0"><i
-                                        class="fas fa-circle text-danger f-10 m-r-5"></i>{{ $task->submissions->where('score', null)->count() / $submit_count * 100 }}
+                                        class="fas fa-circle text-danger f-10 m-r-5"></i>{{ $task->submissions->count() === 0 ? 0 : $task->submissions->where('score', null)->count() / $submit_count * 100 }}
                                 %</h3>
                             <span class="ml-3">Belum Dinilai</span>
                         </div>
                     </div>
                     <div class="progress mt-4" style="height:8px;">
                         <div class="progress-bar bg-success rounded mr-1" role="progressbar"
-                             style="width: {{ $task->submissions->where('score', '<>', null)->count() / $submit_count * 100 }}%;"
+                             style="width: {{ $task->submissions->count() === 0 ? 0 : $task->submissions->where('score', '<>', null)->count() / $submit_count * 100 }}%;"
                              aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
                         <div class="progress-bar bg-danger rounded" role="progressbar"
-                             style="width: {{ $task->submissions->where('score', null)->count() / $submit_count * 100 }}%;"
+                             style="width: {{ $task->submissions->count() === 0 ? 0 : $task->submissions->where('score', null)->count() / $submit_count * 100 }}%;"
                              aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
@@ -226,7 +263,8 @@
                                     <td>
                                         @if(!is_null($submission->files))
                                             <div class="overlay-edit">
-                                                <a href="{{ $submission->files }}" target="_blank"
+
+                                                <a href="{{ route('admin.task.submission.download', $submission) }}" target="_blank"
                                                    class="btn btn-sm btn-icon btn-success">
                                                     <i class="feather icon-download"></i>
                                                 </a>
@@ -265,11 +303,11 @@
 
 @section('modals')
     <div id="share-modal" class="modal fade" role="dialog" aria-labelledby="share-modal" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="penilaian-modal">Bagikan Tugas</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Bagikan Tugas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
@@ -287,7 +325,7 @@
     </div>
 
     <div id="score-modal" class="modal fade" role="dialog" aria-labelledby="score-modal" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <form id="score-form" method="post">
                     <div class="modal-header">
@@ -305,7 +343,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-info waves-effect" id="score-submit">Submit</button>
+                        <button type="button" class="btn btn-primary waves-effect" id="score-submit">Submit</button>
                     </div>
                 </form>
             </div>
@@ -412,28 +450,6 @@
                 chart.render();
             });
 
-            simplyCountdown('.deadline-time', {
-                year: {{ $task->due_time->format('Y') }},
-                month: {{ $task->due_time->format('m') }},
-                day: {{ $task->due_time->format('d') }},
-                hours: {{ $task->due_time->format('H') }},
-                minutes: {{ $task->due_time->format('i') }},
-                seconds: {{ $task->due_time->format('s') }},
-                words: {
-                    days: 'Hari',
-                    hours: 'Jam',
-                    minutes: 'Menit',
-                    seconds: 'Detik',
-                },
-                onEnd: () => {
-                    $('.deadline-time').css('color', 'red');
-                },
-                plural: false,
-                inline: true,
-                refresh: 1000,
-
-            });
-
             $('#copy-btn').click(function () {
                 $('#url-input').select();
                 document.execCommand('copy');
@@ -444,7 +460,6 @@
                 $.get({
                     url: '{{ url('/ajax/admin/task/student/info') }}/' + $(this).data('id'),
                     success: (r) => {
-                        console.log(r);
                         $('#student-info').text(r.student.name + " - " + r.nim);
                         $('#student-nim').val(r.nim);
                         $('#score-form').attr('action', '{{ route('admin.task.score.store', $task) }}')
@@ -470,7 +485,7 @@
                     if (response.success == 0) { // IF ERROR VALIDATION
                         $.each(response.errors, (key, val) => {
                             $.each(val, (_key, _val) => {
-                                toastr.error(val);
+                                showNotification(val, "error");
                             });
                         });
                     } else { // Its success
@@ -481,7 +496,7 @@
                             'Nilai : ' + response.data.score +
                             '</span>'
                         );
-                        toastr.success("Nilai " + response.data.nim + " berhasil dirubah");
+                        showNotification("Nilai " + response.data.nim + " berhasil dirubah", "success");
                         $('#score-modal').modal('hide');
                     }
                 })
@@ -491,5 +506,38 @@
                 order: [[5, 'desc']]
             })
         });
+    </script>
+
+    <script>
+        // Set the date we're counting down to
+        var d = new Date("{{ $task->due_time }}");
+        var countDownDate = new Date(d).getTime();
+
+        // Update the count down every 1 second
+        var x = setInterval(function() {
+
+            // Get todays date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            var distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Output the result in an element with id="demo"
+            document.getElementById("timer").innerHTML = "<b>" + days + "</b>Hari : <b>" + hours + "</b>Jam : <b>" +
+                minutes + "</b>Menit : <b>" + seconds + "</b>Detik ";
+
+            // If the count down is over, write some text
+            if (distance < 0) {
+                clearInterval(x);
+                $('#timer').text("Waktu Habis");
+                $('#timer-body').removeClass('bg-c-green').addClass('bg-c-red');
+            }
+        }, 1000);
     </script>
 @endsection

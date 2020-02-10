@@ -63,5 +63,6 @@ class AssistantShortlink
                 'secret_key' => $secret_key
             ]
         ]);
+        return env('SHORTLINK_URL', '') . 'link/' .  json_decode($response->getBody()->getContents())->link->ShortUrl;
     }
 }

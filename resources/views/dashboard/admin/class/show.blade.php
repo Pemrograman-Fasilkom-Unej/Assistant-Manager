@@ -26,7 +26,14 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Daftar Mahasiswa di {{ $class->title }}</h5>
+                    <div class="row align-items-center m-l-0">
+                        <div class="col-sm-6">
+                            <h5>Daftar Mahasiswa di {{ $class->title }}</h5>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <button class="btn btn-success btn-sm btn-round has-ripple" data-toggle="modal" data-target="#modal-add-student"><i class="feather icon-plus"></i> Tambah Mahasiswa<span class="ripple ripple-animate" style="height: 144.797px; width: 144.797px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -58.3985px; left: -28.6016px;"></span></button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="dt-responsive table-responsive">
@@ -62,6 +69,30 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('modals')
+    <div id="modal-add-student" class="modal fade" role="dialog" aria-labelledby="modal-add-student" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Tambah Mahasiswa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin.class.add-student', $class) }}" method="post">
+                        @csrf
+                        <div class="form-group">
+                            <label for="assistants-option">Daftar Mahasiswa</label>
+                            <textarea class="form-control" rows="3" name="students" placeholder="List Nim">{{ old('students') }}</textarea>
+                            <small id="textHelp" class="form-text text-muted">List NIM pada kelas tersebut dipisahkan oleh baris baru</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -50,6 +50,16 @@
             </div>
         </div>
     </div>
+
+    <form action="{{ route('admin.class.enable') }}" method="post" id="enable-form">
+        @csrf
+        <input type="hidden" id="enable-class-id" name="id">
+    </form>
+
+    <form action="{{ route('admin.class.disable') }}" method="post" id="disable-form">
+        @csrf
+        <input type="hidden" id="disable-class-id" name="id">
+    </form>
 @endsection
 
 @section('js')
@@ -66,6 +76,17 @@
                 {data: '_task_count'},
                 {data: 'action'},
             ]
-        })
+        });
+
+        function enableClass(id) {
+            $('#enable-class-id').val(id);
+            $('#enable-form').submit();
+        }
+
+        function disableClass(id) {
+            $('#disable-class-id').val(id);
+            $('#disable-form').submit();
+        }
     </script>
+
 @endsection

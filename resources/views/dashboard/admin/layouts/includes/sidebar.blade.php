@@ -32,8 +32,8 @@
                     </a>
                     <ul class="pcoded-submenu">
                             <li><a href="{{ route('admin.class.index') }}">Kelas</a></li>
-                        @foreach(Auth::user()->classes as $class)
-                            <li><a href="{{ route('admin.class.show', $class) }}">{{ $class->classes->title }}</a></li>
+                        @foreach(\App\Classes::get() as $class)
+                            <li><a href="{{ route('admin.class.show', $class) }}">{{ $class->title }}</a></li>
                         @endforeach
                     </ul>
                 </li>

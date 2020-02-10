@@ -10,8 +10,8 @@
     <!-- Meta -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="description" content=""/>
     <meta name="keywords" content="">
     <!-- Favicon icon -->
     <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
@@ -96,6 +96,17 @@
 <script src="{{ asset('assets/js/ripple.js') }}"></script>
 <script src="{{ asset('assets/js/pcoded.min.js') }}"></script>
 <script src="{{ asset('assets/js/menu-setting.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/bootstrap-notify.min.js') }}"></script>
+<script src="{{ asset('assets/js/tools.js') }}"></script>
+<script>
+    @if(Session::has('success'))
+    showNotification("{{ \Illuminate\Support\Facades\Session::get('success') }}", "success");
+    @endif
+
+    @if(Session::has('errors'))
+    showNotification("{{ \Illuminate\Support\Facades\Session::get('errors') }}", "danger");
+    @endif
+</script>
 @yield('js')
 </body>
 </html>

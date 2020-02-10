@@ -1,11 +1,9 @@
 @extends('dashboard.admin.layouts.app')
 
-@section('title', 'Tambah Tugas')
+@section('title', 'Edit Tugas')
 
 @section('_css')
     <link rel="stylesheet" href="{{ asset('assets/css/summernote-bs4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/plugins/daterangepicker.css') }}">
-
 @endsection
 
 @section('css')
@@ -21,7 +19,7 @@
             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a>
             </li>
             <li class="breadcrumb-item"><a href="{{ route('admin.task.index') }}">Tugas</a></li>
-            <li class="breadcrumb-item"><a href="#!">Tambah Tugas</a></li>
+            <li class="breadcrumb-item"><a href="#!">Edit Tugas</a></li>
         </ul>
     </div>
 @endsection
@@ -31,34 +29,24 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Tambahkan Tugas</h5>
+                    <h5>Edit Tugas</h5>
                 </div>
                 <div class="card-body">
-                    <form class="" method="post" action="{{ route('admin.task.store', $class) }}">
+                    <form class="" method="post" action="{{ route('admin.task.update', $task) }}">
                         @csrf
-                        <div class="form-group fill">
-                            <label class="floating-label" for="name">Nama Tugas</label>
-                            <input type="text" class="form-control" id="name" aria-describedby="Nama Tugas"
-                                   placeholder="Masukan Nama Tugas" name="title" required value="{{ old('title') }}">
-                        </div>
+                        @method('put')
                         <div class="form-group fill">
                             <label for="description">Deskripsi</label>
-                            <textarea name="description" id="description">{{ old('description') }}</textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="deadline">Deadline</label>
-                            <input type="text" id="deadline" class="form-control" value="{{ old('deadline') }}"
-                                   name="deadline"
-                                   placeholder="{{ \Carbon\Carbon::now()->format('d F Y - h:i') }}">
+                            <textarea name="description" id="description">{{ $task->description }}</textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="assistants-option">Tipe Data</label>
+                            @php($types = explode('|', $task->data_types))
                             @foreach($datatypes as $index => $datatype)
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input options-" value="{{ $datatype }}"
-                                           id="datatype-{{ $index }}" required name="datatypes[]">
+                                    <input type="checkbox" class="custom-control-input options-" value="{{ $datatype }}" {{ in_array($datatype, $types) ? 'checked' : ''}}
+                                           id="datatype-{{ $index }}" name="datatypes[]">
                                     <label class="custom-control-label"
                                            for="datatype-{{ $index }}">{{ $datatype }}</label>
                                 </div>
@@ -74,22 +62,8 @@
 
 @section('js')
     <script src="{{ asset('assets/js/summernote-bs4.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/daterangepicker.js') }}"></script>
     <script>
         $(document).ready(function () {
-
-            $('input[name="deadline"]').daterangepicker({
-                timePicker: true,
-                singleDatePicker: true,
-                showDropdowns: true,
-                locale: {
-                    format: 'Y-M-D h:mm'
-                },
-                minYear: 1901,
-                maxYear: parseInt(moment().format('YYYY'),10)
-            });
-
             $.ajax({
                 url: 'https://api.github.com/emojis',
                 async: false

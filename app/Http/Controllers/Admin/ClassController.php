@@ -42,11 +42,20 @@ class ClassController extends Controller
     public function create()
     {
         $years = [];
+        $days = [
+            "Minggu",
+            "Senin",
+            "Selasa",
+            "Rabu",
+            "Kamis",
+            "Jumat",
+            "Sabtu"
+        ];
         for ($i = 0; $i < 5; $i++) {
             array_push($years, date('Y') - $i);
         }
         $assistants = User::whereRoleId(2)->get();
-        return view('dashboard.admin.class.create', compact('years', 'assistants'));
+        return view('dashboard.admin.class.create', compact('years', 'assistants', 'days'));
     }
 
     /**
@@ -60,12 +69,14 @@ class ClassController extends Controller
         $this->validate($request, [
             'title' => 'required|min:6|max:32',
             'year' => 'required',
+            'day' => 'required|min:0|max:6',
             'semester' => 'required',
             'assistants' => 'required',
-            'students' => 'required'
+            'students' => 'required',
+            'time' => 'required'
         ]);
 
-        $request->request->set('status', 0);
+        $request->request->set('status', 1);
         try {
             DB::beginTransaction();
             $class = Classes::create($request->all());
@@ -83,8 +94,7 @@ class ClassController extends Controller
             }
 
             DB::commit();
-            toastr()->success("Kelas berhasil ditambahkan");
-            return redirect()->route('admin.class.index');
+            return redirect()->route('admin.class.index')->with('success', "Kelas Berhasil Ditambahkan");
         } catch (Exception $exception) {
             DB::rollBack();
             dd($exception->getMessage());
@@ -112,7 +122,21 @@ class ClassController extends Controller
      */
     public function edit(Classes $class)
     {
-        //
+        $years = [];
+        $days = [
+            "Minggu",
+            "Senin",
+            "Selasa",
+            "Rabu",
+            "Kamis",
+            "Jumat",
+            "Sabtu"
+        ];
+        for ($i = 0; $i < 5; $i++) {
+            array_push($years, date('Y') - $i);
+        }
+        $assistants = User::whereRoleId(2)->get();
+        return view('dashboard.admin.class.edit', compact('class', 'years', 'days', 'assistants'));
     }
 
     /**
@@ -124,7 +148,33 @@ class ClassController extends Controller
      */
     public function update(Request $request, Classes $class)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required|min:6|max:32',
+            'year' => 'required',
+            'day' => 'required|min:0|max:6',
+            'semester' => 'required',
+            'assistants' => 'required',
+            'time' => 'required'
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $class->update($request->all());
+            $class->assistants()->delete();
+            foreach ($request->assistants as $assistant) {
+                ClassAssistant::create([
+                    'assistant_id' => $assistant,
+                    'class_id' => $class->id
+                ]);
+            }
+            DB::commit();
+            return redirect()->route('admin.class.index')->with('success', "Kelas Berhasil Diubah");
+        } catch (Exception $exception) {
+            DB::rollBack();
+            dd($exception->getMessage());
+            toastr()->error($exception->getMessage());
+            return redirect()->back()->withInput($request->all());
+        }
     }
 
     /**
@@ -136,6 +186,44 @@ class ClassController extends Controller
     public function destroy(Classes $class)
     {
         //
+    }
+
+    public function disableClass(Request $request){
+        $class = Classes::findOrFail($request->id);
+        $class->update([
+            'status' => 0
+        ]);
+
+        return redirect()->back()->with('success', "Kelas berhasil dinonaktifkan");
+    }
+
+    public function enableClass(Request $request){
+        $class = Classes::findOrFail($request->id);
+        $class->update([
+            'status' => 1
+        ]);
+
+        return redirect()->back()->with('success', "Kelas berhasil diaktifkan");
+    }
+
+    public function addStudent(Classes $class, Request $request){
+        $this->validate($request, [
+            'students' => 'required'
+        ]);
+
+        try {
+            DB::beginTransaction();
+            foreach (array_unique(explode("\n", $request->students)) as $student) {
+                $class->students()->where('nim', trim($student))->firstOrCreate([
+                    'nim' => trim($student)
+                ]);
+            }
+            DB::commit();
+        } catch (\Exception $exception){
+            DB::rollBack();
+            dd($exception);
+        }
+        return redirect()->back()->with('success', "Mahasiswa berhasil ditambah");
     }
 
     public function detailStudent(Classes $class, Student $student)
