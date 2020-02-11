@@ -10,7 +10,10 @@ namespace App;
 
 
 use GuzzleHttp\Client;
+use function GuzzleHttp\Psr7\build_query;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use mysql_xdevapi\Exception;
 
 class AssistantShortlink
 {
@@ -25,9 +28,10 @@ class AssistantShortlink
         return $client;
     }
 
-    public static function getLinks(){
+    public static function getLinks($params = []){
         $client = self::config();
-        $response = $client->get("__links");
+        $params = build_query($params);
+        $response = $client->get("__links?$params");
         if($response->getStatusCode() == 200){
             return collect(json_decode($response->getBody(), true)["result"]);
         } else {
@@ -63,6 +67,23 @@ class AssistantShortlink
                 'secret_key' => $secret_key
             ]
         ]);
-        return env('SHORTLINK_URL', '') . 'link/' .  json_decode($response->getBody()->getContents())->link->ShortUrl;
+        $data = json_decode($response->getBody()->getContents());
+        if($data->status === "success"){
+            return env('SHORTLINK_URL', '') . 'link/' .  $data->link->ShortUrl;
+        }
+        else {
+            return $data;
+        }
+    }
+
+    public static function deleteLink($id){
+        $client = self::config();
+        $response = $client->delete("__links", [
+            'form_params' => [
+                'id' => $id
+            ]
+        ]);
+        $data = json_decode($response->getBody()->getContents());
+        return $data;
     }
 }

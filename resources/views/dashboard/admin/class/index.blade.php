@@ -25,8 +25,17 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Daftar Kelas</h5>
-                    <button class="btn btn-success btn-sm has-ripple" onclick="window.location.href = '{{ route('admin.class.create') }}'"><span><i class="feather icon-plus"></i></span>Tambah Kelas</button>
+                    <div class="row align-items-center m-l-0">
+                        <div class="col-sm-6">
+                            <h5>Daftar Kelas</h5>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <button class="btn btn-success btn-sm has-ripple"
+                                    onclick="window.location.href = '{{ route('admin.class.create') }}'"><span><i
+                                            class="feather icon-plus"></i></span>Tambah Kelas
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="dt-responsive table-responsive">

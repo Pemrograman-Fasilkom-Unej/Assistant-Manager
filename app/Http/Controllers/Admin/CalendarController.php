@@ -17,6 +17,7 @@ class CalendarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+        return view('coming-soon');
         $schedules = Schedule::whereUserId(Auth::id())->get()->map(function($q){
             $res = [
                 'id' => $q->id,

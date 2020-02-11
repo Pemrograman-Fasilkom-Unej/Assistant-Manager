@@ -84,7 +84,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><i class="fas fa-plus"></i> Edit:</td>
+                            <td><i class="fas fa-pencil-alt"></i> Edit:</td>
                             <td class="text-right">
                                 <a class="btn btn-sm btn-info text-white" href="{{ route('admin.task.edit', $task) }}">Edit</a>
                             </td>

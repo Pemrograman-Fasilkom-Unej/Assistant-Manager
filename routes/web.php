@@ -26,6 +26,7 @@ Route::get('/home', function(){
 })->middleware('auth');
 
 Auth::routes();
+Route::redirect('/register', '/');
 
 Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], function(){
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:admin']], function(){
@@ -62,6 +63,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
         ->name('task.submission.download');
     Route::resource('/ticket', 'TicketController');
     Route::resource('/calendar', 'CalendarController');
+    Route::get('/link', 'LinkController@index')->name('link.index');
+    Route::post('/link', 'LinkController@store')->name('link.store');
+    Route::delete('/link', 'LinkController@delete')->name('link.delete');
+
+    Route::view('/note', 'coming-soon')->name('note.index');
 });
 
 Route::get('/task/{token}', 'TaskController@show')->name('task.show');
@@ -70,6 +76,8 @@ Route::post('/task/{token}/check', 'TaskController@checkStudent')->name('task.ch
 
 
 Route::get('test', function (){
+    return \App\AssistantShortlink::getLinks([
+
+    ]);
     return \App\AssistantShortlink::storeLink("https://www.youtube.com/watch?v=b54EfRDgWGs", "babi");
-    return implode("\n", $c->students->pluck('nim')->toArray());
 });

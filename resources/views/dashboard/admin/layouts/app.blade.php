@@ -14,7 +14,7 @@
     <meta name="description" content=""/>
     <meta name="keywords" content="">
     <!-- Favicon icon -->
-    <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('assets/images/favicon.png') }}">
     @yield('_css')
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     @yield('css')
@@ -95,7 +95,7 @@
 <script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/js/ripple.js') }}"></script>
 <script src="{{ asset('assets/js/pcoded.min.js') }}"></script>
-<script src="{{ asset('assets/js/menu-setting.min.js') }}"></script>
+{{--<script src="{{ asset('assets/js/menu-setting.min.js') }}"></script>--}}
 <script src="{{ asset('assets/js/plugins/bootstrap-notify.min.js') }}"></script>
 <script src="{{ asset('assets/js/tools.js') }}"></script>
 <script>

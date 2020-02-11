@@ -15,6 +15,7 @@ class TicketController extends Controller
      */
     public function index()
     {
+        return view('coming-soon');
         return view('dashboard.admin.ticket.index');
     }
 
