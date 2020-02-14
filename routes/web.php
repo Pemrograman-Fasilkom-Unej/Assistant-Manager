@@ -38,6 +38,40 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], funct
         Route::get('task/student/info/{id}', 'AdminController@getStudentInfo')->name('student.info');
         Route::post('file/upload', 'AdminController@uploadFile')->name('file.upload');
     });
+
+    Route::group(['prefix' => 'assistant', 'as' => 'assistant.', 'middleware' => ['auth', 'role:assistant']], function(){
+        Route::get('classes', 'AssistantController@getClasses')->name('class.index');
+        Route::get('tasks', 'AssistantController@getTasks')->name('task.index');
+        Route::get('task/student/info/{id}', 'AssistantController@getStudentInfo')->name('student.info');
+    });
+});
+
+Route::group(['prefix' => 'assistant', 'namespace' => 'Assistant', 'as' => 'assistant.', 'middleware' => ['auth', 'role:assistant']], function(){
+    Route::redirect('/', '/assistant/dashboard')->name('dashboard');
+    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+
+    Route::resource('/class', 'ClassController')->except([
+        'update', 'edit', 'create', 'store'
+    ]);
+    Route::post('/class/{class}/add-student', 'ClassController@addStudent')->name('class.add-student');
+    Route::get('/class/{class}/{student}', 'ClassController@detailStudent')->name('class.student.detail');
+
+    Route::resource('/task', 'TaskController')->except(['create', 'store']);
+    Route::get('/task/create/{class}', 'TaskController@create')
+        ->middleware('can:view,class')
+        ->name('task.create');
+    Route::post('/task/store/{class}', 'TaskController@store')
+        ->middleware('can:view,class')
+        ->name('task.store');
+    Route::post('/task/{task}/score/store', 'TaskController@storeScore')
+        ->middleware('can:view,task')
+        ->name('task.score.store');
+    Route::get('/task/submission/download/{submission}', 'TaskController@downloadFile')
+        ->name('task.submission.download');
+
+    Route::get('/link', 'LinkController@index')->name('link.index');
+    Route::post('/link', 'LinkController@store')->name('link.store');
+
 });
 
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:admin']], function(){
@@ -76,8 +110,5 @@ Route::post('/task/{token}/check', 'TaskController@checkStudent')->name('task.ch
 
 
 Route::get('test', function (){
-    return \App\AssistantShortlink::getLinks([
-
-    ]);
-    return \App\AssistantShortlink::storeLink("https://www.youtube.com/watch?v=b54EfRDgWGs", "babi");
+    
 });

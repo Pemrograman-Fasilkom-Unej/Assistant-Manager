@@ -1,5 +1,9 @@
-@extends('errors::minimal')
+@extends('errors.layout')
 
-@section('title', __('Page Expired'))
-@section('code', '419')
-@section('message', __('Page Expired'))
+@section('title', __('419 Page Expired'))
+@section('content')
+    <div class="text-center">
+        <img src="{{ asset('assets/images/maintance/404.png') }}" alt="" class="img-fluid">
+        <h5 class="text-muted my-4">Oops! Page Expired!</h5>
+    </div>
+@endsection

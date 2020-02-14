@@ -1,0 +1,88 @@
+@extends('dashboard.assistant.layouts.app')
+
+@section('title', 'Dashboard')
+
+@section('_css')
+    @include('components.style-datatables')
+@endsection
+
+@section('breadcrumb')
+    <div class="col-md-12">
+        <div class="page-header-title">
+            <h5 class="m-b-10">Kelas</h5>
+        </div>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('assistant.dashboard') }}"><i class="feather icon-home"></i></a>
+            </li>
+            <li class="breadcrumb-item"><a href="#!">Daftar Kelas</a></li>
+        </ul>
+    </div>
+@endsection
+
+@section('content')
+    <div class="row">
+        <!-- Zero config table start -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center m-l-0">
+                        <div class="col-sm-6">
+                            <h5>Daftar Kelas</h5>
+                        </div>
+                        <div class="col-sm-6 text-right">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="dt-responsive table-responsive">
+                        <table id="class-table" class="table table-striped table-bordered nowrap">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Kelas</th>
+                                <th>Tahun / Semester</th>
+                                <th>Jumlah Mahasiswa</th>
+                                <th>Jumlah Tugas</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('js')
+    @include('components.script-datatables')
+    <script>
+        $('#class-table').DataTable({
+            processing: true,
+            ajax: '{{ route('ajax.assistant.class.index') }}',
+            columns: [
+                {data: 'no'},
+                {data: 'title'},
+                {data: '_year'},
+                {data: '_student_count'},
+                {data: '_task_count'},
+                {data: 'action'},
+            ]
+        });
+
+        function enableClass(id) {
+            $('#enable-class-id').val(id);
+            $('#enable-form').submit();
+        }
+
+        function disableClass(id) {
+            $('#disable-class-id').val(id);
+            $('#disable-form').submit();
+        }
+    </script>
+
+@endsection

@@ -1,0 +1,221 @@
+<?php
+
+namespace App\Http\Controllers\Assistant;
+
+use App\AssistantShortlink;
+use App\Classes;
+use App\Http\Controllers\Controller;
+use App\Http\Traits\MinioHelper;
+use App\Task;
+use App\TaskSubmission;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
+class TaskController extends Controller
+{
+    use MinioHelper;
+    private $datatypes = ['zip', 'pdf', 'docx', 'rar', 'txt'];
+
+    public function __construct()
+    {
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $classes = Classes::whereHas('assistants', function($assistant){
+            $assistant->where('assistant_id', Auth::id());
+        })->get();
+        return view('dashboard.assistant.task.index', compact('classes'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Classes $class)
+    {
+        if(Auth::user()->can('view', $class)){
+            $datatypes = $this->datatypes;
+            return view('dashboard.assistant.task.create', compact('class', 'datatypes'));
+        }
+        return abort(403);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request, Classes $class)
+    {
+        if(Auth::user()->can('view', $class)){
+            $datatypes = $this->datatypes;
+            $this->validate($request, [
+                'title' => 'required|min:5|max:64',
+                'description' => 'required|min:3',
+                'datatypes' => 'required',
+                'deadline' => 'required'
+            ]);
+
+            foreach ($request->datatypes as $datatype) {
+                if (!in_array($datatype, $datatypes)) {
+                    return redirect()->back()->withInput($request->toArray())->with('errors', "Something error about datatypes");
+                }
+            }
+
+            $unique_url = $request->title . ' ' . $class->title . ' ' . ($class->semester == 1 ? 'ganjil' : 'genap') . ' ' . $class->year;
+            $unique_url = Str::slug($unique_url);
+            $deadline = Carbon::parse($request->deadline);
+            $token = md5(Str::random(32));
+            Storage::disk('minio')->makeDirectory("tasks/$token");
+            $code = str_replace(env('SHORTLINK_URL') . '/', '', check_unique_slug($unique_url));
+            $link = AssistantShortlink::storeLink(route('task.show', $token), $code);
+            $task = Task::create([
+                'user_id' => Auth::id(),
+                'class_id' => $class->id,
+                'title' => $request->title,
+                'description' => $request->description,
+                'token' => $token,
+                'url' => $link,
+                'due_time' => $deadline,
+                'data_types' => implode("|", $request->datatypes)
+            ]);
+
+            return redirect()->route('assistant.task.index');
+        }
+        return abort(403);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param \App\Task $task
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Task $task)
+    {
+        if(Auth::user()->can('view', $task)){
+            $class = $task->classes;
+            $task_submission = $task->submissions->groupBy(function ($q) {
+                return $q->created_at->format('d M');
+            })->map(function ($value, $key) {
+                return $value->count();
+            })->reverse();
+
+            $student_count = $task->classes->students->count();
+            $submit_count = $task->submissions->count();
+            $not_submit_count = $student_count - $submit_count < 0 ? '0' : $student_count - $submit_count;
+
+            return view('dashboard.assistant.task.show', compact('task', 'class', 'task_submission', 'student_count', 'submit_count', 'not_submit_count'));
+        }
+        return abort(403);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param \App\Task $task
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Task $task)
+    {
+        if(Auth::user()->can('view', $task)) {
+            $datatypes = $this->datatypes;
+            return view('dashboard.assistant.task.edit', compact('task', 'datatypes'));
+        }
+        return abort(403);
+    }
+
+    public function update(Request $request, Task $task)
+    {
+        if(Auth::user()->can('view', $task)) {
+            $datatypes = $this->datatypes;
+            $this->validate($request, [
+                'description' => 'required|min:3',
+                'datatypes' => 'required',
+            ]);
+
+            foreach ($request->datatypes as $datatype) {
+                if (!in_array($datatype, $datatypes)) {
+                    toastr()->error("Something error about datatypes");
+                    return redirect()->back()->withInput($request->toArray())->with('errors', "Something error about datatypes");
+                }
+            }
+
+            $task->update([
+                'description' => $request->description,
+                'data_types' => implode("|", $request->datatypes)
+            ]);
+
+            return \redirect()->route('assistant.task.show', $task)->with('success', "Tugas berhasil diubah");
+        }
+        return abort(403);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \App\Task $task
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Task $task)
+    {
+        //
+    }
+
+    public function storeScore(Task $task, Request $request)
+    {
+        if(Auth::user()->can('view', $task)) {
+            $validator = Validator::make($request->all(), [
+                'nim' => 'required|numeric|digits:12|exists:students,nim',
+                'score' => 'required|numeric|min:0|max:100'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => 0,
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            if (!in_array($request->nim, $task->classes->students->pluck('nim')->toArray())) {
+                return response()->json([
+                    'success' => 0,
+                    'errors' => [
+                        'nim' => ["Mahasiswa dengan NIM $request->nim tidak terdaftar pada kelas ini"]
+                    ]
+                ]);
+            }
+
+            $submission = $task->submissions->where('nim', $request->nim)->first();
+
+            $submission->update([
+                'score' => $request->score
+            ]);
+
+            return response()->json([
+                'success' => 1,
+                'data' => $submission
+            ]);
+        }
+        return abort(403);
+    }
+
+    public function downloadFile(TaskSubmission $submission){
+        $download_url = $this->generateTemporaryUrl($submission->files);
+        return Redirect::away($download_url);
+    }
+}

@@ -30,7 +30,7 @@ class ClassPolicy
      */
     public function view(User $user, Classes $classes)
     {
-        return $classes->assistants->pluck('id')->contains($user->id) || $user->isAn('admin');
+        return $classes->assistants->pluck('assistant_id')->contains($user->id) || $user->isAn('admin');
     }
 
     /**
