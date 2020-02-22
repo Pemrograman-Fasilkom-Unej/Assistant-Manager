@@ -13,15 +13,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/login');
 
 Route::get('/home', function(){
     if(Auth::user()->is('admin')){
         return redirect('/admin/dashboard');
     } else {
-        return "Not yet";
+        return redirect('/assistant/dashboard');
     }
 })->middleware('auth');
 
@@ -110,5 +108,5 @@ Route::post('/task/{token}/check', 'TaskController@checkStudent')->name('task.ch
 
 
 Route::get('test', function (){
-    
+
 });
