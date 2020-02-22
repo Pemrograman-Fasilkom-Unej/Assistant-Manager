@@ -2,22 +2,21 @@
 
 @section('title', 'Dashboard')
 
-@section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/bootstrap-duallistbox/dist/bootstrap-duallistbox.min.css') }}">
+@section('_css')
+    @include('components.style-select2')
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 @endsection
 
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-5 align-self-center">
-            <h4 class="page-title">Kelas</h4>
-            <div class="d-flex align-items-center">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">Buat Kelas</li>
-                    </ol>
-                </nav>
-            </div>
+    <div class="col-md-12">
+        <div class="page-header-title">
+            <h5 class="m-b-10">Kelas</h5>
         </div>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.class.index') }}">Daftar Kelas</a></li>
+            <li class="breadcrumb-item"><a href="#!">Tambah Kelas</a></li>
+        </ul>
     </div>
 @endsection
 
@@ -25,20 +24,19 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
+                <div class="card-header">
+                    <h5>Tambahkan Kelas</h5>
+                </div>
                 <div class="card-body">
-                    <h4 class="card-title">Tambahkan Kelas</h4>
-                    <h6 class="card-subtitle">Tambahkan Kelas Pada Semester Ini</h6>
-                    <form class="mt-4" method="post" action="{{ route('admin.class.store') }}">
+                    <form class="" method="post" action="{{ route('admin.class.store') }}">
                         @csrf
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Nama Kelas</label>
+                        <div class="form-group fill">
+                            <label class="floating-label" for="name">Nama Kelas</label>
                             <input type="text" class="form-control" id="name" aria-describedby="Nama Kelas" placeholder="Masukan Nama Kelas" name="title" required value="{{ old('title') }}">
-                            <small id="Nama Kelas" class="form-text text-muted">Contoh : Algo I</small>
-
                         </div>
                         <div class="form-group">
                             <label for="year">Tahun</label>
-                            <select class="custom-select mr-sm-2" id="tahun-select" name="year">
+                            <select class="js-example-basic-single form-control" id="tahun-select" name="year" required>
                                 @foreach($years  as $year)
                                     <option {{ old('year') == $year ? 'selected' : '' }} value="{{ $year }}">{{ $year }}</option>
                                 @endforeach
@@ -46,16 +44,30 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="year">Tahun</label>
-                            <select class="custom-select mr-sm-2" id="semester-select" name="semester">
+                            <label for="year">Semester</label>
+                            <select class="js-example-basic-single form-control" id="semester-select" name="semester" required>
                                 <option {{ old('semester') == 1 ? 'selected' : '' }} value="1">Ganjil</option>
                                 <option {{ old('semester') == 2 ? 'selected' : '' }} value="2">Genap</option>
                             </select>
                         </div>
 
                         <div class="form-group">
+                            <label for="day">Hari Praktikum</label>
+                            <select class="js-example-basic-single form-control" id="day-select" name="day" required>
+                                @foreach($days as $index => $day)
+                                    <option value="{{ $index }}">{{ $day }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time">Waktu Praktikum</label>
+                            <input type="text" class="timepicker form-control" name="time">
+                        </div>
+
+                        <div class="form-group">
                             <label for="assistants-option">Assisten</label>
-                            <select multiple="multiple" size="10" class="duallistbox" id="assistants-option" name="assistants[]" required>
+                            <select multiple="multiple" class="js-example-basic-multiple form-control" id="assistants-option" name="assistants[]" required>
                                 @foreach($assistants as $assistant)
                                     <option value="{{ $assistant->id }}">{{ $assistant->name }}</option>
                                 @endforeach
@@ -76,9 +88,22 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('assets/libs/bootstrap-duallistbox/dist/jquery.bootstrap-duallistbox.min.js') }}"></script>
-    <script src="{{ asset('dist/js/pages/forms/dual-listbox/dual-listbox.js') }}"></script>
+    @include('components.script-select2')
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <script>
+        $(".js-example-basic-single").select2();
+        $(".js-example-basic-multiple").select2();
 
+        $('.timepicker').timepicker({
+            timeFormat: 'H:mm',
+            interval: 5,
+            minTime: '7',
+            maxTime: '20',
+            defaultTime: '7',
+            startTime: '7',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true
+        });
     </script>
 @endsection

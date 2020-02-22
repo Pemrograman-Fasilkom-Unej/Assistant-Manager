@@ -169,6 +169,7 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class,
         Yoeunes\Toastr\ToastrServiceProvider::class,
+        App\Providers\MinIOStorageServiceProvider::class,
 
         /*
          * Application Service Providers...

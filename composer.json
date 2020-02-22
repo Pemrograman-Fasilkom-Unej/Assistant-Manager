@@ -9,7 +9,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "coraxster/flysystem-aws-s3-v3-minio": "^1.0",
         "fideloper/proxy": "^4.0",
+        "guzzlehttp/guzzle": "^6.5",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
         "yajra/laravel-datatables-oracle": "~9.0",

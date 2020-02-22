@@ -7,18 +7,16 @@
 @endsection
 
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-5 align-self-center">
-            <h4 class="page-title">Dashboard</h4>
-            <div class="d-flex align-items-center">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.assistant.index') }}">Assistant</a></li>
-                        <li class="breadcrumb-item">Add Assistant</li>
-                    </ol>
-                </nav>
-            </div>
+    <div class="col-md-12">
+        <div class="page-header-title">
+            <h5 class="m-b-10">Kelas</h5>
         </div>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a>
+            </li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.assistant.index') }}">Daftar Assistant</a></li>
+            <li class="breadcrumb-item"><a href="#!">Tambah Asisten</a></li>
+        </ul>
     </div>
 @endsection
 
@@ -27,7 +25,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tambahkan Kelas</h4>
+                    <h4 class="card-title">Tambahkan Asisten</h4>
                     <h6 class="card-subtitle">Tambahkan Kelas Pada Semester Ini</h6>
                     <form class="mt-4" method="post" action="{{ route('admin.assistant.store') }}">
                         @csrf

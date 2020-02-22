@@ -7,50 +7,65 @@
 @endsection
 
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-5 align-self-center">
-            <h4 class="page-title">Kelas</h4>
-            <div class="d-flex align-items-center">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.class.index') }}">Kelas</a></li>
-                        <li class="breadcrumb-item">Detail Kelas - {{ $class->title }}</li>
-                    </ol>
-                </nav>
-            </div>
+    <div class="col-md-12">
+        <div class="page-header-title">
+            <h5 class="m-b-10">Kelas</h5>
         </div>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a>
+            </li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.class.index') }}">Daftar Kelas</a></li>
+            <li class="breadcrumb-item"><a href="#!">Detail Kelas - {{ $class->title }}</a></li>
+        </ul>
     </div>
 @endsection
 
 @section('content')
     <div class="row">
-        <div class="col-12">
+        <!-- Zero config table start -->
+        <div class="col-sm-12">
             <div class="card">
-                <div class="card-body">
-                    <div class="d-md-flex align-items-center">
-                        <div>
-                            <h4 class="card-title">Detail Kelas</h4>
-                            <h5 class="card-subtitle">Detail Kelas - {{ $class->title }}</h5>
+                <div class="card-header">
+                    <div class="row align-items-center m-l-0">
+                        <div class="col-sm-6">
+                            <h5>Daftar Mahasiswa di {{ $class->title }}</h5>
                         </div>
-                        <div class="ml-auto d-flex no-block align-items-center">
-
+                        <div class="col-sm-6 text-right">
+                            <button class="btn btn-success btn-sm btn-round has-ripple" data-toggle="modal" data-target="#modal-add-student"><i class="feather icon-plus"></i> Tambah Mahasiswa<span class="ripple ripple-animate" style="height: 144.797px; width: 144.797px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -58.3985px; left: -28.6016px;"></span></button>
                         </div>
                     </div>
-                    <button data-toggle="modal" data-target="#penilaian-modal" class="btn btn-primary mb-2"><i class="fas fa-plus"></i>Tambah Penilaian</button>
-                    <div class="table-responsive">
-                        <table id="students-table" class="table table-striped table-bordered display">
+                </div>
+                <div class="card-body">
+                    <div class="dt-responsive table-responsive">
+                        <table id="student-table" class="table table-striped table-bordered nowrap">
                             <thead>
                             <tr>
                                 <th>#</th>
                                 <th>NIM</th>
                                 <th>Nama</th>
                                 <th>Jumlah Tugas</th>
-                                <th>Nilai</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-
+                            @foreach($class->students as $index => $student)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $student->student->nim }}</td>
+                                    <td>{{ $student->student->name }}</td>
+                                    <td>{{
+                                    $student->student->submissions->map(function ($q) use ($class) {
+                                        if ($q->task->class_id == $class->id) {
+                                            return $q;
+                                        }
+                                    })->count()
+                                    }}</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm has-ripple"
+                                           href="{{ route('admin.class.student.detail', ['class' => $class, 'student' => $student->student]) }}">Detail</a>
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -61,55 +76,30 @@
 @endsection
 
 @section('modals')
-    <div id="penilaian-modal" class="modal" role="dialog" aria-labelledby="penilaian-modal" aria-hidden="true">
-        <div class="modal-dialog">
+    <div id="modal-add-student" class="modal fade" role="dialog" aria-labelledby="modal-add-student" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="penilaian-modal">Tambah Penilaian</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Tambah Mahasiswa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <form id="score-form">
+                    <form action="{{ route('admin.class.add-student', $class) }}" method="post">
+                        @csrf
                         <div class="form-group">
-                            <label for="">Tugas</label>
-                            <select class="select2 form-control custom-select" style="width: 100%; height:36px;">
-                                @foreach($class->tasks->sortByDesc('created_at') as $task)
-                                    <option value="{{ $task->id }}">{{ $task->title }}</option>
-                                @endforeach
-                            </select>
+                            <label for="assistants-option">Daftar Mahasiswa</label>
+                            <textarea class="form-control" rows="3" name="students" placeholder="List Nim">{{ old('students') }}</textarea>
+                            <small id="textHelp" class="form-text text-muted">List NIM pada kelas tersebut dipisahkan oleh baris baru</small>
                         </div>
-                        <div class="form-group">
-                            <label for="">Mahasiswa</label>
-                            <select class="select2 form-control custom-select" style="width: 100%; height:36px;">
-                                @foreach($class->students as $student)
-                                    <option value="{{ $student->student->nim }}">{{ $student->student->nim }} - {{ $student->student->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Nilai</label>
-                            <input type="number" min="0" max="100" class="form-control" name="score">
-                        </div>
-
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info waves-effect">Submit</button>
-                </div>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
     </div>
 @endsection
 
 @section('js')
     @include('components.script-datatables')
     @include('components.script-select2')
-    <script>
-        $('#students-table').DataTable({
-
-        })
-    </script>
 @endsection

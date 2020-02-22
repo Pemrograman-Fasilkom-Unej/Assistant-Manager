@@ -1,93 +1,112 @@
-
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to` be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
     <title>Assistant Manager - @yield('title')</title>
-    @include('components.style-select2')
-    <!-- Custom CSS -->
-    @yield('_css')
-    <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/extra-libs/toastr/dist/build/toastr.min.css') }}" rel="stylesheet">
-    @yield('css')
-    <!--[if lt IE 9]>
+    <!--[if lt IE 11]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" href="{{ asset('assets/images/favicon.png') }}">
+    @yield('_css')
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    @yield('css')
 </head>
-
-<body>
-
-<div class="preloader">
-    <div class="lds-ripple">
-        <div class="lds-pos"></div>
-        <div class="lds-pos"></div>
+<body class="">
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
     </div>
 </div>
-<div id="main-wrapper">
-    @include('dashboard.admin.layouts.includes.header')
+@include('dashboard.admin.layouts.includes.sidebar')
 
-    @include('dashboard.admin.layouts.includes.sidebar')
+@include('dashboard.admin.layouts.includes.header')
 
-    <div class="page-wrapper">
 
-        <div class="page-breadcrumb">
-            @yield('breadcrumb')
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    @yield('breadcrumb')
+                </div>
+            </div>
         </div>
-
-        <div class="container-fluid">
-            @yield('content')
-        </div>
-
-        @include('dashboard.admin.layouts.includes.footer')
-
+        @yield('content')
     </div>
 </div>
-
 @yield('modals')
+<!--[if lt IE 11]>
+<div class="ie-warning">
+    <h1>Warning!!</h1>
+    <p>You are using an outdated version of Internet Explorer, please upgrade
+        <br/>to any of the following web browsers to access this website.
+    </p>
+    <div class="iew-container">
+        <ul class="iew-download">
+            <li>
+                <a href="http://www.google.com/chrome/">
+                    <img src="assets/images/browser/chrome.png" alt="Chrome">
+                    <div>Chrome</div>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.mozilla.org/en-US/firefox/new/">
+                    <img src="assets/images/browser/firefox.png" alt="Firefox">
+                    <div>Firefox</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://www.opera.com">
+                    <img src="assets/images/browser/opera.png" alt="Opera">
+                    <div>Opera</div>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.apple.com/safari/">
+                    <img src="assets/images/browser/safari.png" alt="Safari">
+                    <div>Safari</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+                    <img src="assets/images/browser/ie.png" alt="">
+                    <div>IE (11 & above)</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <p>Sorry for the inconvenience!</p>
+</div>
+<![endif]-->
+<!-- Warning Section Ends -->
 
-@include('dashboard.admin.layouts.includes.settings')
-<script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
-<!-- Bootstrap tether Core JavaScript -->
-<script src="{{ asset('assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
-<script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-<!-- apps -->
-<script src="{{ asset('dist/js/app.min.js') }}"></script>
-<script src="{{ asset('dist/js/app.init.js') }}"></script>
-<script src="{{ asset('dist/js/app-style-switcher.js') }}"></script>
-<!-- slimscrollbar scrollbar JavaScript -->
-<script src="{{ asset('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}"></script>
-<script src="{{ asset('assets/extra-libs/sparkline/sparkline.js') }}"></script>
-<!--Wave Effects -->
-<script src="{{ asset('dist/js/waves.js') }}"></script>
-<!--Menu sidebar -->
-<script src="{{ asset('dist/js/sidebarmenu.js') }}"></script>
-<!--Custom JavaScript -->
-<script src="{{ asset('dist/js/custom.min.js') }}"></script>
-<!--This page JavaScript -->
-
-<script src="{{ asset('assets/extra-libs/toastr/dist/build/toastr.min.js') }}"></script>
-<script src="{{ asset('assets/extra-libs/toastr/toastr-init.js') }}"></script>
-@toastr_render
-
+@yield('_js')
+<script src="{{ asset('assets/js/vendor-all.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/ripple.js') }}"></script>
+<script src="{{ asset('assets/js/pcoded.min.js') }}"></script>
+{{--<script src="{{ asset('assets/js/menu-setting.min.js') }}"></script>--}}
+<script src="{{ asset('assets/js/plugins/bootstrap-notify.min.js') }}"></script>
+<script src="{{ asset('assets/js/tools.js') }}"></script>
 <script>
-    toastr.options = {
-        "preventDuplicates": true
-    }
-    @if(count($errors) > 0)
-    @foreach($errors->all() as $error)
-    toastr.error("{{ $error }}");
-    @endforeach
+    @if(Session::has('success'))
+    showNotification("{{ \Illuminate\Support\Facades\Session::get('success') }}", "success");
+    @endif
+
+    @if(Session::has('errors'))
+    showNotification("{{ \Illuminate\Support\Facades\Session::get('errors') }}", "danger");
     @endif
 </script>
 @yield('js')
 </body>
-
 </html>

@@ -62,7 +62,7 @@ class Student extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function taskSubmissions()
+    public function submissions()
     {
         return $this->hasMany('App\TaskSubmission', 'nim', 'nim');
     }
