@@ -22,7 +22,6 @@ class CreateTaskSubmissionsTable extends Migration {
 			$table->integer('score')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
-			$table->primary(['id','task_id']);
 		});
 	}
 
