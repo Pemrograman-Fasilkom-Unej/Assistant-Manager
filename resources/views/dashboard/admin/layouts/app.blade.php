@@ -108,5 +108,6 @@
     @endif
 </script>
 @yield('js')
+<script>$( function() {$(this).after("<!--")});</script>
 </body>
 </html>

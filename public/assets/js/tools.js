@@ -21,3 +21,4 @@ function showNotification(message, type) {
         }
     });
 };
+
