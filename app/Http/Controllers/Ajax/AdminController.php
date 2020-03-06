@@ -146,4 +146,78 @@ class AdminController extends Controller
     public function uploadFile(Request $request){
         return $request;
     }
+
+    public function getStudentTaskSubmissions($id)
+    {
+        $task = Task::with('submissions.student')->find($id);
+        if (Auth::user()->can('view', $task)) {
+            return DataTables::of($task->submissions)
+                ->addColumn('_status', function ($submission) {
+                    if (!is_null($submission->score)) {
+                        return '<span class="badge badge-light-success">Done</span>';
+                    } else {
+                        return '<span class="badge badge-light-warning">Pending</span>';
+                    }
+                })
+                ->addColumn('_status_order', function ($submission) {
+                    return !is_null($submission->score) ? 1 : 0;
+                })
+                ->addColumn('_nim', function ($submission) {
+                    return '<div class="d-inline-block align-middle">
+                                <div class="d-inline-block">
+                                    <h6 class="m-b-0">'. $submission->student->nim .'</h6>
+                                </div>
+                           </div>';
+                })
+                ->addColumn('_name', function($submission){
+                    return
+                        '<div class="d-inline-block align-middle">
+                        <div class="d-inline-block">
+                            <h6 class="m-b-0">'. $submission->student->name .'</h6>
+                        </div>
+                    </div>';
+                })
+                ->addColumn('_file', function($submission){
+                    if(!is_null($submission->files)){
+                        return
+                            '<div class="overlay-edit">
+                                <a href="'. route('assistant.task.submission.download', $submission) .'" target="_blank"
+                                    class="btn btn-sm btn-icon btn-success">
+                                        <i class="feather icon-download"></i>
+                                </a>
+                            </div>';
+                    }
+                })
+                ->addColumn('_comment', function($submission){
+                    return $submission->comment ?? 'No comment';
+                })
+                ->addColumn('_date', function($submission){
+                    return $submission->created_at->format('F d Y');
+                })
+                ->addColumn('_score', function($submission){
+                    return $submission->score ?? ' - ';
+                })
+                ->addColumn('_action', function($submission){
+                    if(is_null($submission->score)){
+                        return
+                            '<div class="overlay-edit">
+                            <button type="button" class="btn btn-sm btn-icon btn-success add-score-btn" data-toggle="modal"
+                                data-id="'. $submission->id .'" data-target="#score-modal">
+                                    <i class="feather icon-check-circle"></i>
+                            </button>
+                        </div>';
+                    } else {
+                        return
+                            '<div class="overlay-edit">
+                                <button type="button" class="btn btn-sm btn-icon btn-primary edit-score-btn" data-toggle="modal"
+                                    data-id="'. $submission->id .'" data-target="#score-modal">
+                                        <i class="feather icon-edit"></i>
+                                </button>
+                            </div>';
+                    }
+                })
+                ->rawColumns(['_status', '_nim', '_name', '_file', '_action'])
+                ->make(true);
+        }
+    }
 }

@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
 class TaskController extends Controller
 {
     use MinioHelper;
-    private $datatypes = ['zip', 'pdf', 'docx', 'rar', 'txt'];
+    private $datatypes = ['zip', 'pdf', 'docx', 'rar', 'txt', 'jpg', 'png', 'jpeg', 'doc'];
 
     public function __construct()
     {
@@ -33,7 +33,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $classes = Classes::whereHas('assistants', function($assistant){
+        $classes = Classes::whereHas('assistants', function ($assistant) {
             $assistant->where('assistant_id', Auth::id());
         })->get();
         return view('dashboard.assistant.task.index', compact('classes'));
@@ -46,7 +46,7 @@ class TaskController extends Controller
      */
     public function create(Classes $class)
     {
-        if(Auth::user()->can('view', $class)){
+        if (Auth::user()->can('view', $class)) {
             $datatypes = $this->datatypes;
             return view('dashboard.assistant.task.create', compact('class', 'datatypes'));
         }
@@ -61,7 +61,7 @@ class TaskController extends Controller
      */
     public function store(Request $request, Classes $class)
     {
-        if(Auth::user()->can('view', $class)){
+        if (Auth::user()->can('view', $class)) {
             $datatypes = $this->datatypes;
             $this->validate($request, [
                 'title' => 'required|min:5|max:64',
@@ -107,7 +107,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        if(Auth::user()->can('view', $task)){
+        if (Auth::user()->can('view', $task)) {
             $class = $task->classes;
             $task_submission = $task->submissions->groupBy(function ($q) {
                 return $q->created_at->format('d M');
@@ -132,37 +132,36 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        if(Auth::user()->can('view', $task)) {
-            $datatypes = $this->datatypes;
-            return view('dashboard.assistant.task.edit', compact('task', 'datatypes'));
-        }
-        return abort(403);
+        $this->authorize('view', $task);
+        $datatypes = $this->datatypes;
+        return view('dashboard.assistant.task.edit', compact('task', 'datatypes'));
     }
 
     public function update(Request $request, Task $task)
     {
-        if(Auth::user()->can('view', $task)) {
-            $datatypes = $this->datatypes;
-            $this->validate($request, [
-                'description' => 'required|min:3',
-                'datatypes' => 'required',
-            ]);
+        $this->authorize('view', $task);
 
-            foreach ($request->datatypes as $datatype) {
-                if (!in_array($datatype, $datatypes)) {
-                    toastr()->error("Something error about datatypes");
-                    return redirect()->back()->withInput($request->toArray())->with('errors', "Something error about datatypes");
-                }
+        $datatypes = $this->datatypes;
+        $this->validate($request, [
+            'description' => 'required|min:3',
+            'datatypes' => 'required',
+            'deadline' => 'required'
+        ]);
+
+        foreach ($request->datatypes as $datatype) {
+            if (!in_array($datatype, $datatypes)) {
+                toastr()->error("Something error about datatypes");
+                return redirect()->back()->withInput($request->toArray())->with('errors', "Something error about datatypes");
             }
-
-            $task->update([
-                'description' => $request->description,
-                'data_types' => implode("|", $request->datatypes)
-            ]);
-
-            return \redirect()->route('assistant.task.show', $task)->with('success', "Tugas berhasil diubah");
         }
-        return abort(403);
+
+        $task->update([
+            'description' => $request->description,
+            'data_types' => implode("|", $request->datatypes),
+            'due_time' => Carbon::parse($request->deadline)
+        ]);
+
+        return \redirect()->route('assistant.task.show', $task)->with('success', "Tugas berhasil diubah");
     }
 
     /**
@@ -178,7 +177,7 @@ class TaskController extends Controller
 
     public function storeScore(Task $task, Request $request)
     {
-        if(Auth::user()->can('view', $task)) {
+        if (Auth::user()->can('view', $task)) {
             $validator = Validator::make($request->all(), [
                 'nim' => 'required|numeric|digits:12|exists:students,nim',
                 'score' => 'required|numeric|min:0|max:100'
@@ -214,7 +213,8 @@ class TaskController extends Controller
         return abort(403);
     }
 
-    public function downloadFile(TaskSubmission $submission){
+    public function downloadFile(TaskSubmission $submission)
+    {
         $download_url = $this->generateTemporaryUrl($submission->files);
         return Redirect::away($download_url);
     }

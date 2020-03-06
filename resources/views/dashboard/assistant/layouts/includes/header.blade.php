@@ -88,6 +88,7 @@
                             <span>{{ Auth::user()->name }}</span>
                         </div>
                         <ul class="pro-body">
+                            <li><a class="dropdown-item" href="{{ route('assistant.profile.index') }}"><i class="feather icon-user"></i>Profile</a></li>
                             <li><a href="#" class="dropdown-item" onclick="$('#logout-form').submit()"><i class="feather icon-log-out"></i> Logout</a></li>
                         </ul>
                     </div>

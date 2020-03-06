@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
 class TaskController extends Controller
 {
     use MinioHelper;
-    private $datatypes = ['zip', 'pdf', 'docx', 'rar', 'txt'];
+    private $datatypes = ['zip', 'pdf', 'docx', 'rar', 'txt', 'jpg', 'png', 'jpeg', 'doc'];
 
     public function __construct()
     {
@@ -131,6 +131,7 @@ class TaskController extends Controller
         $this->validate($request, [
             'description' => 'required|min:3',
             'datatypes' => 'required',
+            'deadline' => 'required'
         ]);
 
         foreach ($request->datatypes as $datatype) {
@@ -142,7 +143,8 @@ class TaskController extends Controller
 
         $task->update([
             'description' => $request->description,
-            'data_types' => implode("|", $request->datatypes)
+            'data_types' => implode("|", $request->datatypes),
+            'due_time' => Carbon::parse($request->deadline)
         ]);
 
         return \redirect()->route('admin.task.show', $task)->with('success', "Tugas berhasil diubah");

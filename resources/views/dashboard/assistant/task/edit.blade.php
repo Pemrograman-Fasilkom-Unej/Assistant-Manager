@@ -4,6 +4,7 @@
 
 @section('_css')
     <link rel="stylesheet" href="{{ asset('assets/css/summernote-bs4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins/daterangepicker.css') }}">
 @endsection
 
 @section('css')
@@ -41,6 +42,13 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="deadline">Deadline</label>
+                            <input type="text" id="deadline" class="form-control" value="{{ $task->due_time->format('Y-m-d h:i A') }}"
+                                   name="deadline"
+                                   placeholder="{{ $task->due_time->format('Y-F-d h:i A') }}">
+                        </div>
+
+                        <div class="form-group">
                             <label for="assistants-option">Tipe Data</label>
                             @php($types = explode('|', $task->data_types))
                             @foreach($datatypes as $index => $datatype)
@@ -62,8 +70,21 @@
 
 @section('js')
     <script src="{{ asset('assets/js/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/daterangepicker.js') }}"></script>
     <script>
         $(document).ready(function () {
+            $('input[name="deadline"]').daterangepicker({
+                timePicker: true,
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: 'Y-M-D h:mm A'
+                },
+                minYear: 1901,
+                maxYear: parseInt(moment().format('YYYY'),10)
+            });
+
             $.ajax({
                 url: 'https://api.github.com/emojis',
                 async: false

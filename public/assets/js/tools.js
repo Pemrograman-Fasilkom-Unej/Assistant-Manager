@@ -17,7 +17,7 @@ function showNotification(message, type) {
         },
         offset: {
             x: 30,
-            y: 30
+            y: 30,
         }
     });
 };
