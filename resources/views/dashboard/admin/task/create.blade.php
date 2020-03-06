@@ -50,7 +50,7 @@
                             <label for="deadline">Deadline</label>
                             <input type="text" id="deadline" class="form-control" value="{{ old('deadline') }}"
                                    name="deadline"
-                                   placeholder="{{ \Carbon\Carbon::now()->format('d F Y - h:i') }}">
+                                   placeholder="{{ \Carbon\Carbon::now()->format('d F Y - h:i A') }}">
                         </div>
 
                         <div class="form-group">
@@ -84,7 +84,7 @@
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
-                    format: 'Y-M-D h:mm'
+                    format: 'Y-M-D h:mm A'
                 },
                 minYear: 1901,
                 maxYear: parseInt(moment().format('YYYY'),10)

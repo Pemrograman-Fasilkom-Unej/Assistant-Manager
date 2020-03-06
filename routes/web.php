@@ -35,12 +35,14 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], funct
         Route::get('tickets', 'AdminController@getTickets')->name('ticket.index');
         Route::get('task/student/info/{id}', 'AdminController@getStudentInfo')->name('student.info');
         Route::post('file/upload', 'AdminController@uploadFile')->name('file.upload');
+        Route::get('task/{id}/submissions', 'AdminController@getStudentTaskSubmissions')->name('task.submissions');
     });
 
     Route::group(['prefix' => 'assistant', 'as' => 'assistant.', 'middleware' => ['auth', 'role:assistant']], function(){
         Route::get('classes', 'AssistantController@getClasses')->name('class.index');
         Route::get('tasks', 'AssistantController@getTasks')->name('task.index');
         Route::get('task/student/info/{id}', 'AssistantController@getStudentInfo')->name('student.info');
+        Route::get('task/{id}/submissions', 'AssistantController@getStudentTaskSubmissions')->name('task.submissions');
     });
 });
 
@@ -69,6 +71,9 @@ Route::group(['prefix' => 'assistant', 'namespace' => 'Assistant', 'as' => 'assi
 
     Route::get('/link', 'LinkController@index')->name('link.index');
     Route::post('/link', 'LinkController@store')->name('link.store');
+
+    Route::get('/profile', 'ProfileController@index')->name('profile.index');
+    Route::patch('/profile', 'ProfileController@update')->name('profile.update');
 
 });
 
@@ -102,11 +107,18 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     Route::view('/note', 'coming-soon')->name('note.index');
 });
 
+Route::middleware('auth')->group(function(){
+    Route::get('/export/class/{id}', 'ExportController@exportClass')->name('class.export');
+});
+
 Route::get('/task/{token}', 'TaskController@show')->name('task.show');
 Route::post('/task/{token}', 'TaskController@uploadSubmission')->name('task.upload');
 Route::post('/task/{token}/check', 'TaskController@checkStudent')->name('task.check');
 
 
 Route::get('test', function (){
-
+    $class = \App\Classes::with('tasks.submissions.student')->find(\App\Classes::first()->id);
+//    return view('excel.class-recap', compact('class'));
+//
+    return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ClassExport(\App\Classes::first()->id), 'test.xlsx');
 });

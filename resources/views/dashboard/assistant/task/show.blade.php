@@ -237,62 +237,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($task->submissions->sortByDesc('created_at') as $submission)
-                                <tr>
-                                    <td data-order="{{ !is_null($submission->score) ? 1 : 0 }}">
-                                        @if(!is_null($submission->score))
-                                            <span class="badge badge-light-success">Done</span>
-                                        @else
-                                            <span class="badge badge-light-warning">Pending</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="d-inline-block align-middle">
-                                            <div class="d-inline-block">
-                                                <h6 class="m-b-0">{{ $submission->student->nim }}</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-inline-block align-middle">
-                                            <div class="d-inline-block">
-                                                <h6 class="m-b-0">{{ $submission->student->name }}</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        @if(!is_null($submission->files))
-                                            <div class="overlay-edit">
 
-                                                <a href="{{ route('assistant.task.submission.download', $submission) }}" target="_blank"
-                                                   class="btn btn-sm btn-icon btn-success">
-                                                    <i class="feather icon-download"></i>
-                                                </a>
-                                            </div>
-                                        @endif
-                                    </td>
-                                    <td>{{ $submission->comment ?? 'No comment' }}</td>
-                                    <td data-order="{{ $submission->created_at }}">{{ $submission->created_at->format('F d Y') }}</td>
-                                    <td>{{ $submission->score ?? ' - ' }}</td>
-                                    <td>
-                                        @if(is_null($submission->score))
-                                            <div class="overlay-edit">
-                                                <button type="button" class="btn btn-sm btn-icon btn-success add-score-btn" data-toggle="modal"
-                                                        data-id="{{ $submission->id }}" data-target="#score-modal">
-                                                    <i class="feather icon-check-circle"></i>
-                                                </button>
-                                            </div>
-                                        @else
-                                            <div class="overlay-edit">
-                                                <button type="button" class="btn btn-sm btn-icon btn-primary edit-score-btn" data-toggle="modal"
-                                                        data-id="{{ $submission->id }}" data-target="#score-modal">
-                                                    <i class="feather icon-edit"></i>
-                                                </button>
-                                            </div>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
                         </table>
                     </div>
                 </div>
@@ -455,7 +400,7 @@
                 document.execCommand('copy');
             });
 
-            $('.add-score-btn').click(function () {
+            $('body').on('click', '.add-score-btn', function () {
                 $('#student-score').val('');
                 $.get({
                     url: '{{ url('/ajax/assistant/task/student/info') }}/' + $(this).data('id'),
@@ -467,7 +412,7 @@
                 })
             });
 
-            $('.edit-score-btn').click(function () {
+            $('body').on('click', '.edit-score-btn', function () {
                 $.get({
                     url: '{{ url('/ajax/assistant/task/student/info') }}/' + $(this).data('id'),
                     success: (r) => {
@@ -479,13 +424,29 @@
                 })
             });
 
+            var submission_table = $('#user-list-table').DataTable({
+                serverSide: true,
+                ajax: "{{ route('ajax.assistant.task.submissions', $task->id) }}",
+                order: [[5, 'desc']],
+                columns: [
+                    { data: '_status', name: '_status_order' },
+                    { data: '_nim', name: 'student.nim' },
+                    { data: '_name', name: 'student.name' },
+                    { data: '_file', orderable: false, searchable: false },
+                    { data: '_comment' },
+                    { data: '_date', name: 'created_at' },
+                    { data: '_score', name: '_score' },
+                    { data: '_action', searchable: false, orderable: false },
+                ]
+            });
+
             $('#score-submit').on('click', function (e) {
                 e.preventDefault();
                 $('#score-form').ajaxSubmit((response) => {
                     if (response.success == 0) { // IF ERROR VALIDATION
                         $.each(response.errors, (key, val) => {
                             $.each(val, (_key, _val) => {
-                                showNotification(val, "error");
+                                showNotification(val[0], "danger");
                             });
                         });
                     } else { // Its success
@@ -496,15 +457,12 @@
                             'Nilai : ' + response.data.score +
                             '</span>'
                         );
+                        submission_table.ajax.reload();
                         showNotification("Nilai " + response.data.nim + " berhasil dirubah", "success");
                         $('#score-modal').modal('hide');
                     }
                 })
             });
-
-            $('#user-list-table').DataTable({
-                order: [[5, 'desc']]
-            })
         });
     </script>
 

@@ -1,4 +1,4 @@
-@extends('dashboard.admin.layouts.app')
+@extends('dashboard.assistant.layouts.app')
 
 @section('title', 'Dashboard')
 
@@ -12,9 +12,9 @@
             <h5 class="m-b-10">Kelas</h5>
         </div>
         <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a>
+            <li class="breadcrumb-item"><a href="{{ route('assistant.dashboard') }}"><i class="feather icon-home"></i></a>
             </li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.assistant.index') }}">Daftar Assistant</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('assistant.profile.index') }}">Daftar Assistant</a></li>
             <li class="breadcrumb-item"><a href="#!">{{ $assistant->name }}</a></li>
         </ul>
     </div>
@@ -105,7 +105,7 @@
                     </div>
                     <div class="tab-pane fade" id="previous-month" role="tabpanel" aria-labelledby="pills-setting-tab">
                         <div class="card-body">
-                            <form class="form-horizontal form-material" method="post" enctype="multipart/form-data" action="{{ route('admin.assistant.update', $assistant) }}">
+                            <form class="form-horizontal form-material" method="post" enctype="multipart/form-data" action="{{ route('assistant.profile.update') }}">
                                 @csrf
                                 @method('PATCH')
                                 <div class="form-group">

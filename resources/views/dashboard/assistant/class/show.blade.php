@@ -31,6 +31,7 @@
                             <h5>Daftar Mahasiswa di {{ $class->title }}</h5>
                         </div>
                         <div class="col-sm-6 text-right">
+                            <a href="{{ route('class.export', $class->id) }}" class="btn btn-primary btn-sm has-ripple">Export Rekap Nilai</a>
                             <button class="btn btn-success btn-sm btn-round has-ripple" data-toggle="modal" data-target="#modal-add-student"><i class="feather icon-plus"></i> Tambah Mahasiswa<span class="ripple ripple-animate" style="height: 144.797px; width: 144.797px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -58.3985px; left: -28.6016px;"></span></button>
                         </div>
                     </div>
