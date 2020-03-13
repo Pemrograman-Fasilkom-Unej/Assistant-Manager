@@ -10,11 +10,7 @@ namespace App;
 
 
 use GuzzleHttp\Client;
-use function GuzzleHttp\Psr7\build_query;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use mysql_xdevapi\Exception;
 
 class AssistantShortlink
 {
