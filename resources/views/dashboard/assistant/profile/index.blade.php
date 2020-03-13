@@ -71,7 +71,7 @@
                             <div class="profiletimeline mt-0">
                                 <div class="sl-item">
                                     <div class="sl-left">
-                                        <img src="{{ asset($assistant->avatar ?? 'assets/images/users/1.jpg') }}" alt="user" class="rounded-circle" width="50px"/>
+                                        <img src="{{ $assistant->avatar_url }}" alt="{{ $assistant->name }}" class="rounded-circle" width="50px"/>
                                     </div>
                                     <div class="sl-right">
                                         <div>
@@ -86,7 +86,7 @@
                                 @foreach($assistant->activities as $activity)
                                     <div class="sl-item">
                                         <div class="sl-left">
-                                            <img src="{{ asset($assistant->avatar ?? 'assets/images/users/1.jpg') }}" alt="user" class="rounded-circle"/>
+                                            <img src="{{ $assistant->avatar_url }}" alt="{{ $assistant->name }}" class="rounded-circle"/>
                                         </div>
                                         <div class="sl-right">
                                             <div>

@@ -76,13 +76,10 @@ class TaskController extends Controller
                 }
             }
 
-            $unique_url = $request->title . ' ' . $class->title . ' ' . ($class->semester == 1 ? 'ganjil' : 'genap') . ' ' . $class->year;
-            $unique_url = Str::slug($unique_url);
             $deadline = Carbon::parse($request->deadline);
             $token = md5(Str::random(32));
             Storage::disk('minio')->makeDirectory("tasks/$token");
-            $code = str_replace(env('SHORTLINK_URL') . '/', '', check_unique_slug($unique_url));
-            $link = AssistantShortlink::storeLink(route('task.show', $token), $code);
+            $link = AssistantShortlink::storeLink(route('task.show', $token));
             $task = Task::create([
                 'user_id' => Auth::id(),
                 'class_id' => $class->id,

@@ -65,7 +65,7 @@
                                     </td>
                                     <td>{{ $link->created_at->format('d M Y, H:i') }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-danger" onclick="deleteLink({{ $link->id }})">
+                                        <button type="button" class="btn btn-danger" onclick="deleteLink('{{ $link->link_id }}')">
                                             Delete
                                         </button>
                                     </td>

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @property integer $id
@@ -79,5 +80,29 @@ class User extends Authenticatable
 
     public static function whereIs($role){
         return self::where('role_id', Role::where('role', $role)->first()->id);
+    }
+
+    /**
+     * Get (work with Storage Facade) avatar path.
+     * 
+     * @return string
+     */
+    public function getAvatarPathAttribute()
+    {
+        return str_replace('storage/', '', $this->avatar);
+    }
+
+    /**
+     * Provide profile url.
+     * 
+     * @return string
+     */
+    public function getAvatarUrlAttribute()
+    {
+        if (Storage::disk('public')->has($this->avatar_path)) {
+            return Storage::disk('public')->url($this->avatar_path);
+        }
+
+        return asset('assets/images/user/default.png');
     }
 }
