@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Assistant;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -27,7 +28,7 @@ class ProfileController extends Controller
         ]);
 
         if($request->has('_avatar')){
-            Storage::disk('public')->delete($assistant->avatar);
+            Storage::disk('public')->delete($assistant->avatar_path);
             $file = $request->file('_avatar');
             $avatar = Storage::disk('public')->put("assets/assistants", $file);
             $assistant->update([
