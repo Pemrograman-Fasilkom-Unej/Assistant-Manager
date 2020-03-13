@@ -4,10 +4,10 @@
 
             <div class="">
                 <div class="main-menu-header">
-                    <img class="img-radius" src="{{ Auth::user()->avatar ?? asset('assets/images/user/default.png') }}"
+                    <img class="img-radius" src="{{ Auth::user()->avatar_url }}"
                          alt="User-Profile-Image">
                     <div class="user-details">
-                        <div id="more-details">{{ \Illuminate\Support\Facades\Auth::user()->name }}</div>
+                        <div id="more-details">{{ Auth::user()->name }}</div>
                     </div>
                 </div>
             </div>

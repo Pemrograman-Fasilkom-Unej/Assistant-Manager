@@ -79,12 +79,12 @@
 {{--            </li>--}}
             <li>
                 <div class="dropdown drp-user">
-                    <a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="{{ url('/') }}" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="feather icon-user"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-notification">
                         <div class="pro-head">
-                            <img src="{{ Auth::user()->avatar ?? asset('assets/images/user/default.png') }}" class="img-radius" alt="User-Profile-Image">
+                            <img src="{{ Auth::user()->avatar_url }}" class="img-radius" alt="{{ auth()->user()->name }}">
                             <span>{{ Auth::user()->name }}</span>
                         </div>
                         <ul class="pro-body">
