@@ -181,7 +181,7 @@ class AdminController extends Controller
                     if(!is_null($submission->files)){
                         return
                             '<div class="overlay-edit">
-                                <a href="'. route('assistant.task.submission.download', $submission) .'" target="_blank"
+                                <a href="'. route('admin.task.submission.download', $submission) .'" target="_blank"
                                     class="btn btn-sm btn-icon btn-success">
                                         <i class="feather icon-download"></i>
                                 </a>

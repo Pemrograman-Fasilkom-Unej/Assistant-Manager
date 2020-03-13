@@ -117,6 +117,13 @@ Route::post('/task/{token}/check', 'TaskController@checkStudent')->name('task.ch
 
 
 Route::get('test', function (){
-    $r = \App\AssistantShortlink::storeLink("http://localhost:8000/test#");
-    dd($r);
+    foreach (\Illuminate\Support\Facades\DB::table('temp')->get() as $item){
+        $url = \App\AssistantShortlink::storeLink($item->long_url, $item->short_url);
+        $task = \App\Task::whereUrl($url, $url)->first();
+        if(!is_null($task)){
+            $task->update([
+                'url' => $url
+            ]);
+        }
+    }
 });
