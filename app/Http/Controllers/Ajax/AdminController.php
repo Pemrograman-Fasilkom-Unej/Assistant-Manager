@@ -30,7 +30,7 @@ class AdminController extends Controller
 
     public function getClasses(Request $request)
     {
-        $classes = Classes::get()->map(function ($q, $i) {
+        $classes = Classes::orderBy('title')->get()->map(function ($q, $i) {
             $q->no = $i + 1;
             return $q;
         });

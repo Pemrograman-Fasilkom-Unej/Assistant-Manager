@@ -32,10 +32,7 @@ class LinkController extends Controller
             'short_url' => 'max:64'
         ]);
 
-        $link = AssistantShortlink::storeLink($request->long_url, $request->short_url ?? null);
-        if($link->status !== null){
-            return redirect()->back()->with('errors', $link->message);
-        }
+        $link = AssistantShortlink::storeLink($request->long_url, $request->short_url ?? "");
         return redirect()->back()->with('success', "Link berhasil dipendekan");
     }
 }

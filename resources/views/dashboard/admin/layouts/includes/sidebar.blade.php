@@ -19,20 +19,9 @@
                 <li class="nav-item"><a href="{{ route('admin.dashboard') }}" class="nav-link "><span
                                 class="pcoded-micon"><i class="feather icon-sidebar"></i></span><span
                                 class="pcoded-mtext">Dashboard</span></a></li>
-                <li class="nav-item pcoded-hasmenu">
-                    <a href="#!" class="nav-link">
-                        <span class="pcoded-micon">
-                            <i class="feather icon-users"></i>
-                        </span>
-                        <span class="pcoded-mtext">Kelas</span>
-                    </a>
-                    <ul class="pcoded-submenu">
-                        <li><a href="{{ route('admin.class.index') }}">Kelas</a></li>
-                        @foreach(\App\Classes::get() as $class)
-                            <li><a href="{{ route('admin.class.show', $class) }}">{{ $class->title }}</a></li>
-                        @endforeach
-                    </ul>
-                </li>
+                <li class="nav-item"><a href="{{ route('admin.class.index') }}" class="nav-link "><span
+                                class="pcoded-micon"><i class="feather icon-users"></i></span><span
+                                class="pcoded-mtext">Kelas</span></a></li>
                 <li class="nav-item"><a href="{{ route('admin.task.index') }}" class="nav-link "><span
                                 class="pcoded-micon"><i class="feather icon-paperclip"></i></span><span
                                 class="pcoded-mtext">Tugas</span></a></li>

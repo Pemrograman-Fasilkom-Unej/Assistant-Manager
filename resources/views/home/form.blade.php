@@ -24,6 +24,12 @@
                     <div class="card-body">
                         <h2>{{ $task->title }}</h2>
                         <p>{!! $task->description !!}</p>
+                        <p>
+                            <strong>Format Pengumpulan : </strong>
+                            @foreach(explode('|', $task->data_types) as $type)
+                                <span class="pcoded-badge badge badge-primary">{{ $type }}</span>
+                            @endforeach
+                        </p>
                     </div>
                     <div class="card-footer bg-c-green" id="timer-body">
                         <div class="counter text-center">
@@ -93,6 +99,7 @@
                                         <div class="form-group mt-2">
                                             <label for="description">Keterangan</label>
                                             <textarea class="form-control" id="description" name="description" rows="3"
+                                                      maxlength="32"
                                                       placeholder="Keterangan pada tugas anda (tidak wajib)"></textarea>
                                         </div>
 

@@ -79,9 +79,13 @@ class TaskController extends Controller
             return json_response(0, "Anda sudah melakukan submission pada tugas ini");
         }
 
+        if(strlen($request->comment) > 32){
+            return json_response(0, "Text di comment lebih dari 32 karakter");
+        }
+
         $student = Student::find($request->id);
 
-        $path = $this->storeFileMinio("task/$token", $request->upload_file, $student->nim . '_' . $student->name);
+        $path = $this->storeFileMinio("tasks/$token", $request->upload_file, $student->nim . '_' . $student->name);
 
         $submission = $task->submissions()->create([
             'nim' => $student->nim,

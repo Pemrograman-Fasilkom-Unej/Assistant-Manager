@@ -117,8 +117,6 @@ Route::post('/task/{token}/check', 'TaskController@checkStudent')->name('task.ch
 
 
 Route::get('test', function (){
-    $class = \App\Classes::with('tasks.submissions.student')->find(\App\Classes::first()->id);
-//    return view('excel.class-recap', compact('class'));
-//
-    return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ClassExport(\App\Classes::first()->id), 'test.xlsx');
+    $r = \App\AssistantShortlink::storeLink("http://localhost:8000/test#");
+    dd($r);
 });
