@@ -57,6 +57,7 @@ Route::group(['prefix' => 'assistant', 'namespace' => 'Assistant', 'as' => 'assi
     Route::get('/class/{class}/{student}', 'ClassController@detailStudent')->name('class.student.detail');
 
     Route::resource('/task', 'TaskController')->except(['create', 'store']);
+    Route::post('/task/preview', 'TaskController@preview')->name('task.preview');
     Route::get('/task/create/{class}', 'TaskController@create')
         ->middleware('can:view,class')
         ->name('task.create');

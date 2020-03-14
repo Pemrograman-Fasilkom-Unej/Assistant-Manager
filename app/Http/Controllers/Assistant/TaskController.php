@@ -215,4 +215,12 @@ class TaskController extends Controller
         $download_url = $this->generateTemporaryUrl($submission->files);
         return Redirect::away($download_url);
     }
+
+    /**
+     * Preview tugas.
+     */
+    public function preview()
+    {
+        return view('dashboard.assistant.task.preview');
+    }
 }
