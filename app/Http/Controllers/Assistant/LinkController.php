@@ -3,27 +3,17 @@
 namespace App\Http\Controllers\Assistant;
 
 use App\AssistantShortlink;
+use App\Link;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class LinkController extends Controller
 {
-    public function index(){
-        $links = AssistantShortlink::getLinks([])->map(function ($link){
-            return (object)[
-                'id' => $link['ID'],
-                'long_url' => $link['LongUrl'],
-                'short_url' => env('SHORTLINK_URL', '') . 'link/' . $link['ShortUrl'],
-                'created_at' => Carbon::parse($link['CreatedAt'])
-            ];
-        });
+    public function index()
+    {
+        $links = Link::get();
         return view('dashboard.assistant.link.index', compact('links'));
-    }
-
-    public function delete(Request $request){
-        $response = AssistantShortlink::deleteLink($request->id);
-        return redirect()->back()->with($response->status == "failed" ? 'danger' : 'success', $response->message);
     }
 
     public function store(Request $request){
