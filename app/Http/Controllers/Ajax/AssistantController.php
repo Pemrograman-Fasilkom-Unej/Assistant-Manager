@@ -115,7 +115,7 @@ class AssistantController extends Controller
                     return $submission->comment ?? 'No comment';
                 })
                 ->addColumn('_date', function($submission){
-                    return $submission->created_at->format('F d Y');
+                    return $submission->created_at->format('F, d Y h:i A');
                 })
                 ->addColumn('_score', function($submission){
                     return $submission->score ?? ' - ';
