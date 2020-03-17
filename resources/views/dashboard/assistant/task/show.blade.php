@@ -457,7 +457,7 @@
                             'Nilai : ' + response.data.score +
                             '</span>'
                         );
-                        submission_table.ajax.reload();
+                        submission_table.ajax.reload(null, false);
                         showNotification("Nilai " + response.data.nim + " berhasil dirubah", "success");
                         $('#score-modal').modal('hide');
                     }
