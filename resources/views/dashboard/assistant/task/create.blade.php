@@ -34,7 +34,7 @@
                     <h5>Tambahkan Tugas</h5>
                 </div>
                 <div class="card-body">
-                    <form id="form_task" method="post" action="{{ route('assistant.task.store', $class) }}">
+                    <form class="" method="post" action="{{ route('assistant.task.store', $class) }}">
                         @csrf
                         <div class="form-group fill">
                             <label class="floating-label" for="name">Nama Tugas</label>
@@ -65,7 +65,6 @@
                             @endforeach
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" id="btn_preview" class="btn btn-info">Preview</button>
                     </form>
                 </div>
             </div>
@@ -128,14 +127,6 @@
                     }
                 }
             });
-
-            $('#btn_preview').on('click', function (e) {
-                $('#form_task')
-                    .attr('target', '_blank')
-                    .attr('action', '{{ route('assistant.task.preview') }}')
-                    .submit();
-            });
-
         });
 
         $(function () {
