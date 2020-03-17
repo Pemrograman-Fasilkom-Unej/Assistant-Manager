@@ -194,13 +194,13 @@
                     <div class="row mt-4">
                         <div class="col">
                             <h3 class="m-0">
-                                <i class="fas fa-circle text-success f-10 m-r-5"></i>{{ $task->submissions->count() === 0 ? 0 : number_format($task->submissions->whereNotNull('score')->count() / $submit_count * 100, 2) }}%
+                                <i class="fas fa-circle text-success f-10 m-r-5"></i>{{ $task->submissions->count() === 0 ? 0 : number_format($task->submissions->where('score', '<>', null)->count() / $submit_count * 100, 2) }}%
                             </h3>
                             <span class="ml-3">Sudah Dinilai</span>
                         </div>
                         <div class="col">
                             <h3 class="m-0"><i
-                                        class="fas fa-circle text-danger f-10 m-r-5"></i>{{ $task->submissions->count() === 0 ? 0 : number_format($task->submissions->whereNull('score')->count() / $submit_count * 100, 2) }}
+                                        class="fas fa-circle text-danger f-10 m-r-5"></i>{{ $task->submissions->count() === 0 ? 0 : number_format($task->submissions->where('score', null)->count() / $submit_count * 100, 2) }}
                                 %</h3>
                             <span class="ml-3">Belum Dinilai</span>
                         </div>
