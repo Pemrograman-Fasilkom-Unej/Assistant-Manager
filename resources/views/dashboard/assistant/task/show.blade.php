@@ -288,7 +288,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary waves-effect" id="score-submit">Submit</button>
+                        <button type="submit" class="btn btn-primary waves-effect" id="score-submit">Submit</button>
                     </div>
                 </form>
             </div>
