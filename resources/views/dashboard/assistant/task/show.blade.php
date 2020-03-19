@@ -194,13 +194,13 @@
                     <div class="row mt-4">
                         <div class="col">
                             <h3 class="m-0">
-                                <i class="fas fa-circle text-success f-10 m-r-5"></i>{{ $task->submissions->count() === 0 ? 0 : $task->submissions->where('score', '<>', null)->count() / $submit_count * 100 }}%
+                                <i class="fas fa-circle text-success f-10 m-r-5"></i>{{ $task->submissions->count() === 0 ? 0 : number_format($task->submissions->where('score', '<>', null)->count() / $submit_count * 100, 2) }}%
                             </h3>
                             <span class="ml-3">Sudah Dinilai</span>
                         </div>
                         <div class="col">
                             <h3 class="m-0"><i
-                                        class="fas fa-circle text-danger f-10 m-r-5"></i>{{ $task->submissions->count() === 0 ? 0 : $task->submissions->where('score', null)->count() / $submit_count * 100 }}
+                                        class="fas fa-circle text-danger f-10 m-r-5"></i>{{ $task->submissions->count() === 0 ? 0 : number_format($task->submissions->where('score', null)->count() / $submit_count * 100, 2) }}
                                 %</h3>
                             <span class="ml-3">Belum Dinilai</span>
                         </div>
@@ -288,7 +288,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary waves-effect" id="score-submit">Submit</button>
+                        <button type="submit" class="btn btn-primary waves-effect" id="score-submit">Submit</button>
                     </div>
                 </form>
             </div>
@@ -457,7 +457,7 @@
                             'Nilai : ' + response.data.score +
                             '</span>'
                         );
-                        submission_table.ajax.reload();
+                        submission_table.ajax.reload(null, false);
                         showNotification("Nilai " + response.data.nim + " berhasil dirubah", "success");
                         $('#score-modal').modal('hide');
                     }
