@@ -49,18 +49,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($class->students as $index => $student)
+                            @foreach($class->students as $student)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $student->student->nim }}</td>
                                     <td>{{ $student->student->name }}</td>
-                                    <td>{{
-                                    $student->student->submissions->map(function ($q) use ($class) {
-                                        if ($q->task->class_id == $class->id) {
-                                            return $q;
-                                        }
-                                    })->count()
-                                    }}</td>
+                                    <td>{{ $student->student->submissions->count() }}</td>
                                     <td>
                                         <a class="btn btn-primary btn-sm has-ripple"
                                            href="{{ route('assistant.class.student.detail', ['class' => $class, 'student' => $student->student]) }}">Detail</a>
