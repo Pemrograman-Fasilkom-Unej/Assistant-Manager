@@ -43,6 +43,7 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], funct
         Route::get('tasks', 'AssistantController@getTasks')->name('task.index');
         Route::get('task/student/info/{id}', 'AssistantController@getStudentInfo')->name('student.info');
         Route::get('task/{id}/submissions', 'AssistantController@getStudentTaskSubmissions')->name('task.submissions');
+        Route::get('task/{id}/no-submissions', 'AssistantController@getStudentWithoutTaskSubmissions')->name('task.no_submissions');
     });
 });
 
