@@ -222,6 +222,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
+                    <div class="card-title">
+                        <h4>Daftar Yang Mengumpulkan Tugas ({{ $submit_count }})</h4>
+                    </div>
                     <div class="dt-responsive table-responsive">
                         <table id="user-list-table" class="table">
                             <thead>
@@ -234,6 +237,31 @@
                                 <th>Tanggal Submit</th>
                                 <th>Nilai</th>
                                 <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4>Daftar Yang <strong>Tidak Mengumpulkan</strong> Tugas ({{ $not_submit_count }})</h4>
+                    </div>
+                    <div class="dt-responsive table-responsive">
+                        <table id="no-submissions-table" class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>NIM</th>
+                                <th>Nama</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -437,6 +465,16 @@
                     { data: '_date', name: 'created_at' },
                     { data: '_score', name: '_score' },
                     { data: '_action', searchable: false, orderable: false },
+                ]
+            });
+
+            var no_submission_table = $('#no-submissions-table').DataTable({
+                serverSide: true,
+                ajax: '{{ route('ajax.assistant.task.no_submissions', $task->id) }}',
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false },
+                    { data: 'nim', name: 'nim' },
+                    { data: 'name', name: 'name'}
                 ]
             });
 
