@@ -129,16 +129,12 @@ class ClassController extends Controller
     public function detailStudent(Classes $class, Student $student)
     {
         $student_detail = ClassStudent::whereClassId($class->id)->whereNim($student->nim)->firstOrFail();
-        $submissions = $student->submissions->filter(function ($q) use ($class) {
+        $submissions = $student->submissions()->with('task')->get()->filter(function ($q) use ($class) {
             return $q->task->class_id == $class->id;
         });
 
-        $current_tasks = $submissions->pluck('task_id')->toArray();
-        $unsubmited_tasks = $class->tasks->map(function ($q) use ($current_tasks) {
-            if (!in_array($q->id, $current_tasks)) {
-                return $q;
-            }
-        })->filter();
+        $current_tasks = $submissions->pluck('task.id');
+        $unsubmited_tasks = $class->tasks->whereNotIn('id', $current_tasks);
         return view('dashboard.assistant.class.detail', compact('class', 'student', 'student_detail', 'submissions', 'unsubmited_tasks'));
     }
 }
