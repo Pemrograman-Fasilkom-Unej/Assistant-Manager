@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
-use Carbon\Carbon;
+use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,10 +22,13 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      *
+     * @param UrlGenerator $urlGenerator
      * @return void
      */
-    public function boot()
+    public function boot(UrlGenerator $urlGenerator)
     {
-
+        if (App::environment(['prod', 'production']) && Str::startsWith(config('app.url'), 'https')) {
+            $urlGenerator->forceScheme('https');
+        }
     }
 }
