@@ -25,8 +25,15 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     /**
+     * List of accepted format for uploading a task.
+     *
+     * @var array
+     */
+    public const FILE_TYPES = ['zip', 'pdf', 'docx', 'rar', 'txt', 'jpg', 'png', 'jpeg', 'doc'];
+
+    /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'integer';
