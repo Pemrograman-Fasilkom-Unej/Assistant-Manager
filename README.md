@@ -1,6 +1,7 @@
 <p align="center"><img src="https://github.com/Pemrograman-Fasilkom-Unej/Assistant-Manager/blob/master/public/assets/images/logo-icon.png?raw=true" width="200"></p>
 
 <p align="center">
+<a href="https://github.com/Pemrograman-Fasilkom-Unej/Assistant-Manager/commits/develop"><img src="https://img.shields.io/github/last-commit/Pemrograman-Fasilkom-Unej/Assistant-Manager/develop?style=for-the-badge" alt="Last Commit"></a>
 <a href="https://github.com/Pemrograman-Fasilkom-Unej/Assistant-Manager/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Pemrograman-Fasilkom-Unej/Assistant-Manager?style=for-the-badge" alt="License"></a>
 </p>
 
