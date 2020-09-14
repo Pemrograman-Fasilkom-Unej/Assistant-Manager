@@ -115,16 +115,3 @@ Route::middleware('auth')->group(function(){
 Route::get('/task/{token}', 'TaskController@show')->name('task.show');
 Route::post('/task/{token}', 'TaskController@uploadSubmission')->name('task.upload');
 Route::post('/task/{token}/check', 'TaskController@checkStudent')->name('task.check');
-
-
-Route::get('test', function (){
-    foreach (\Illuminate\Support\Facades\DB::table('temp')->get() as $item){
-        $url = \App\AssistantShortlink::storeLink($item->long_url, $item->short_url);
-        $task = \App\Task::whereUrl($url, $url)->first();
-        if(!is_null($task)){
-            $task->update([
-                'url' => $url
-            ]);
-        }
-    }
-});
