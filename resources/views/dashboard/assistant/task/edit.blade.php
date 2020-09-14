@@ -20,7 +20,8 @@
             <li class="breadcrumb-item"><a href="{{ route('assistant.dashboard') }}"><i class="feather icon-home"></i></a>
             </li>
             <li class="breadcrumb-item"><a href="{{ route('assistant.task.index') }}">Tugas</a></li>
-            <li class="breadcrumb-item"><a href="#!">Edit Tugas</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('assistant.task.show', $task) }}">Detail - {{ $task->title }}</a></li>
+            <li class="breadcrumb-item"><a href="#!">Edit</a></li>
         </ul>
     </div>
 @endsection
@@ -30,12 +31,17 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Edit Tugas</h5>
+                    <h5>Edit: {{ $task->title }}</h5>
                 </div>
                 <div class="card-body">
-                    <form class="" method="post" action="{{ route('assistant.task.update', $task) }}">
+                    <form id="form_task" method="post" action="{{ route('assistant.task.update', $task) }}">
                         @csrf
                         @method('put')
+                        <div class="d-none">
+                            <label class="floating-label" for="name">Nama Tugas</label>
+                            <input type="hidden" class="form-control" id="name" aria-describedby="Nama Tugas"
+                                   placeholder="Masukan Nama Tugas" name="title" required value="{{ old('title', $task->title) }}">
+                        </div>
                         <div class="form-group fill">
                             <label for="description">Deskripsi</label>
                             <textarea name="description" id="description">{{ $task->description }}</textarea>
@@ -61,6 +67,7 @@
                             @endforeach
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" id="btn_preview" class="btn btn-info">Preview <i class="fa fa-eye"></i></button>
                     </form>
                 </div>
             </div>
@@ -74,6 +81,21 @@
     <script src="{{ asset('assets/js/plugins/daterangepicker.js') }}"></script>
     <script>
         $(document).ready(function () {
+
+            $('#btn_preview').on('click', function () {
+                $('input[name="_method"]').remove();
+                $('#form_task')
+                    .attr('target', '_blank')
+                    .attr('action', '{{ route('assistant.task.preview') }}')
+                    .submit();
+
+                // Revert
+                $('#form_task').append(`@method('put')`);
+                $('#form_task')
+                    .attr('action', '{{ route('assistant.task.update', $task) }}')
+                    .removeAttr('target');
+            });
+
             $('input[name="deadline"]').daterangepicker({
                 timePicker: true,
                 singleDatePicker: true,

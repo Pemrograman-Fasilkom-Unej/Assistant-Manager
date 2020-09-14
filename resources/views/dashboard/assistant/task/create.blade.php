@@ -34,7 +34,7 @@
                     <h5>Tambahkan Tugas</h5>
                 </div>
                 <div class="card-body">
-                    <form class="" method="post" action="{{ route('assistant.task.store', $class) }}">
+                    <form id="form_task" method="post" action="{{ route('assistant.task.store', $class) }}">
                         @csrf
                         <div class="form-group fill">
                             <label class="floating-label" for="name">Nama Tugas</label>
@@ -65,6 +65,7 @@
                             @endforeach
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" id="btn_preview" class="btn btn-info">Preview <i class="fa fa-eye"></i></button>
                     </form>
                 </div>
             </div>
@@ -78,6 +79,18 @@
     <script src="{{ asset('assets/js/plugins/daterangepicker.js') }}"></script>
     <script>
         $(document).ready(function () {
+
+            $('#btn_preview').on('click', function () {
+                $('#form_task')
+                    .attr('target', '_blank')
+                    .attr('action', '{{ route('assistant.task.preview') }}')
+                    .submit();
+
+                // Revert Form
+                $('#form_task')
+                    .attr('action', '{{ route('assistant.task.store', $class) }}')
+                    .removeAttr('target');
+            });
 
             $('input[name="deadline"]').daterangepicker({
                 timePicker: true,
