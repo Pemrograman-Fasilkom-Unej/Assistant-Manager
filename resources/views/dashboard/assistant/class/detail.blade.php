@@ -62,15 +62,15 @@
                         </div>
                         <br><br>
                         {!! $unsubmited_tasks->count() > 0 ? '<h5>List Tugas Tidak Terkumpulkan</h5>' : '' !!}
-                        <table class="table">
-                        @forelse($unsubmited_tasks as $task)
-                            <td>
+                        <ul class="list-unstyled">
+                            @forelse ($unsubmited_tasks as $task)
+                            <li class="mb-1">
                                 <a href="{{ route('assistant.task.show', $task) }}">{{ $task->title }}</a>
-                            </td>
-                        @empty
-                            <h5>Semua Tugas Terkumpulkan</h5>
-                        @endforelse
-                        </table>
+                            </li>
+                            @empty
+                                <h5>Semua Tugas Terkumpulkan</h5>
+                            @endforelse
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -83,43 +83,45 @@
                 </div>
                 <div class="card-body">
                     <div class="dt-responsive table-responsive">
-                        <table id="student-table" class="table table-striped table-bordered nowrap">
-                            <thead>
-                            <tr>
-                                <th width="10%">#</th>
-                                <th>Nama Tugas</th>
-                                <th>Nilai</th>
-                                <th>Keterangan</th>
-                                <th>File</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($submissions as $index => $submission)
+                        @if ($submissions->isNotEmpty())
+                            <table id="student-table" class="table table-striped table-bordered nowrap">
+                                <thead>
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $submission->task->title }}</td>
-                                    <td>{{ $submission->score }}</td>
-                                    <td>{{ $submission->comment }}</td>
-                                    <td>
-                                        @if(!is_null($submission->files ))
-                                            <a href="{{ route('assistant.task.submission.download', $submission) }}" target="_blank" class="btn btn-success btn-sm has-ripple">
-                                                Download
-                                            </a>
-                                        @else
-                                            No File
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('assistant.task.show', $submission->task) }}"
-                                           class="btn btn-info btn-sm has-ripple">Tugas</a>
-                                    </td>
+                                    <th width="10%">#</th>
+                                    <th>Nama Tugas</th>
+                                    <th>Nilai</th>
+                                    <th>Keterangan</th>
+                                    <th>File</th>
+                                    <th>Action</th>
                                 </tr>
-                            @empty
-                                Belum ada tugas yang pernah disubmit
-                            @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @foreach($submissions as $submission)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $submission->task->title }}</td>
+                                        <td>{{ $submission->score }}</td>
+                                        <td>{{ $submission->comment }}</td>
+                                        <td>
+                                            @if(!is_null($submission->files ))
+                                                <a href="{{ route('assistant.task.submission.download', $submission) }}" target="_blank" class="btn btn-success btn-sm has-ripple">
+                                                    Download
+                                                </a>
+                                            @else
+                                                No File
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('assistant.task.show', $submission->task) }}"
+                                            class="btn btn-info btn-sm has-ripple">Tugas</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <p>Belum ada tugas yang pernah disubmit.</p>
+                        @endif
                     </div>
                 </div>
             </div>

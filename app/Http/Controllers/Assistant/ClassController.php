@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Assistant;
 
-use App\ClassAssistant;
-use App\Classes;
-use App\ClassStudent;
-use App\Http\Controllers\Controller;
-use App\Student;
+use App\Task;
 use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Classes;
+use App\Student;
+use App\ClassStudent;
 use Mockery\Exception;
+use App\ClassAssistant;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ClassController extends Controller
 {
@@ -58,12 +59,15 @@ class ClassController extends Controller
      * @param \App\Classes $classes
      * @return \Illuminate\Http\Response
      */
-    public function show(Classes $class)
+    public function show($classId)
     {
-        if(Auth::user()->can('view', $class)){
-            return view('dashboard.assistant.class.show', compact('class'));
-        }
-        return abort(403);
+        $class = Classes::with(['students.student.submissions' => function ($q) use ($classId) {
+            return $q->whereIn('task_id', Task::whereClassId($classId)->get()->pluck('id'));
+        }])->findOrFail($classId);
+
+        abort_unless(Auth::user()->can('view', $class), 403);
+
+        return view('dashboard.assistant.class.show', compact('class'));
     }
 
     /**
@@ -125,16 +129,12 @@ class ClassController extends Controller
     public function detailStudent(Classes $class, Student $student)
     {
         $student_detail = ClassStudent::whereClassId($class->id)->whereNim($student->nim)->firstOrFail();
-        $submissions = $student->submissions->filter(function ($q) use ($class) {
+        $submissions = $student->submissions()->with('task')->get()->filter(function ($q) use ($class) {
             return $q->task->class_id == $class->id;
         });
 
-        $current_tasks = $submissions->pluck('task_id')->toArray();
-        $unsubmited_tasks = $class->tasks->map(function ($q) use ($current_tasks) {
-            if (!in_array($q->id, $current_tasks)) {
-                return $q;
-            }
-        })->filter();
+        $current_tasks = $submissions->pluck('task.id');
+        $unsubmited_tasks = $class->tasks->whereNotIn('id', $current_tasks);
         return view('dashboard.assistant.class.detail', compact('class', 'student', 'student_detail', 'submissions', 'unsubmited_tasks'));
     }
 }

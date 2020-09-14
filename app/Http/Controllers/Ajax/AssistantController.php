@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Classes;
+use App\ClassStudent;
 use App\Http\Controllers\Controller;
 use App\Task;
 use App\TaskSubmission;
@@ -72,75 +73,92 @@ class AssistantController extends Controller
 
     public function getStudentTaskSubmissions($id)
     {
-        $task = Task::with('submissions.student')->find($id);
-        if (Auth::user()->can('view', $task)) {
-            return DataTables::of($task->submissions)
-                ->addColumn('_status', function ($submission) {
-                    if (!is_null($submission->score)) {
-                        return '<span class="badge badge-light-success">Done</span>';
-                    } else {
-                        return '<span class="badge badge-light-warning">Pending</span>';
-                    }
-                })
-                ->addColumn('_status_order', function ($submission) {
-                    return !is_null($submission->score) ? 1 : 0;
-                })
-                ->addColumn('_nim', function ($submission) {
-                    return '<div class="d-inline-block align-middle">
-                                <div class="d-inline-block">
-                                    <h6 class="m-b-0">'. $submission->student->nim .'</h6>
-                                </div>
-                           </div>';
-                })
-                ->addColumn('_name', function($submission){
+        $task = Task::with('submissions.student')->findOrFail($id);
+
+        abort_unless(Auth::user()->can('view', $task), 403);
+
+        return DataTables::of($task->submissions)
+            ->addColumn('_status', function ($submission) {
+                if (!is_null($submission->score)) {
+                    return '<span class="badge badge-light-success">Done</span>';
+                } else {
+                    return '<span class="badge badge-light-warning">Pending</span>';
+                }
+            })
+            ->addColumn('_status_order', function ($submission) {
+                return !is_null($submission->score) ? 1 : 0;
+            })
+            ->addColumn('_nim', function ($submission) {
+                return '<div class="d-inline-block align-middle">
+                            <div class="d-inline-block">
+                                <h6 class="m-b-0">'. $submission->student->nim .'</h6>
+                            </div>
+                        </div>';
+            })
+            ->addColumn('_name', function($submission){
+                return
+                '<div class="d-inline-block align-middle">
+                    <div class="d-inline-block">
+                        <h6 class="m-b-0">'. $submission->student->name .'</h6>
+                    </div>
+                </div>';
+            })
+            ->addColumn('_file', function($submission){
+                if(!is_null($submission->files)){
                     return
-                    '<div class="d-inline-block align-middle">
-                        <div class="d-inline-block">
-                            <h6 class="m-b-0">'. $submission->student->name .'</h6>
-                        </div>
-                    </div>';
-                })
-                ->addColumn('_file', function($submission){
-                    if(!is_null($submission->files)){
-                        return
-                            '<div class="overlay-edit">
-                                <a href="'. route('assistant.task.submission.download', $submission) .'" target="_blank"
-                                    class="btn btn-sm btn-icon btn-success">
-                                        <i class="feather icon-download"></i>
-                                </a>
-                            </div>';
-                    }
-                })
-                ->addColumn('_comment', function($submission){
-                    return $submission->comment ?? 'No comment';
-                })
-                ->addColumn('_date', function($submission){
-                    return $submission->created_at->format('F, d Y h:i A');
-                })
-                ->addColumn('_score', function($submission){
-                    return $submission->score ?? ' - ';
-                })
-                ->addColumn('_action', function($submission){
-                    if(is_null($submission->score)){
-                        return
                         '<div class="overlay-edit">
-                            <button type="button" class="btn btn-sm btn-icon btn-success add-score-btn" data-toggle="modal"
+                            <a href="'. route('assistant.task.submission.download', $submission) .'" target="_blank"
+                                class="btn btn-sm btn-icon btn-success">
+                                    <i class="feather icon-download"></i>
+                            </a>
+                        </div>';
+                }
+            })
+            ->addColumn('_comment', function($submission){
+                return $submission->comment ?? 'No comment';
+            })
+            ->addColumn('_date', function($submission){
+                return $submission->created_at->format('F, d Y h:i A');
+            })
+            ->addColumn('_score', function($submission){
+                return $submission->score ?? ' - ';
+            })
+            ->addColumn('_action', function($submission){
+                if(is_null($submission->score)){
+                    return
+                    '<div class="overlay-edit">
+                        <button type="button" class="btn btn-sm btn-icon btn-success add-score-btn" data-toggle="modal"
+                            data-id="'. $submission->id .'" data-target="#score-modal">
+                                <i class="feather icon-check-circle"></i>
+                        </button>
+                    </div>';
+                } else {
+                    return
+                        '<div class="overlay-edit">
+                            <button type="button" class="btn btn-sm btn-icon btn-primary edit-score-btn" data-toggle="modal"
                                 data-id="'. $submission->id .'" data-target="#score-modal">
-                                    <i class="feather icon-check-circle"></i>
+                                    <i class="feather icon-edit"></i>
                             </button>
                         </div>';
-                    } else {
-                        return
-                            '<div class="overlay-edit">
-                                <button type="button" class="btn btn-sm btn-icon btn-primary edit-score-btn" data-toggle="modal"
-                                    data-id="'. $submission->id .'" data-target="#score-modal">
-                                        <i class="feather icon-edit"></i>
-                                </button>
-                            </div>';
-                    }
-                })
-                ->rawColumns(['_status', '_nim', '_name', '_file', '_action'])
-                ->make(true);
-        }
+                }
+            })
+            ->rawColumns(['_status', '_nim', '_name', '_file', '_action'])
+            ->make(true);
+    }
+
+    public function getStudentWithoutTaskSubmissions($id)
+    {
+        $task = Task::with('submissions.student')->findOrFail($id);
+
+        abort_unless(Auth::user()->can('view', $task), 403);
+
+        $studentsInClass        = ClassStudent::with('student')->whereClassId($task->class_id)->get()->pluck('student');
+        $studentsSubmittedTask  = $task->submissions->pluck('student');
+        $studentsWithoutTask    = $studentsInClass->diff($studentsSubmittedTask);
+
+        return DataTables::of($studentsWithoutTask)
+            ->addIndexColumn()
+            ->removeColumn('email')
+            ->toJson();
     }
 }
