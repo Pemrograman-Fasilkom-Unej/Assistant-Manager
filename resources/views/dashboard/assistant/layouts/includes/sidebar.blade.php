@@ -28,8 +28,8 @@
                     </a>
                     <ul class="pcoded-submenu">
                         <li><a href="{{ route('assistant.class.index') }}">Kelas</a></li>
-                        @foreach(Auth::user()->classes()->with('classes')->get() as $class)
-                            <li><a href="{{ route('assistant.class.show', $class->classes) }}">{{ $class->classes->title }}</a></li>
+                        @foreach(App\Classes::where('status', 1)->whereHas('assistants', function ($q) {$q->where('assistant_id', Auth::id());})->get() as $class)
+                            <li><a href="{{ route('assistant.class.show', $class) }}">{{ $class->title }}</a></li>
                         @endforeach
                     </ul>
                 </li>

@@ -15,9 +15,8 @@ class AssistantController extends Controller
 {
     public function getClasses(Request $request)
     {
-        $classes = Auth::user()->classes->map(function ($class, $index) {
-            $class->classes->no = $index + 1;
-            return $class->classes;
+        $classes = Classes::whereStatus(1)->whereHas('assistants', function($q){
+            $q->where('assistant_id', Auth::id());
         });
 
         if ($request->has('status')) {
@@ -25,6 +24,7 @@ class AssistantController extends Controller
         }
 
         return DataTables::of($classes)
+            ->addIndexColumn()
             ->addColumn('_year', function ($q) {
                 return $q->year . ($q->semester == 1 ? ' / Ganjil' : ' / Genap');
             })
@@ -36,7 +36,7 @@ class AssistantController extends Controller
             })
             ->addColumn('action', function ($q) {
                 return "
-                    <a class='btn btn-primary btn-sm has-ripple' href='" . route('assistant.class.show', $q) . "'>Detail</a>   
+                    <a class='btn btn-primary btn-sm has-ripple' href='" . route('assistant.class.show', $q) . "'>Detail</a>
                 ";
             })
             ->make(true);

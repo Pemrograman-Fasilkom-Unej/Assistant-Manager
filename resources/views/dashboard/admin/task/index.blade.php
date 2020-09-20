@@ -66,11 +66,11 @@
             processing: true,
             ajax: '{{ route('ajax.admin.task.index') }}',
             columns: [
-                { data: 'no' },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, sortable: false },
                 { data: '_class' },
                 { data: 'title' },
                 { data: '_url' },
-                { data: '_deadline' },
+                { data: '_deadline', name: 'due_time' },
                 { data: 'action' },
             ]
         })

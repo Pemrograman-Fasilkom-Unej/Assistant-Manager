@@ -36,6 +36,7 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], funct
         Route::get('task/student/info/{id}', 'AdminController@getStudentInfo')->name('student.info');
         Route::post('file/upload', 'AdminController@uploadFile')->name('file.upload');
         Route::get('task/{id}/submissions', 'AdminController@getStudentTaskSubmissions')->name('task.submissions');
+        Route::get('links', 'AdminController@getLinks')->name('links');
     });
 
     Route::group(['prefix' => 'assistant', 'as' => 'assistant.', 'middleware' => ['auth', 'role:assistant']], function(){
@@ -106,6 +107,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     Route::post('/link', 'LinkController@store')->name('link.store');
     Route::delete('/link', 'LinkController@delete')->name('link.delete');
 
+    Route::get('/settings', 'ConfigController@index')->name('config.index');
+    Route::post('/settings/year-semester', 'ConfigController@changeYear')->name('config.change-year');
+
     Route::view('/note', 'coming-soon')->name('note.index');
 });
 
@@ -116,3 +120,4 @@ Route::middleware('auth')->group(function(){
 Route::get('/task/{token}', 'TaskController@show')->name('task.show');
 Route::post('/task/{token}', 'TaskController@uploadSubmission')->name('task.upload');
 Route::post('/task/{token}/check', 'TaskController@checkStudent')->name('task.check');
+

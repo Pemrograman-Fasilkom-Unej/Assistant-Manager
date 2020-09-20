@@ -27,7 +27,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $classes = Classes::whereHas('assistants', function ($assistant) {
+        $classes = Classes::where('status', 1)->whereHas('assistants', function ($assistant) {
             $assistant->where('assistant_id', Auth::id());
         })->get();
         return view('dashboard.assistant.task.index', compact('classes'));
@@ -42,6 +42,9 @@ class TaskController extends Controller
     public function create(Classes $class)
     {
         abort_unless(Auth::user()->can('view', $class), 403);
+        if($class->status !== 1){
+            return redirect()->back()->with('error', 'Kelas sudah tidak dapat diberi tugas');
+        }
 
         $datatypes = Task::FILE_TYPES;
         return view('dashboard.assistant.task.create', compact('class', 'datatypes'));

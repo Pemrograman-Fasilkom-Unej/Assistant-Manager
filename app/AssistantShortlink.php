@@ -10,49 +10,61 @@ namespace App;
 
 
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Facades\Auth;
 
 class AssistantShortlink
 {
-    public static function config(){
+    public static function config()
+    {
         $client = new Client([
             'base_uri' => env("SHORTLINK_URL"),
             'headers' => [
-                'KEY' => env("SHORTLINK_KEY", "TOKEN_NOT_SET"),
+                'key' => env("SHORTLINK_KEY", "TOKEN_NOT_SET"),
                 'Content-Type' => "application/json"
             ]
         ]);
         return $client;
     }
 
-    public static function storeLink($long_url, $short_url = ""){
+    public static function getLinks($params = [])
+    {
         $client = self::config();
-        $response = $client->post("link", [
-            'form_params' => [
-                'long_url' => $long_url,
-                'short_url' => $short_url,
-            ]
+        $response = $client->get('/api/v1/link', [
+            'query' => $params
         ]);
-        $data = json_decode($response->getBody()->getContents());
-        if($data->success == 1){
-            $short_url = env('SHORTLINK_URL') . $data->data->short_url;
-            Link::create([
-                'user_id' => Auth::id(),
-                'link_id' => $data->data->_id,
-                'short_url' => $short_url,
-                'long_url' => $data->data->long_url
-            ]);
-            return $short_url;
+        $data = json_decode($response->getBody()->getContents(), false);
+        if($data->statusCode){
+            return $data->data;
         } else {
-            throw new \Exception($data->message);
+            return [];
         }
     }
 
-    public static function deleteLink($id){
+    public static function storeLink($long_url, $is_custom = false, $short_url = '')
+    {
         $client = self::config();
-        $response = $client->delete("link/$id");
+        $response = $client->post("/api/v1/link", [
+            RequestOptions::JSON => [
+                'long_url' => $long_url,
+                'is_custom' => $is_custom,
+                'short_url' => $short_url,
+            ]
+        ]);
+        $apiData = json_decode($response->getBody()->getContents(), true);
+        if ($apiData['statusCode'] === 200) {
+            return env('SHORTLINK_URL') . $apiData['data']['short_url'];
+        } else {
+            throw new \Exception('Shortlink Error : ' . $apiData['message']);
+        }
+    }
+
+    public static function deleteLink($id)
+    {
+        $client = self::config();
+        $response = $client->delete("/api/v1/link/$id");
         $data = json_decode($response->getBody()->getContents());
-        if($data->success == 1){
+        if ($data->statusCode === 200) {
             return $data;
         } else {
             throw new \Exception($data->message);

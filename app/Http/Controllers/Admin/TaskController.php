@@ -32,7 +32,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $classes = Classes::get();
+        $classes = Classes::where('status', 1)->get();
+        // return $classes;
         return view('dashboard.admin.task.index', compact('classes'));
     }
 

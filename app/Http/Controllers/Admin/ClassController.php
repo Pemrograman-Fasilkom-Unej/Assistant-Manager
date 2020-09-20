@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\ClassAssistant;
 use App\Classes;
 use App\ClassStudent;
+use App\Config;
 use App\Http\Controllers\Controller;
 use App\Student;
 use App\User;
@@ -26,12 +27,7 @@ class ClassController extends Controller
      */
     public function index()
     {
-        $years = Classes::get()->groupBy(function ($q) {
-            return $q->created_at->format('Y');
-        })->map(function ($q, $k) {
-            return $k;
-        });
-        return view('dashboard.admin.class.index', compact('years'));
+        return view('dashboard.admin.class.index');
     }
 
     /**
@@ -51,11 +47,8 @@ class ClassController extends Controller
             "Jumat",
             "Sabtu"
         ];
-        for ($i = 0; $i < 5; $i++) {
-            array_push($years, date('Y') - $i);
-        }
         $assistants = User::whereRoleId(2)->get();
-        return view('dashboard.admin.class.create', compact('years', 'assistants', 'days'));
+        return view('dashboard.admin.class.create', compact('assistants', 'days'));
     }
 
     /**
@@ -68,9 +61,7 @@ class ClassController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|min:6|max:32',
-            'year' => 'required',
             'day' => 'required|min:0|max:6',
-            'semester' => 'required',
             'assistants' => 'required',
             'students' => 'required',
             'time' => 'required'
@@ -79,7 +70,14 @@ class ClassController extends Controller
         $request->request->set('status', 1);
         try {
             DB::beginTransaction();
-            $class = Classes::create($request->all());
+            $class = Classes::create([
+                'title' => $request->title,
+                'day' => $request->day,
+                'year' => Config::year(),
+                'semester' => Config::semester(),
+                'time' => $request->time
+            ]);
+
             foreach ($request->assistants as $assistant) {
                 ClassAssistant::create([
                     'assistant_id' => $assistant,
