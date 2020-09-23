@@ -148,9 +148,7 @@ class ClassController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|min:6|max:32',
-            'year' => 'required',
             'day' => 'required|min:0|max:6',
-            'semester' => 'required',
             'assistants' => 'required',
             'time' => 'required'
         ]);
