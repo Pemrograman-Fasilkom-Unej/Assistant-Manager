@@ -65,7 +65,7 @@
             processing: true,
             ajax: '{{ route('ajax.assistant.class.index') }}',
             columns: [
-                {data: 'no'},
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, sortable: false },
                 {data: 'title'},
                 {data: '_year'},
                 {data: '_student_count'},

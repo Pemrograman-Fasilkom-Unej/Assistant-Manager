@@ -58,7 +58,7 @@
             processing: true,
             ajax: '{{ route('ajax.admin.assistant.index') }}',
             columns: [
-                { data: 'no' },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, sortable: false },
                 { data: 'name' },
                 { data: 'nim' },
                 { data: 'username' },

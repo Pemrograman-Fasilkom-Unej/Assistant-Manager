@@ -176,7 +176,7 @@
             console.log(file);
         },
         error: (file, errorMessage, xhr) => {
-            notify(errorMessage, "danger");
+            notify(JSON.stringify(errorMessage), "danger");
             $('#description').removeAttr('readonly');
             $('#btn---upload').removeClass('disabled');
         }

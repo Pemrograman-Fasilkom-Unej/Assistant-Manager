@@ -34,22 +34,6 @@
                             <label class="floating-label" for="name">Nama Kelas</label>
                             <input type="text" class="form-control" id="name" aria-describedby="Nama Kelas" placeholder="Masukan Nama Kelas" name="title" required value="{{ old('title') }}">
                         </div>
-                        <div class="form-group">
-                            <label for="year">Tahun</label>
-                            <select class="js-example-basic-single form-control" id="tahun-select" name="year" required>
-                                @foreach($years  as $year)
-                                    <option {{ old('year') == $year ? 'selected' : '' }} value="{{ $year }}">{{ $year }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="year">Semester</label>
-                            <select class="js-example-basic-single form-control" id="semester-select" name="semester" required>
-                                <option {{ old('semester') == 1 ? 'selected' : '' }} value="1">Ganjil</option>
-                                <option {{ old('semester') == 2 ? 'selected' : '' }} value="2">Genap</option>
-                            </select>
-                        </div>
 
                         <div class="form-group">
                             <label for="day">Hari Praktikum</label>

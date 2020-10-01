@@ -24,12 +24,7 @@ class ClassController extends Controller
      */
     public function index()
     {
-        $years = Classes::get()->groupBy(function ($q) {
-            return $q->created_at->format('Y');
-        })->map(function ($q, $k) {
-            return $k;
-        });
-        return view('dashboard.assistant.class.index', compact('years'));
+        return view('dashboard.assistant.class.index');
     }
 
     /**
@@ -39,7 +34,6 @@ class ClassController extends Controller
      */
     public function create()
     {
-
     }
 
     /**
@@ -50,7 +44,6 @@ class ClassController extends Controller
      */
     public function store(Request $request)
     {
-
     }
 
     /**
@@ -78,7 +71,6 @@ class ClassController extends Controller
      */
     public function edit(Classes $class)
     {
-
     }
 
     /**
@@ -90,7 +82,6 @@ class ClassController extends Controller
      */
     public function update(Request $request, Classes $class)
     {
-
     }
 
     /**
@@ -104,12 +95,13 @@ class ClassController extends Controller
         //
     }
 
-    public function addStudent(Classes $class, Request $request){
+    public function addStudent(Classes $class, Request $request)
+    {
         $this->validate($request, [
             'students' => 'required'
         ]);
 
-        if(Auth::user()->can('view', $class)){
+        if (Auth::user()->can('view', $class)) {
             try {
                 DB::beginTransaction();
                 foreach (array_unique(explode("\n", $request->students)) as $student) {
@@ -118,7 +110,7 @@ class ClassController extends Controller
                     ]);
                 }
                 DB::commit();
-            } catch (\Exception $exception){
+            } catch (\Exception $exception) {
                 DB::rollBack();
                 dd($exception);
             }

@@ -17,11 +17,9 @@ class AdminController extends Controller
 {
     public function getAssistants()
     {
-        $assistants = User::whereIs('assistant')->get()->map(function ($q, $i) {
-            $q->no = $i + 1;
-            return $q;
-        });
+        $assistants = User::whereIs('assistant');
         return DataTables::of($assistants)
+            ->addIndexColumn()
             ->addColumn('action', function ($q) {
                 return "<a class='btn btn-sm has-ripple btn-primary' href='". route('admin.assistant.show', $q) ."'>Detail</a>";
             })
@@ -30,16 +28,14 @@ class AdminController extends Controller
 
     public function getClasses(Request $request)
     {
-        $classes = Classes::orderBy('title')->get()->map(function ($q, $i) {
-            $q->no = $i + 1;
-            return $q;
-        });
+        $classes = Classes::orderByDesc('created_at');
 
         if ($request->has('status')) {
             $classes = $classes->whereStatus($request->status);
         }
 
         return DataTables::of($classes)
+            ->addIndexColumn()
             ->addColumn('_year', function($q){
                 return $q->year . ($q->semester == 1 ? ' / Ganjil' : ' / Genap');
             })
@@ -58,19 +54,16 @@ class AdminController extends Controller
                 return "
                     <a class='btn btn-primary btn-sm has-ripple' href='". route('admin.class.show', $q) ."'>Detail</a>
                     <a class='btn btn-info btn-sm has-ripple' href='". route('admin.class.edit', $q) ."'>Edit</a>
-                    $status    
+                    $status
                 ";
             })
             ->make(true);
     }
 
     public function getTasks(Request $request){
-        $my_classes = Auth::user()->classes->pluck('class_id')->toArray();
-        $tasks = Task::get()->map(function($q, $i){
-            $q->no = $i + 1;
-            return $q;
-        });
+        $tasks = Task::orderByDesc('due_time');
         return DataTables::of($tasks)
+            ->addIndexColumn()
             ->addColumn('_class', function($q){
                 return $q->classes->title;
             })

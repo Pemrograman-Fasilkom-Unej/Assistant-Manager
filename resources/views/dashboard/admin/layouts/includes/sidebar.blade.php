@@ -32,19 +32,19 @@
                 <li class="nav-item pcoded-menu-caption">
                     <label>Others</label>
                 </li>
-                <li class="nav-item"><a href="{{ route('admin.ticket.index') }}" class="nav-link "><span
+                {{-- <li class="nav-item"><a href="{{ route('admin.ticket.index') }}" class="nav-link "><span
                                 class="pcoded-micon"><i class="feather icon-bookmark"></i></span><span
-                                class="pcoded-mtext">Tickets</span></a></li>
-                <li class="nav-item"><a href="{{ route('admin.calendar.index') }}" class="nav-link "><span
+                                class="pcoded-mtext">Tickets</span></a></li> --}}
+                {{-- <li class="nav-item"><a href="{{ route('admin.calendar.index') }}" class="nav-link "><span
                                 class="pcoded-micon"><i class="feather icon-calendar"></i></span><span
-                                class="pcoded-mtext">Kalender</span></a></li>
+                                class="pcoded-mtext">Kalender</span></a></li> --}}
                 <li class="nav-item"><a href="{{ route('admin.link.index') }}" class="nav-link "><span
                                 class="pcoded-micon"><i class="feather icon-link"></i></span><span class="pcoded-mtext">Shortlink</span></a>
                 </li>
-                <li class="nav-item"><a href="{{ route('admin.note.index') }}" class="nav-link "><span
+                {{-- <li class="nav-item"><a href="{{ route('admin.note.index') }}" class="nav-link "><span
                                 class="pcoded-micon"><i class="feather icon-book"></i></span><span class="pcoded-mtext">Notes</span></a>
-                </li>
-                <li class="nav-item"><a href="{{ route('admin.note.index') }}" class="nav-link "><span
+                </li> --}}
+                <li class="nav-item"><a href="{{ route('admin.config.index') }}" class="nav-link "><span
                                 class="pcoded-micon"><i class="feather icon-settings"></i></span><span
                                 class="pcoded-mtext">Pengaturan</span></a></li>
             </ul>
