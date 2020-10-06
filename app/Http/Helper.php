@@ -52,3 +52,44 @@ if (!function_exists('error_response')) {
         return json_response(0, "Something error", compact('errors'));
     }
 }
+
+if (! function_exists('in_arrayi')) {
+    /**
+     * Case-insensitive in_array wrapper.
+     *
+     * @param   mixed $needle   Value to seek.
+     * @param   array $haystack Array to seek in.
+     *
+     * @return bool
+     */
+    function in_arrayi($needle, array $haystack): bool
+    {
+        return in_array(strtolower($needle), array_map('strtolower', $haystack), false);
+    }
+}
+
+if (! function_exists('validateFileTypes')) {
+    /**
+     * Does $type exist in $dataTypes?
+     *
+     * @param mixed $types      Type to check.
+     * @param array $validTypes List of valid types.
+     *
+     * @return bool
+     */
+    function validateFileTypes($types, array $validTypes): bool
+    {
+        if (! is_array($types)) {
+            return in_arrayi($types, $validTypes);
+        }
+
+        foreach ($types as $type) {
+            if (! in_arrayi($type, $validTypes)) {
+                return false;
+            }
+            continue;
+        }
+
+        return true;
+    }
+}
