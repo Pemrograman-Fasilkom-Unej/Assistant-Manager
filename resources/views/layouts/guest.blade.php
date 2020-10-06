@@ -29,7 +29,7 @@
                     @yield('content')
 
                     <div class="simple-footer">
-                        Copyright &copy; Pemro Fasilkom Universitas Jember
+                        Copyright &copy; Pemro Fasilkom Universitas Jember 2020
                     </div>
                 </div>
             </div>

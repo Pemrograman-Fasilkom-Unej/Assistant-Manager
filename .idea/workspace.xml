@@ -136,6 +136,9 @@
       <path value="$PROJECT_DIR$/vendor/doctrine/cache" />
       <path value="$PROJECT_DIR$/vendor/doctrine/event-manager" />
       <path value="$PROJECT_DIR$/vendor/spatie/laravel-permission" />
+      <path value="$PROJECT_DIR$/vendor/maximebf/debugbar" />
+      <path value="$PROJECT_DIR$/vendor/barryvdh/laravel-debugbar" />
+      <path value="$PROJECT_DIR$/vendor/symfony/debug" />
     </include_path>
   </component>
   <component name="ProjectId" id="1iJGXBn5Kq9ZK6CNdBJ9Ozppm7x" />
@@ -146,7 +149,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/css" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/views/dashboard/admin" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -157,7 +160,13 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/Http/Livewire" />
+      <recent name="$PROJECT_DIR$/resources/views/livewire" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/views/dashboard/admin" />
+      <recent name="$PROJECT_DIR$/resources/views/dashboard/admin/assistant" />
       <recent name="$PROJECT_DIR$/public/css" />
     </key>
   </component>
@@ -189,9 +198,37 @@
       <screen x="0" y="23" width="1680" height="962" />
     </state>
     <state x="561" y="314" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1680.962/1680.0.1920.1080@0.23.1680.962" timestamp="1601619115375" />
-    <state x="505" y="234" width="670" height="158" key="search.everywhere.popup" timestamp="1601619264498">
+    <state x="565" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1602009194468">
       <screen x="0" y="23" width="1680" height="962" />
     </state>
-    <state x="505" y="234" width="670" height="158" key="search.everywhere.popup/0.23.1680.962/1680.0.1920.1080@0.23.1680.962" timestamp="1601619264498" />
+    <state x="565" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.23.1680.962/1680.0.1920.1080@0.23.1680.962" timestamp="1602009194468" />
+    <state width="1638" height="259" key="GridCell.Tab.0.bottom" timestamp="1602009135543">
+      <screen x="0" y="23" width="1680" height="962" />
+    </state>
+    <state width="1638" height="259" key="GridCell.Tab.0.bottom/0.23.1680.962/1680.0.1920.1080@0.23.1680.962" timestamp="1602009135543" />
+    <state width="1638" height="259" key="GridCell.Tab.0.center" timestamp="1602009135542">
+      <screen x="0" y="23" width="1680" height="962" />
+    </state>
+    <state width="1638" height="259" key="GridCell.Tab.0.center/0.23.1680.962/1680.0.1920.1080@0.23.1680.962" timestamp="1602009135542" />
+    <state width="1638" height="259" key="GridCell.Tab.0.left" timestamp="1602009135541">
+      <screen x="0" y="23" width="1680" height="962" />
+    </state>
+    <state width="1638" height="259" key="GridCell.Tab.0.left/0.23.1680.962/1680.0.1920.1080@0.23.1680.962" timestamp="1602009135541" />
+    <state width="1638" height="259" key="GridCell.Tab.0.right" timestamp="1602009135542">
+      <screen x="0" y="23" width="1680" height="962" />
+    </state>
+    <state width="1638" height="259" key="GridCell.Tab.0.right/0.23.1680.962/1680.0.1920.1080@0.23.1680.962" timestamp="1602009135542" />
+    <state x="659" y="438" key="NewPhpFileDialog" timestamp="1601999328119">
+      <screen x="0" y="23" width="1680" height="962" />
+    </state>
+    <state x="659" y="438" key="NewPhpFileDialog/0.23.1680.962/1680.0.1920.1080@0.23.1680.962" timestamp="1601999328119" />
+    <state width="500" height="445" key="SwitcherDM" timestamp="1602014225574">
+      <screen x="0" y="23" width="1680" height="962" />
+    </state>
+    <state width="500" height="445" key="SwitcherDM/0.23.1680.962/1680.0.1920.1080@0.23.1680.962" timestamp="1602014225574" />
+    <state x="505" y="234" width="670" height="158" key="search.everywhere.popup" timestamp="1602014504886">
+      <screen x="0" y="23" width="1680" height="962" />
+    </state>
+    <state x="505" y="234" width="670" height="158" key="search.everywhere.popup/0.23.1680.962/1680.0.1920.1080@0.23.1680.962" timestamp="1602014504886" />
   </component>
 </project>
