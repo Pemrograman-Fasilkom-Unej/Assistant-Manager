@@ -21,9 +21,9 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/redirect', function(){
+    Route::get('/redirect', function () {
         $user = \Illuminate\Support\Facades\Auth::user();
-        if($user->hasRole('admin')){
+        if ($user->hasRole('admin')) {
             return redirect()->route('dashboard.admin.overview');
         } else {
             return redirect()->route('dashboard.student.overview');
@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group([
         'prefix' => 'dashboard',
         'as' => 'dashboard.'
-    ], function(){
+    ], function () {
         // Dashboard Admin Controller
         Route::group([
             'middleware' => ['role:admin'],
@@ -47,6 +47,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
             Route::get('/classroom', [\App\Http\Controllers\Admin\ClassroomController::class, 'index'])->name('classroom.index');
             Route::get('/classroom/create', [\App\Http\Controllers\Admin\ClassroomController::class, 'create'])->name('classroom.create');
+
+            Route::get('/student', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('student.index');
+
+            Route::get('/setting', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('setting.index');
         });
 
         // Dashboard Assistant Controller
@@ -72,9 +76,27 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group([
         'prefix' => 'api',
         'as' => 'api.'
-    ], function(){
+    ], function () {
 
     });
+});
+
+Route::get('/test', function () {
+    $files = \Illuminate\Support\Facades\Storage::disk('database')->allFiles();
+    $students = [];
+    foreach ($files as $file) {
+        $batch = \Illuminate\Support\Facades\Storage::disk('database')->get($file);
+        $datas = \Illuminate\Support\Str::of($batch)->explode("\n");
+        unset($datas[count($datas) - 1]);
+        foreach ($datas as $data) {
+            $d = explode(",", $data);
+            array_push($students, [
+                'username' => $d[0],
+                'name' => $d[1]
+            ]);
+        }
+    }
+    dd($students);
 });
 
 // Route::middleware(['auth:sanctum'])->get('/dashboard', function () {

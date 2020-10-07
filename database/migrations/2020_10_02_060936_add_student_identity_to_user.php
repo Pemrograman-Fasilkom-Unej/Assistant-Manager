@@ -17,8 +17,10 @@ class AddStudentIdentityToUser extends Migration
             $table->string('username', 12)
                 ->after('id')
                 ->unique();
+            $table->unsignedBigInteger('telegram_id')
+                ->nullable();
             $table->dateTime('activate_at')
-                ->before('created_at')
+                ->after('profile_photo_path')
                 ->nullable();
             $table->string('email')->nullable()->change();
         });

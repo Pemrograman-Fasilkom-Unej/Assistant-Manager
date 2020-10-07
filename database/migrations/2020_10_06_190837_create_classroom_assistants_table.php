@@ -18,8 +18,16 @@ class CreateClassroomAssistantsTable extends Migration
             $table->unsignedBigInteger('classroom_id');
             $table->unsignedBigInteger('assistant_id');
 
-            $table->foreign('classroom_id')->references('id')->on('classrooms');
-            $table->foreign('assistant_id')->references('id')->on('users');
+            $table->foreign('classroom_id')
+                ->references('id')
+                ->on('classrooms')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('assistant_id')
+                ->references('id')
+                ->on('users')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

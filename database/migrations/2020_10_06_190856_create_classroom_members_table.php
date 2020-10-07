@@ -18,8 +18,16 @@ class CreateClassroomMembersTable extends Migration
             $table->unsignedBigInteger('classroom_id');
             $table->unsignedBigInteger('member_id');
 
-            $table->foreign('classroom_id')->references('id')->on('classrooms');
-            $table->foreign('member_id')->references('id')->on('users');
+            $table->foreign('classroom_id')
+                ->references('id')
+                ->on('classrooms')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('member_id')
+                ->references('id')
+                ->on('users')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

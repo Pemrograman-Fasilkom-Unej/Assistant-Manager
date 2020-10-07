@@ -28,12 +28,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password',
+        'name', 'username', 'email', 'password', 'active_at'
     ];
 
-    const CODE_SI = 10;
-    const CODE_TI = 20;
-    const CODE_IF = 30;
+    const CODE_SI = 1;
+    const CODE_TI = 2;
+    const CODE_IF = 3;
 
     /**
      * The attributes that should be hidden for arrays.
@@ -45,6 +45,10 @@ class User extends Authenticatable
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
+    ];
+
+    protected $dates = [
+        'activate_at'
     ];
 
     /**
@@ -68,7 +72,7 @@ class User extends Authenticatable
     public function getProgramAttribute()
     {
         if (strlen($this->username) === 12) {
-            $code = intval(Str::of($this->username)->after('241010')->substr(0, 2)->__toString());
+            $code = intval(Str::of($this->username)->after('241010')->substr(0, 1)->__toString());
             if ($code === self::CODE_SI) {
                 return 'Sistem Informasi';
             } else if ($code === self::CODE_TI) {
@@ -86,5 +90,10 @@ class User extends Authenticatable
             return intval('20' . Str::of($this->username)->substr(0, 2)->__toString());
         }
         return ' - ';
+    }
+
+    public function isActive()
+    {
+        return !is_null($this->activate_at);
     }
 }

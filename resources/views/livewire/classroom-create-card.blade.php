@@ -12,30 +12,12 @@
             <div class="form-group">
                 <label class="form-label">Topic</label>
                 <div class="selectgroup selectgroup-pills">
-                    <label class="selectgroup-item">
-                        <input type="radio" name="topic" value="HTML" class="selectgroup-input" checked="">
-                        <span class="selectgroup-button">Pemrograman Berorientasi Objek 1</span>
-                    </label>
-                    <label class="selectgroup-item">
-                        <input type="radio" name="topic" value="CSS" class="selectgroup-input">
-                        <span class="selectgroup-button">Pemrograman Berorientasi Objek 2</span>
-                    </label>
-                    <label class="selectgroup-item">
-                        <input type="radio" name="topic" value="PHP" class="selectgroup-input">
-                        <span class="selectgroup-button">Perancangan Web</span>
-                    </label>
-                    <label class="selectgroup-item">
-                        <input type="radio" name="topic" value="JavaScript" class="selectgroup-input">
-                        <span class="selectgroup-button">Pemrograman Web</span>
-                    </label>
-                    <label class="selectgroup-item">
-                        <input type="radio" name="topic" value="Ruby" class="selectgroup-input">
-                        <span class="selectgroup-button">Pemrograman Framework</span>
-                    </label>
-                    <label class="selectgroup-item">
-                        <input type="radio" name="topic" value="Ruby" class="selectgroup-input">
-                        <span class="selectgroup-button">Pemrograman Grafis</span>
-                    </label>
+                    @foreach($topics as $index => $val)
+                        <label class="selectgroup-item">
+                            <input type="radio" name="topic" value="{{ $val['id'] }}" class="selectgroup-input" wire:model="topic">
+                            <span class="selectgroup-button">{{ $val['name'] }}</span>
+                        </label>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -43,56 +25,26 @@
         <div class="form-group">
             <label class="form-label">Program</label>
             <div class="selectgroup w-100">
-                <label class="selectgroup-item">
-                    <input type="radio" name="program" value="50" class="selectgroup-input" checked="">
-                    <span class="selectgroup-button">Sistem Informasi</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="program" value="100" class="selectgroup-input">
-                    <span class="selectgroup-button">Teknologi Informasi</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="program" value="150" class="selectgroup-input">
-                    <span class="selectgroup-button">Informatika</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="program" value="200" class="selectgroup-input">
-                    <span class="selectgroup-button">Custom</span>
-                </label>
+                @foreach($programs as $code => $val)
+                    <label class="selectgroup-item">
+                        <input type="radio" value="{{ $code }}" wire:model="program"
+                               class="selectgroup-input" {{ $code === 'O' ? 'checked' : '' }}>
+                        <span class="selectgroup-button">{{ $val }}</span>
+                    </label>
+                @endforeach
             </div>
         </div>
 
         <div class="form-group">
             <label class="form-label">Class</label>
             <div class="selectgroup selectgroup-pills">
-                <label class="selectgroup-item">
-                    <input type="radio" name="icon-input" value="1" class="selectgroup-input" checked="">
-                    <span class="selectgroup-button selectgroup-button-icon">A</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="icon-input" value="1" class="selectgroup-input" checked="">
-                    <span class="selectgroup-button selectgroup-button-icon">B</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="icon-input" value="1" class="selectgroup-input" checked="">
-                    <span class="selectgroup-button selectgroup-button-icon">C</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="icon-input" value="1" class="selectgroup-input" checked="">
-                    <span class="selectgroup-button selectgroup-button-icon">D</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="icon-input" value="1" class="selectgroup-input" checked="">
-                    <span class="selectgroup-button selectgroup-button-icon">E</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="icon-input" value="1" class="selectgroup-input" checked="">
-                    <span class="selectgroup-button selectgroup-button-icon">F</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="icon-input" value="1" class="selectgroup-input" checked="">
-                    <span class="selectgroup-button selectgroup-button-icon">G</span>
-                </label>
+                @foreach($classes as $index => $name)
+                    <label class="selectgroup-item">
+                        <input type="radio" value="{{ $name }}" wire:model="class"
+                               class="selectgroup-input" {{ $index === 0 ? 'checked' : '' }}>
+                        <span class="selectgroup-button selectgroup-button-icon">{{ $name }}</span>
+                    </label>
+                @endforeach
             </div>
         </div>
 
@@ -101,15 +53,15 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Day</label>
-                        <select class="form-control">
-                            <option>Senin</option>
-                            <option>Selasa</option>
-                            <option>Rabu</option>
+                        <select class="form-control" wire:model="day">
+                            @foreach($days as $key => $val)
+                                <option value="{{ $key }}">{{ $val }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
+                    <div class="form-group" wire:ignore>
                         <label>Time Picker</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -117,29 +69,36 @@
                                     <i class="fas fa-clock"></i>
                                 </div>
                             </div>
-                            <input type="text" class="form-control timepicker">
+                            <input type="text" class="form-control timepicker" id="time-input">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" wire:ignore>
             <label>Assistant</label>
-            <select class="form-control select2" multiple="">
-                <option>Option 1</option>
-                <option>Option 2</option>
-                <option>Option 3</option>
-                <option>Option 4</option>
-                <option>Option 5</option>
-                <option>Option 6</option>
+            <select class="form-control select2" multiple="" id="assistants-select">
+                @foreach($assistants as $assistant)
+                    <option value="{{ $assistant['id'] }}">{{ $assistant['name'] }}</option>
+                @endforeach
             </select>
         </div>
-        <button type="submit" class="btn btn-primary text-right">Submit</button>
+
+        <button type="submit" class="btn btn-primary text-right" wire:click="submit">Submit</button>
     </div>
 </div>
 
 @push('scripts')
     <script src="{{ asset('dist/js/bootstrap-timepicker.js') }}"></script>
     <script src="{{ asset('dist/js/select2.min.js') }}"></script>
+    <script>
+        $('#assistants-select').select2();
+        $('#assistants-select').change(function(){
+            @this.set('selected_assistants', $(this).val());
+        });
+        $('#time-input').change(function(){
+            @this.set('time', $(this).val());
+        })
+    </script>
 @endpush

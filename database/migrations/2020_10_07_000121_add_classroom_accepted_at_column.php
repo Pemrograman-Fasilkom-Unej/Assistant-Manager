@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddClassroomTopicIdColumns extends Migration
+class AddClassroomAcceptedAtColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,7 @@ class AddClassroomTopicIdColumns extends Migration
     public function up()
     {
         Schema::table('classrooms', function (Blueprint $table) {
-            $table->unsignedBigInteger('topic_id')->after('id');
-
-            $table->foreign('topic_id')
-                ->references('id')
-                ->on('topics')
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+            $table->dateTime('accepted_at')->after('status')->nullable();
         });
     }
 
@@ -32,8 +26,7 @@ class AddClassroomTopicIdColumns extends Migration
     public function down()
     {
         Schema::table('classrooms', function (Blueprint $table) {
-            $table->dropForeign(['topic_id']);
-            $table->dropColumn('topic_id');
+            $table->dropColumn('accepted_at');
         });
     }
 }

@@ -52,7 +52,7 @@ class RoleSeeder extends Seeder
         // Seeding role
         $admin = Role::create([
             'name' => Role::ADMIN,
-            'guard_name' => Role::ADMIN
+            'guard_name' => 'web'
         ]);
 
         $admin->givePermissionTo([
@@ -68,7 +68,7 @@ class RoleSeeder extends Seeder
 
         $assistant = Role::create([
             'name' => Role::ASSISTANT,
-            'guard_name' => Role::ASSISTANT
+            'guard_name' => 'web'
         ]);
 
         $assistant->givePermissionTo([
@@ -82,10 +82,10 @@ class RoleSeeder extends Seeder
 
         $student = Role::create([
             'name' => Role::STUDENT,
-            'guard_name' => Role::STUDENT
+            'guard_name' => 'web'
         ]);
 
-        $assistant->givePermissionTo([
+        $student->givePermissionTo([
             Permission::SUBMIT_ASSIGNMENT,
         ]);
     }

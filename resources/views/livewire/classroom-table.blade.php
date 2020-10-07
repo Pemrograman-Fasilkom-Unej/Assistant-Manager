@@ -26,28 +26,34 @@
                     <th>Action</th>
                 </tr>
                 <tr>
-                    <td class="p-0 text-center">
-                        1
-                    </td>
-                    <td>Input data</td>
-                    <td class="align-middle">
-                        Friday, 7AM (5 Days from now)
-                    </td>
-                    <td>
-                        <img alt="image" src="../dist/img/avatar/avatar-2.png" class="rounded-circle" width="35"
-                             data-toggle="tooltip" title="Rizal Fakhri">
-                        <img alt="image" src="../dist/img/avatar/avatar-5.png" class="rounded-circle" width="35"
-                             data-toggle="tooltip" title="Isnap Kiswandi">
-                    </td>
-                    <td>40 Students</td>
-                    <td>5 Assigments</td>
-                    <td>
-                        <div class="badge badge-warning">Pending</div>
-                    </td>
-                    <td>
-                        <a href="#" class="btn btn-success">Accept</a>
-                        <a href="#" class="btn btn-primary">Detail</a>
-                    </td>
+                    @foreach($classrooms as $index => $classroom)
+                        <td class="p-0 text-center">
+                            {{ $index + 1 }}
+                        </td>
+                        <td>{{ $classroom->title }}</td>
+                        <td class="align-middle">
+                            {{ $classroom->schedule->format('d/m/Y h:i') }} ({{ $classroom->schedule->diffForHumans() }}
+                            )
+                        </td>
+                        <td>
+                            @foreach($classroom->assistants as $assistant)
+                                <img alt="image" src="{{ $assistant->profile_photo_url }}" class="rounded-circle" width="35"
+                                     data-toggle="tooltip" title="{{ $assistant->name }}">
+                            @endforeach
+                        </td>
+                        <td>{{ $classroom->members()->count() }} Students</td>
+                        <td>5 Assigments</td>
+                        <td>
+                            <div class="badge badge-{{ $classroom->isPending() ? 'warning' : ($classroom->isActive() ? 'success' : 'secondary') }}">{{ $classroom->isPending() ? 'Pending' : ($classroom->isActive() ? 'Active' : 'Inactive') }}</div>
+                        </td>
+                        <td>
+                            @if($classroom->isPending())
+                            <a href="#" class="btn btn-success" wire:click="acceptClassroom({{ $classroom->id }})">Accept</a>
+                            @endif
+                                <a href="#" class="btn btn-danger" wire:click="deleteClassroom({{ $classroom->id }})">Delete</a>
+                            <a href="#" class="btn btn-primary">Detail</a>
+                        </td>
+                    @endforeach
                 </tr>
             </table>
         </div>
