@@ -25,8 +25,8 @@
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
-                <tr>
-                    @foreach($classrooms as $index => $classroom)
+                @foreach($classrooms as $index => $classroom)
+                    <tr>
                         <td class="p-0 text-center">
                             {{ $index + 1 }}
                         </td>
@@ -37,24 +37,27 @@
                         </td>
                         <td>
                             @foreach($classroom->assistants as $assistant)
-                                <img alt="image" src="{{ $assistant->profile_photo_url }}" class="rounded-circle" width="35"
+                                <img alt="image" src="{{ $assistant->profile_photo_url }}" class="rounded-circle"
+                                     width="35"
                                      data-toggle="tooltip" title="{{ $assistant->name }}">
                             @endforeach
                         </td>
                         <td>{{ $classroom->members()->count() }} Students</td>
                         <td>5 Assigments</td>
                         <td>
-                            <div class="badge badge-{{ $classroom->isPending() ? 'warning' : ($classroom->isActive() ? 'success' : 'secondary') }}">{{ $classroom->isPending() ? 'Pending' : ($classroom->isActive() ? 'Active' : 'Inactive') }}</div>
+                            <div
+                                class="badge badge-{{ $classroom->isPending() ? 'warning' : ($classroom->isActive() ? 'success' : 'secondary') }}">{{ $classroom->isPending() ? 'Pending' : ($classroom->isActive() ? 'Active' : 'Inactive') }}</div>
                         </td>
                         <td>
                             @if($classroom->isPending())
-                            <a href="#" class="btn btn-success" wire:click="acceptClassroom({{ $classroom->id }})">Accept</a>
+                                <a href="#" class="btn btn-success" wire:click="acceptClassroom({{ $classroom->id }})">Accept</a>
                             @endif
-                                <a href="#" class="btn btn-danger" wire:click="deleteClassroom({{ $classroom->id }})">Delete</a>
+                            <a href="#" class="btn btn-danger"
+                               wire:click="deleteClassroom({{ $classroom->id }})">Delete</a>
                             <a href="#" class="btn btn-primary">Detail</a>
                         </td>
-                    @endforeach
-                </tr>
+                    </tr>
+                @endforeach
             </table>
         </div>
     </div>

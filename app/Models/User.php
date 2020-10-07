@@ -28,7 +28,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'active_at'
+        'name', 'username', 'email', 'password', 'activate_at', 'telegram_id'
     ];
 
     const CODE_SI = 1;

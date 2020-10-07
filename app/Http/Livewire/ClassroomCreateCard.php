@@ -81,8 +81,8 @@ class ClassroomCreateCard extends Component
             $classroom->assistants()->attach($this->selected_assistants);
             DB::commit();
 
-            if(Auth::user()->hasRoles('admin')){
-                return $this->redirect(route('dashboard.admin.classroom.index'));
+            if(Auth::user()->hasRole('admin')){
+                $this->redirect(route('dashboard.admin.classroom.index'));
             } else {
 
             }

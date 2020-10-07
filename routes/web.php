@@ -20,6 +20,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/AKn3hd29JF2/webhook', \App\Http\Controllers\Telegram\MainController::class)->name('telegram.webhook');
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/redirect', function () {
         $user = \Illuminate\Support\Facades\Auth::user();
@@ -83,6 +85,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::get('/test', function () {
+    return \Telegram\Bot\Laravel\Facades\Telegram::getMe();
+    return \App\Models\Classroom::whereHas('assistants', function($q){
+        $q->where('assistant_id', 463);
+    })->get();
 //    dd(\Illuminate\Support\Facades\Storage::cloud());
     return \Illuminate\Support\Facades\Storage::disk('minio')->put('/test.txt', 'Hello cok');
     dd(\Illuminate\Support\Facades\Storage::disk('minio')->put('/test.txt', 'Hello cok'));

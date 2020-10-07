@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Classroom;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -24,9 +25,16 @@ class ClassroomTable extends Component
 
     public function getClassrooms()
     {
-        $this->classrooms = Classroom::orderByDesc('status')
-            ->orderByDesc('created_at')
-            ->get()
+        $query = Classroom::orderByDesc('status')
+            ->orderByDesc('created_at');
+        if (Auth::user()->hasRole('admin')) {
+            $data = $query->get();
+        } else {
+            $data = $query->whereHas('assistants', function ($q) {
+                $q->where('assistant_id', Auth::id());
+            })->get();
+        }
+        $this->classrooms = $data
             ->map(function ($classroom) {
                 $classroom->schedule = Carbon::now()
                     ->next($classroom->class_day);
@@ -37,7 +45,7 @@ class ClassroomTable extends Component
     public function acceptClassroom($id)
     {
         $token = Str::of(Uuid::uuid())->explode('-')
-            ->filter(function($str){
+            ->filter(function ($str) {
                 return strlen($str) === 4;
             })->join('-');
 
@@ -51,7 +59,8 @@ class ClassroomTable extends Component
         $this->getClassrooms();
     }
 
-    public function deleteClassroom($id){
+    public function deleteClassroom($id)
+    {
         Classroom::find($id)
             ->delete();
 
