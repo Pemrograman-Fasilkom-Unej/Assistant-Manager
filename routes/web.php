@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
             Route::get('/student', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('student.index');
 
+            Route::get('/links', [\App\Http\Controllers\Admin\LinkController::class, 'index'])->name('link.index');
             Route::get('/setting', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('setting.index');
         });
 
@@ -82,6 +83,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::get('/test', function () {
+//    dd(\Illuminate\Support\Facades\Storage::cloud());
+    return \Illuminate\Support\Facades\Storage::disk('minio')->put('/test.txt', 'Hello cok');
+    dd(\Illuminate\Support\Facades\Storage::disk('minio')->put('/test.txt', 'Hello cok'));
+    return \App\Repositories\Shortlink::getLinks();
     $files = \Illuminate\Support\Facades\Storage::disk('database')->allFiles();
     $students = [];
     foreach ($files as $file) {

@@ -13,7 +13,7 @@
     </li>
     <li class="menu-header">Utility</li>
     <li class="nav-item">
+        <a href="{{ route('dashboard.admin.link.index') }}" class="nav-link"><i class="fas fa-setting"></i><span>Shortlink</span></a>
         <a href="{{ route('dashboard.admin.setting.index') }}" class="nav-link"><i class="fas fa-setting"></i><span>Settings</span></a>
-        <a href="#" class="nav-link"><i class="fas fa-setting"></i><span>Shortlink</span></a>
     </li>
 </ul>
