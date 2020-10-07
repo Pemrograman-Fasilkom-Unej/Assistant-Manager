@@ -3,6 +3,8 @@
     "/css/app.css": "/css/app.css",
     "/dist/css/select2.min.css": "/dist/css/select2.min.css",
     "/dist/js/select2.min.js": "/dist/js/select2.min.js",
+    "/dist/css/bootstrap-daterangepicker.css": "/dist/css/bootstrap-daterangepicker.css",
+    "/dist/js/bootstrap-daterangepicker.js": "/dist/js/bootstrap-daterangepicker.js",
     "/dist/css/bootstrap-timepicker.min.css": "/dist/css/bootstrap-timepicker.min.css",
     "/dist/js/bootstrap-timepicker.js": "/dist/js/bootstrap-timepicker.js"
 }

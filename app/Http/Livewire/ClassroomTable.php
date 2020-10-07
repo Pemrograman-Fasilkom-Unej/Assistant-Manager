@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Classroom;
+use App\Repositories\ClassroomRepository;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Support\Facades\Auth;
@@ -25,21 +26,7 @@ class ClassroomTable extends Component
 
     public function getClassrooms()
     {
-        $query = Classroom::orderByDesc('status')
-            ->orderByDesc('created_at');
-        if (Auth::user()->hasRole('admin')) {
-            $data = $query->get();
-        } else {
-            $data = $query->whereHas('assistants', function ($q) {
-                $q->where('assistant_id', Auth::id());
-            })->get();
-        }
-        $this->classrooms = $data
-            ->map(function ($classroom) {
-                $classroom->schedule = Carbon::now()
-                    ->next($classroom->class_day);
-                return $classroom;
-            });
+        $this->classrooms = ClassroomRepository::getUserClassroom();
     }
 
     public function acceptClassroom($id)

@@ -50,6 +50,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/classroom', [\App\Http\Controllers\Admin\ClassroomController::class, 'index'])->name('classroom.index');
             Route::get('/classroom/create', [\App\Http\Controllers\Admin\ClassroomController::class, 'create'])->name('classroom.create');
 
+            Route::get('/assignment', [\App\Http\Controllers\Admin\AssignmentController::class, 'index'])->name('assignment.index');
+            Route::get('/assignment/create', [\App\Http\Controllers\Admin\AssignmentController::class, 'create'])->name('assignment.create');
+            Route::post('/assignment', \App\Actions\Academic\CreateAssignment::class)->name('assignment.store');
+
             Route::get('/student', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('student.index');
 
             Route::get('/links', [\App\Http\Controllers\Admin\LinkController::class, 'index'])->name('link.index');
@@ -63,6 +67,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             'as' => 'assistant.'
         ], function () {
             Route::get('/', AssistantDashboardController::class)->name('overview');
+
+            Route::post('/assignment', [\App\Http\Controllers\Admin\AssignmentController::class, 'store'])->name('assignment.store');
         });
 
         // Dashboard Student Controller
@@ -72,6 +78,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             'as' => 'student.'
         ], function () {
             Route::get('/', StudentDashboardController::class)->name('overview');
+
+            Route::post('/assignment/{assignment:token}/submit', [\App\Http\Controllers\Admin\AssignmentController::class, 'store'])->name('assignment.submit');
         });
 
     });
@@ -85,6 +93,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::get('/test', function () {
+    return \App\Repositories\AssignmentRepository::getAssistantAssignments()->forPage(1,1);
     return \Telegram\Bot\Laravel\Facades\Telegram::getMe();
     return \App\Models\Classroom::whereHas('assistants', function($q){
         $q->where('assistant_id', 463);
