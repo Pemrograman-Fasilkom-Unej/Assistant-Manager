@@ -53,7 +53,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task)
     {
-        return $task->classes->assistants->pluck('id')->contains($user->id) || $user->isAn('admin');
+        return $task->classes->assistants->pluck('assistant_id')->contains($user->id) || $user->isAn('admin');
     }
 
     /**
