@@ -10,6 +10,7 @@ use App\Task;
 use App\TaskSubmission;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -73,10 +74,9 @@ class TaskController extends Controller
             return redirect()->back()->withInput($request->toArray())->with('errors', 'Something error about datatypes');
         }
 
-        $deadline = Carbon::parse($request->deadline);
-        $token = md5(Str::random(32));
-        Storage::disk('minio')->makeDirectory("tasks/$token");
-        $link = AssistantShortlink::storeLink(route('task.show', $token));
+        $deadline   = Carbon::parse($request->deadline);
+        $token      = md5(Str::random(32));
+        $link       = $this->createShortlinkAndFolder($token);
         Task::create([
             'user_id' => Auth::id(),
             'class_id' => $class->id,
@@ -124,7 +124,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $this->authorize('view', $task);
+        $this->authorize('update', $task);
         $datatypes = Task::FILE_TYPES;
         return view('dashboard.assistant.task.edit', compact('task', 'datatypes'));
     }
@@ -229,5 +229,26 @@ class TaskController extends Controller
     public function preview(Request $request)
     {
         return view('dashboard.assistant.task.preview', compact('request'));
+    }
+
+    /**
+     * Create shortlink & task folder in disk.
+     * If the current environment is not production
+     * theh, it will produce the local url instead.
+     *
+     * @param $token
+     * @return string
+     * @throws \Exception
+     */
+    private function createShortLinkAndFolder($token): string
+    {
+        if (App::environment(['prod', 'production'])) {
+            Storage::disk('minio')->makeDirectory("tasks/$token");
+            $link = AssistantShortlink::storeLink(route('task.show', $token));
+        } else {
+            $link = route('task.show', $token);
+        }
+
+        return $link;
     }
 }
