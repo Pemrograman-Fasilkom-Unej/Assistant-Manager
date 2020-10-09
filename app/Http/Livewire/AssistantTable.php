@@ -2,27 +2,23 @@
 
 namespace App\Http\Livewire;
 
+use App\Abstracts\LivewireTable;
 use App\Models\User;
 use Livewire\Component;
+use App\Traits\LivewireTableComponent;
 
-class AssistantTable extends Component
+class AssistantTable extends LivewireTable
 {
     public $assistants;
-    public $currentPage = 1;
-    public $firstPage = 1;
-    public $limit = 10;
-    public $total;
-    public $totalPage;
-    public $search;
 
     public function __construct($id = null)
     {
         parent::__construct($id);
         $this->total = User::role('assistant')->count();
-        $this->getAssistants();
+        $this->getData();
     }
 
-    public function getAssistants()
+    public function getData()
     {
         $query = User::role('assistant');
         $search = $this->search;
@@ -40,24 +36,6 @@ class AssistantTable extends Component
             ->limit($this->limit)
             ->get();
         $this->totalPage = ceil($this->total / $this->limit);
-    }
-
-    public function next()
-    {
-        $this->currentPage++;
-        $this->getAssistants();
-    }
-
-    public function previous()
-    {
-        $this->currentPage--;
-        $this->getAssistants();
-    }
-
-    public function changePage($page)
-    {
-        $this->currentPage = $page;
-        $this->getAssistants();
     }
 
     public function render()

@@ -6,7 +6,7 @@
                 <div class="card-header-action">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search" wire:model="search"
-                               wire:keydown.enter="getStudents()">
+                               wire:keydown.enter="getData()">
                         <div class="input-group-btn">
                             <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                         </div>

@@ -96,4 +96,9 @@ class User extends Authenticatable
     {
         return !is_null($this->activate_at);
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class);
+    }
 }

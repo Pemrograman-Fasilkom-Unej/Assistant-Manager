@@ -19,4 +19,6 @@ mix
     .copy('node_modules/bootstrap-daterangepicker/daterangepicker.css', 'public/dist/css/bootstrap-daterangepicker.css')
     .copy('node_modules/bootstrap-daterangepicker/daterangepicker.js', 'public/dist/js/bootstrap-daterangepicker.js')
     .copy('node_modules/bootstrap-timepicker/css/bootstrap-timepicker.css', 'public/dist/css/bootstrap-timepicker.min.css')
-    .copy('node_modules/bootstrap-timepicker/js/bootstrap-timepicker.js', 'public/dist/js/bootstrap-timepicker.js');
+    .copy('node_modules/bootstrap-timepicker/js/bootstrap-timepicker.js', 'public/dist/js/bootstrap-timepicker.js')
+    .copy('node_modules/chart.js/dist/Chart.min.css', 'public/dist/css/chart.min.css')
+    .copy('node_modules/chart.js/dist/Chart.min.js', 'public/dist/js/chart.min.js')

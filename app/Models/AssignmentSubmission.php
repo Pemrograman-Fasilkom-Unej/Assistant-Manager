@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class AssignmentSubmission extends Model
 {
@@ -25,5 +27,14 @@ class AssignmentSubmission extends Model
     public function assignment()
     {
         return $this->belongsTo(Assignment::class);
+    }
+
+    public function getFileUrlAttribute()
+    {
+        return Storage::cloud()->temporaryUrl(
+            $this->file,
+            Carbon::now()->addMinutes(5),
+            []
+        );
     }
 }

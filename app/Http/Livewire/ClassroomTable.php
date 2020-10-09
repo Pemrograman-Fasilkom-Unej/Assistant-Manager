@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Abstracts\LivewireTable;
 use App\Models\Classroom;
 use App\Repositories\ClassroomRepository;
 use Carbon\Carbon;
@@ -10,21 +11,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
-class ClassroomTable extends Component
+class ClassroomTable extends LivewireTable
 {
-//    protected $listeners =[
-//        'class-accepted' => '$refresh'
-//    ];
 
     public $classrooms = [];
     public $search;
 
     public function mount()
     {
-        $this->getClassrooms();
+        $this->getData();
     }
 
-    public function getClassrooms()
+    public function getData()
     {
         $this->classrooms = ClassroomRepository::getUserClassroom();
     }
@@ -43,7 +41,7 @@ class ClassroomTable extends Component
                 'status' => 1
             ]);
 
-        $this->getClassrooms();
+        $this->getData();
     }
 
     public function deleteClassroom($id)
@@ -51,7 +49,7 @@ class ClassroomTable extends Component
         Classroom::find($id)
             ->delete();
 
-        $this->getClassrooms();
+        $this->getData();
     }
 
     public function render()

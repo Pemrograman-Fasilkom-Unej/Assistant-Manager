@@ -49,6 +49,8 @@
         <div class="main-content">
             @yield('content')
         </div>
+
+        @stack('modal')
         <footer class="main-footer">
             <div class="footer-left">
                 Copyright &copy; Pemro Fasilkom Universitas Jember 2020

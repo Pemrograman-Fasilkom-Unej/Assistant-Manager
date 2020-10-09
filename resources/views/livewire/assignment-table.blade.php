@@ -57,7 +57,7 @@
                                     <div class="badge badge-{{ $assignment->isComplete() ? 'success' : 'info' }}">{{ $assignment->isComplete() ? 'Completed' : 'Active' }}</div>
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-primary">Detail</a>
+                                    <a href="{{ route('dashboard.admin.assignment.show', $assignment) }}" class="btn btn-primary">Detail</a>
                                     <a href="#" class="btn btn-warning">Edit</a>
                                     <a href="#" class="btn btn-danger" wire:click="deleteAssignment({{ $assignment->id }})">Delete</a>
                                 </td>

@@ -30,7 +30,7 @@ class CreateAssignmentSubmissionsTable extends Migration
 
             $table->foreign('assignment_id')
                 ->references('id')
-                ->on('classrooms')
+                ->on('assignments')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
         });

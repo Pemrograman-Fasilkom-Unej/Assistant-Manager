@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Assistant\DashboardController as AssistantDashboardController;
 use App\Http\Controllers\Assistant\DashboardController as StudentDashboardController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/assignment', [\App\Http\Controllers\Admin\AssignmentController::class, 'index'])->name('assignment.index');
             Route::get('/assignment/create', [\App\Http\Controllers\Admin\AssignmentController::class, 'create'])->name('assignment.create');
             Route::post('/assignment', \App\Actions\Academic\CreateAssignment::class)->name('assignment.store');
+            Route::get('/assignment/{assignment:token}', [\App\Http\Controllers\Admin\AssignmentController::class, 'show'])->name('assignment.show');
 
             Route::get('/student', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('student.index');
 
@@ -93,6 +95,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::get('/test', function () {
+
+    $files = Storage::cloud()->files('asu');
+    $zip = new \League\Flysystem\Filesystem(new \League\Flysystem\ZipArchive\ZipArchiveAdapter(public_path('downloadable/asd.zip')));
+    foreach ($files as $file){
+        $zip->put($file, Storage::cloud()->get($file));
+    }
+
+    $zip->getAdapter()->getArchive()->close();
+    return ;
+
+    return Storage::cloud()->downloadBucket("test/asu");
     return \App\Repositories\AssignmentRepository::getAssistantAssignments()->forPage(1,1);
     return \Telegram\Bot\Laravel\Facades\Telegram::getMe();
     return \App\Models\Classroom::whereHas('assistants', function($q){

@@ -2,26 +2,21 @@
 
 namespace App\Http\Livewire;
 
+use App\Abstracts\LivewireTable;
 use App\Models\User;
 use Livewire\Component;
 
-class StudentTable extends Component
+class StudentTable extends LivewireTable
 {
     public $students;
-    public $currentPage = 1;
-    public $firstPage = 1;
-    public $limit = 10;
-    public $total;
-    public $totalPage;
-    public $search;
 
     public function mount()
     {
         $this->total = User::role('student')->count();
-        $this->getStudents();
+        $this->getData();
     }
 
-    public function getStudents()
+    public function getData()
     {
         $query = User::role('student');
         $search = $this->search;
@@ -39,24 +34,6 @@ class StudentTable extends Component
             ->limit($this->limit)
             ->get();
         $this->totalPage = ceil($this->total / $this->limit);
-    }
-
-    public function next()
-    {
-        $this->currentPage++;
-        $this->getStudents();
-    }
-
-    public function previous()
-    {
-        $this->currentPage--;
-        $this->getStudents();
-    }
-
-    public function changePage($page)
-    {
-        $this->currentPage = $page;
-        $this->getStudents();
     }
 
     public function render()
