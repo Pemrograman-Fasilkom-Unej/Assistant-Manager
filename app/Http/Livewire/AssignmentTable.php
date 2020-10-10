@@ -25,6 +25,10 @@ class AssignmentTable extends Component
     public function deleteAssignment($id)
     {
         (new DeleteAssignment())->delete(Assignment::find($id));
+        $this->emit('alert', [
+            'type' => 'success',
+            'message' => 'Assignment has been deleted'
+        ]);
         $this->updatingSearch();
     }
 

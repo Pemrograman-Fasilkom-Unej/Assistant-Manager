@@ -23,8 +23,13 @@ class AssignmentDetailSubmissionTable extends Component
     public $search;
 
     protected $listeners = [
-        'loadAssignmentData' => 'getData'
+        'loadAssignmentData' => 'refreshData'
     ];
+
+    public function refreshData()
+    {
+        $this->resetPage();
+    }
 
     public function render()
     {

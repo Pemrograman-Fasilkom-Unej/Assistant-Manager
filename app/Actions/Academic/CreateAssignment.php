@@ -33,9 +33,9 @@ class CreateAssignment
         }
 
         if(Auth::user()->hasRole('admin')){
-            return redirect()->route('dashboard.admin.assignment.index');
+            return redirect()->route('dashboard.admin.assignment.index')->with('success', 'Assignment has been added');
         } else {
-            return redirect()->route('dashboard.assistant.assignment.index');
+            return redirect()->route('dashboard.assistant.assignment.index')->with('success', 'Assignment has been added');
         }
     }
 

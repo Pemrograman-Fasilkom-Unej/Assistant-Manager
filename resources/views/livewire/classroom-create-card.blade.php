@@ -89,6 +89,10 @@
     </div>
 </div>
 
+<script>
+
+</script>
+
 @push('scripts')
     <script src="{{ asset('dist/js/bootstrap-timepicker.js') }}"></script>
     <script src="{{ asset('dist/js/select2.min.js') }}"></script>
@@ -100,5 +104,7 @@
         $('#time-input').change(function(){
             @this.set('time', $(this).val());
         })
+
+        console.log('{{ $topic }}');
     </script>
 @endpush

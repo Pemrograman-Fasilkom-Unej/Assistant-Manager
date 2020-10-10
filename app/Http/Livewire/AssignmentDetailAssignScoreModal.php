@@ -26,6 +26,10 @@ class AssignmentDetailAssignScoreModal extends Component
             ]);
 //            $this->emit('loadAssignmentData');
             $this->emit('assignScoreDone');
+            $this->emit('alert', [
+                'type' => 'success',
+                'message' => 'Score has been set'
+            ]);
         }
         $this->reset(['score', 'submissionId']);
     }

@@ -33,6 +33,11 @@ class ClassroomTable extends Component
                 'status' => 1
             ]);
 
+        $this->emit('alert', [
+            'type' => 'success',
+            'message' => 'Class has been accepted'
+        ]);
+
         $this->resetPage();
     }
 
@@ -40,6 +45,11 @@ class ClassroomTable extends Component
     {
         Classroom::find($id)
             ->delete();
+
+        $this->emit('alert', [
+            'type' => 'success',
+            'message' => 'Class has been deleted'
+        ]);
 
         $this->resetPage();
     }

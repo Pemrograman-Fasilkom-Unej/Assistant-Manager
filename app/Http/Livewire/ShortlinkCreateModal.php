@@ -18,6 +18,10 @@ class ShortlinkCreateModal extends Component
 
         if(filter_var($this->longUrl, FILTER_VALIDATE_URL)){
             Shortlink::storeLink($this->longUrl, ($this->shortUrl !== ''), $this->shortUrl);
+            $this->emit('alert', [
+                'type' => 'success',
+                'message' => 'Link has been shorted'
+            ]);
             $this->emit('refreshLinks');
         }
     }

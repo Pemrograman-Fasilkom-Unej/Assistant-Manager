@@ -9,6 +9,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -26,6 +28,15 @@ class ClassroomCreateCard extends Component
     public $day = 0;
     public $time;
     public $selected_assistants;
+
+    protected $rules = [
+        'topic' => 'required|exists:topics,id',
+        'program' => 'required',
+        'class' => 'required',
+        'day' => 'required|numeric|min:0|max:6',
+        'time' => 'required',
+        'selected_assistants' => 'required|array'
+    ];
 
     public function mount()
     {
@@ -53,14 +64,17 @@ class ClassroomCreateCard extends Component
     }
 
     public function submit(){
-        $this->validate([
-            'topic' => 'required|exists:topics,id',
-            'program' => 'required',
-            'class' => 'required',
-            'day' => 'required|numeric|min:0|max:6',
-            'time' => 'required',
-            'selected_assistants' => 'required|array'
-        ]);
+        $validator = Validator::make($this->getPublicPropertiesDefinedBySubClass(), $this->rules);
+
+        if($validator->fails()){
+            foreach ($validator->errors()->toArray() as $error){
+                $this->emit('alert', [
+                    'type' => 'error',
+                    'message' => $error
+                ]);
+            }
+            return;
+        }
 
         try {
             DB::beginTransaction();
@@ -80,6 +94,12 @@ class ClassroomCreateCard extends Component
             ]);
             $classroom->assistants()->attach($this->selected_assistants);
             DB::commit();
+
+            $this->emit('alert', [
+                'type' => 'success',
+                'message' => 'Class has been added, please wait for confirmation'
+            ]);
+            Session::flash('success', 'Class has been added, please wait for confirmation');
 
             if(Auth::user()->hasRole('admin')){
                 $this->redirect(route('dashboard.admin.classroom.index'));

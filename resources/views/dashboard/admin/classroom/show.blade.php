@@ -23,7 +23,7 @@
                         <div class="card-header">
                             <h4>Assistants</h4>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body overflow-auto">
                             <ul class="list-unstyled list-unstyled-border">
                                 @foreach($classroom->assistants as $assistant)
                                     <li class="media">
@@ -44,7 +44,7 @@
 
                 <div class="col-lg-8 col-md-12 col-12 col-sm-12 h-auto">
                     <div class="card" style="height: 420px">
-                        <div class="card-body">
+                        <div class="card-body overflow-auto">
                             <table class="table table-bordered text-primary">
                                 <tr>
                                     <td>Year / Semester</td>
