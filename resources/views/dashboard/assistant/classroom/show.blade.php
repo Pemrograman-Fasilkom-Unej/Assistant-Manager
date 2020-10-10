@@ -50,6 +50,10 @@
                                     <td>{{ $classroom->year }} / {{ $classroom->season }}</td>
                                 </tr>
                                 <tr>
+                                    <td>Token / Code</td>
+                                    <td>{{ $classroom->token }}</td>
+                                </tr>
+                                <tr>
                                     <td>Next Schedule</td>
                                     <td>{{ $classroom->schedule->format('d F Y - H:i') }}</td>
                                 </tr>
