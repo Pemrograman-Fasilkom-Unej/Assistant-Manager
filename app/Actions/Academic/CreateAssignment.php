@@ -4,6 +4,7 @@
 namespace App\Actions\Academic;
 
 
+use App\Notifications\Student\NewAssignmentNotification;
 use App\Repositories\AssignmentRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,12 +28,12 @@ class CreateAssignment
         }
         $data = $request->only(['title', 'description', 'deadline', 'formats']);
 
-        foreach ($request->classrooms as $classroom){
+        foreach ($request->classrooms as $classroom) {
             $data['classroom_id'] = $classroom;
             $this->store($data);
         }
 
-        if(Auth::user()->hasRole('admin')){
+        if (Auth::user()->hasRole('admin')) {
             return redirect()->route('dashboard.admin.assignment.index')->with('success', 'Assignment has been added');
         } else {
             return redirect()->route('dashboard.assistant.assignment.index')->with('success', 'Assignment has been added');
@@ -45,8 +46,11 @@ class CreateAssignment
             DB::beginTransaction();
             $assignment = AssignmentRepository::createAssignment($data);
             // TODO : Notification to members
+            foreach ($assignment->classroom->members as $student) {
+                $student->notify(new NewAssignmentNotification($assignment));
+            }
             DB::commit();
-        } catch (\Exception $exception){
+        } catch (\Exception $exception) {
             DB::rollBack();
             dd($exception);
         }
