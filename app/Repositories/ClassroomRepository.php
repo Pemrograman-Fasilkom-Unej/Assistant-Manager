@@ -11,25 +11,43 @@ use Illuminate\Support\Facades\Auth;
 
 class ClassroomRepository
 {
-    public static function getUserClassroom(User $user = null)
+    public static function getAssistantClassroom($search = null, User $user = null)
     {
-        if (!$user) {
-            $user = Auth::user();
-        }
+        if (!$user) $user = Auth::user();
 
         $query = Classroom::orderByDesc('status')
             ->orderByDesc('created_at');
         if ($user->hasRole('admin')) {
-            $data = $query->get();
+            // Nothing to do
         } else {
-            $data = $query->whereHas('assistants', function ($q) use ($user) {
+            $query->whereHas('assistants', function ($q) use ($user) {
                 $q->where('assistant_id', $user->id);
-            })->get();
+            })->whereNotNull('accepted_at');
         }
-        return $data->map(function ($classroom) {
-            $classroom->schedule = Carbon::now()
-                ->next($classroom->class_day);
-            return $classroom;
-        });
+
+        if ($search) {
+            $query->where('title', 'like', "%$search%");
+        }
+
+        return $query;
+    }
+
+    public static function getStudentClassroom($search = null, User $user = null)
+    {
+        if (!$user) $user = Auth::user();
+
+        $query = Classroom::orderByDesc('status')
+            ->orderByDesc('created_at')
+            ->whereHas('members', function ($q) use ($user) {
+                $q->where('member_id', $user->id);
+            });
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%$search%");
+            });
+        }
+
+        return $query;
     }
 }

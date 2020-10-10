@@ -99,6 +99,6 @@ class User extends Authenticatable
 
     public function submissions()
     {
-        return $this->hasMany(AssignmentSubmission::class);
+        return $this->hasMany(AssignmentSubmission::class)->orderByDesc('created_at');
     }
 }

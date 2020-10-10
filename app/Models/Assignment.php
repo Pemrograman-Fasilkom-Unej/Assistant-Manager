@@ -51,4 +51,26 @@ class Assignment extends Model
     {
         return Carbon::now()->isAfter($this->deadline);
     }
+
+    public function submissionStatus($user_id){
+        $submission = $this->submissions()->where('user_id', $user_id)->first();
+        if($submission){
+            if($submission->score){
+                return [
+                    'badge' => 'success',
+                    'value' => 'Scored',
+                ];
+            } else {
+                return [
+                    'badge' => 'warning',
+                    'value' => 'Submitted',
+                ];
+            }
+        } else {
+            return [
+                'badge' => 'danger',
+                'value' => 'Not Submitted'
+            ];
+        }
+    }
 }

@@ -7,6 +7,8 @@
     "/dist/js/bootstrap-daterangepicker.js": "/dist/js/bootstrap-daterangepicker.js",
     "/dist/css/bootstrap-timepicker.min.css": "/dist/css/bootstrap-timepicker.min.css",
     "/dist/js/bootstrap-timepicker.js": "/dist/js/bootstrap-timepicker.js",
+    "/dist/css/dropzone.min.css": "/dist/css/dropzone.min.css",
+    "/dist/js/dropzone.min.js": "/dist/js/dropzone.min.js",
     "/dist/css/chart.min.css": "/dist/css/chart.min.css",
     "/dist/js/chart.min.js": "/dist/js/chart.min.js"
 }

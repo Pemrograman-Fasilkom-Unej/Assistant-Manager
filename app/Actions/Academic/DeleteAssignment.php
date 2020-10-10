@@ -15,7 +15,7 @@ class DeleteAssignment
 {
     public function __invoke(Assignment $assignment, Request $request)
     {
-
+        $this->delete($assignment);
     }
 
     public function delete(Assignment $assignment)

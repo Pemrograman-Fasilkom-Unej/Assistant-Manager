@@ -66,11 +66,5 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script>
         $('#assistants-select').select2();
-        $('#assistants-select').change(function () {
-        @this.set('selected_assistants', $(this).val());
-        });
-        $('#time-input').change(function () {
-        @this.set('time', $(this).val());
-        })
     </script>
 @endpush

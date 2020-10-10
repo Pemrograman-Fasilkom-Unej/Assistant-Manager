@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,5 +48,17 @@ class Classroom extends Model
     public function isActive()
     {
         return $this->status === 1;
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
+    public function getScheduleAttribute(){
+        $time = explode(':', $this->class_time);
+        $schedule = Carbon::now();
+        $schedule = $schedule->dayOfWeek === $this->class_day ? $schedule : $schedule->next($this->class_day);
+        return $schedule->addHours($time[0])->addMinutes($time[1]);
     }
 }

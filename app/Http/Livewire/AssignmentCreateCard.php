@@ -14,9 +14,9 @@ class AssignmentCreateCard extends Component
 
     public function mount()
     {
-        $this->classrooms = ClassroomRepository::getUserClassroom();
+        $this->classrooms = ClassroomRepository::getAssistantClassroom()->get();
         $this->formats = ['pdf', 'zip', 'rar', 'docx', 'txt', 'jpg', 'png', 'jpeg', 'doc'];
-        $this->storeUrl = Auth::user()->hasRole('admin') ? route('dashboard.admin.assignment.store') : route('dashboard.admin.assignment.store');
+        $this->storeUrl = Auth::user()->hasRole('admin') ? route('dashboard.admin.assignment.store') : route('dashboard.assistant.assignment.store');
     }
 
     public function render()

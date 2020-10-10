@@ -7,38 +7,30 @@ use App\Actions\Academic\DeleteAssignment;
 use App\Models\Assignment;
 use App\Repositories\AssignmentRepository;
 use Livewire\Component;
+use Livewire\WithPagination;
 
-class AssignmentTable extends LivewireTable
+class AssignmentTable extends Component
 {
-    public $assignments = [];
-    public $all_assignments;
+    use WithPagination;
 
-    public function mount()
-    {
-        $this->all_assignments = AssignmentRepository::getAssistantAssignments();
-        $this->getData();
-    }
+    protected $paginationTheme = 'bootstrap';
 
-    public function getData()
-    {
-        $this->assignments = $this->all_assignments->forPage($this->currentPage, $this->limit);
-        $this->totalPage = ceil($this->all_assignments->count() / $this->limit);
-    }
+    public $search;
 
-    private function refreshAssignmentData()
+    public function updatingSearch()
     {
-        $this->all_assignments = AssignmentRepository::getAssistantAssignments();
+        $this->resetPage();
     }
 
     public function deleteAssignment($id)
     {
         (new DeleteAssignment())->delete(Assignment::find($id));
-        $this->refreshAssignmentData();
-        $this->getData();
+        $this->updatingSearch();
     }
 
     public function render()
     {
-        return view('livewire.assignment-table');
+        $assignments = AssignmentRepository::getAssistantAssignments($this->search)->paginate(10);
+        return view('livewire.assignment-table', compact('assignments'));
     }
 }

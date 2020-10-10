@@ -84,7 +84,7 @@ class ClassroomCreateCard extends Component
             if(Auth::user()->hasRole('admin')){
                 $this->redirect(route('dashboard.admin.classroom.index'));
             } else {
-
+                $this->redirect(route('dashboard.assistant.classroom.index'));
             }
         } catch (\Exception $e){
             DB::rollBack();

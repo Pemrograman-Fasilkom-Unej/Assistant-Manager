@@ -9,6 +9,7 @@ class DashboardController extends Controller
 {
     public function __invoke()
     {
-        return "assistant";
+        return redirect()->route('dashboard.coming-soon');
+        return view('dashboard.assistant.overview');
     }
 }

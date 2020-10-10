@@ -4,42 +4,25 @@ namespace App\Http\Livewire;
 
 use App\Abstracts\LivewireTable;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Livewire\Component;
 use App\Traits\LivewireTableComponent;
+use Livewire\WithPagination;
 
-class AssistantTable extends LivewireTable
+class AssistantTable extends Component
 {
-    public $assistants;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
-    public function __construct($id = null)
-    {
-        parent::__construct($id);
-        $this->total = User::role('assistant')->count();
-        $this->getData();
-    }
+    public $search;
 
-    public function getData()
-    {
-        $query = User::role('assistant');
-        $search = $this->search;
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('username', 'like', "%$search%")
-                    ->orWhere('name', 'like', "%$search%");
-            });
-            $this->total = $query->count();
-        } else {
-            $this->total = User::role('assistant')->count();
-        }
-        $this->assistants = $query
-            ->skip(($this->currentPage - 1) * $this->limit)
-            ->limit($this->limit)
-            ->get();
-        $this->totalPage = ceil($this->total / $this->limit);
+    public function updatingSearch(){
+        $this->resetPage();
     }
 
     public function render()
     {
-        return view('livewire.assistant-table');
+        $assistants = UserRepository::getAssistants($this->search)->paginate(10);
+        return view('livewire.assistant-table', compact('assistants'));
     }
 }

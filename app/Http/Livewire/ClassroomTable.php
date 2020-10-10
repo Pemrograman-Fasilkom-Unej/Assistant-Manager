@@ -10,22 +10,14 @@ use Faker\Provider\Uuid;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Livewire\WithPagination;
 
-class ClassroomTable extends LivewireTable
+class ClassroomTable extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
-    public $classrooms = [];
     public $search;
-
-    public function mount()
-    {
-        $this->getData();
-    }
-
-    public function getData()
-    {
-        $this->classrooms = ClassroomRepository::getUserClassroom();
-    }
 
     public function acceptClassroom($id)
     {
@@ -34,14 +26,14 @@ class ClassroomTable extends LivewireTable
                 return strlen($str) === 4;
             })->join('-');
 
-        $class = Classroom::find($id)
+        Classroom::find($id)
             ->update([
                 'accepted_at' => now(),
                 'token' => $token,
                 'status' => 1
             ]);
 
-        $this->getData();
+        $this->resetPage();
     }
 
     public function deleteClassroom($id)
@@ -49,11 +41,16 @@ class ClassroomTable extends LivewireTable
         Classroom::find($id)
             ->delete();
 
-        $this->getData();
+        $this->resetPage();
+    }
+
+    public function updatingSearch(){
+        $this->resetPage();
     }
 
     public function render()
     {
-        return view('livewire.classroom-table');
+        $classrooms = ClassroomRepository::getAssistantClassroom($this->search)->orderByDesc('created_at')->paginate(10);
+        return view('livewire.classroom-table', compact('classrooms'));
     }
 }

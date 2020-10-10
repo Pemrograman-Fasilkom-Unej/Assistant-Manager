@@ -3,9 +3,10 @@
         <h4>Classroom List</h4>
         <div class="card-header-form">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search">
+                <input type="text" class="form-control" placeholder="Search" wire:model="search"
+                       wire:keydown.enter="updatingSearch">
                 <div class="input-group-btn">
-                    <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                    <button class="btn btn-primary" wire:click="updatingSearch"><i class="fas fa-search"></i></button>
                 </div>
             </div>
         </div>
@@ -28,7 +29,7 @@
                 @foreach($classrooms as $index => $classroom)
                     <tr>
                         <td class="p-0 text-center">
-                            {{ $index + 1 }}
+                            {{ $classrooms->firstItem() + $index }}
                         </td>
                         <td>{{ $classroom->title }}</td>
                         <td class="align-middle">
@@ -43,22 +44,28 @@
                             @endforeach
                         </td>
                         <td>{{ $classroom->members()->count() }} Students</td>
-                        <td>5 Assigments</td>
+                        <td>{{ $classroom->assignments()->count() }} Assigments</td>
                         <td>
                             <div
                                 class="badge badge-{{ $classroom->isPending() ? 'warning' : ($classroom->isActive() ? 'success' : 'secondary') }}">{{ $classroom->isPending() ? 'Pending' : ($classroom->isActive() ? 'Active' : 'Inactive') }}</div>
                         </td>
                         <td>
-                            @if($classroom->isPending())
-                                <a href="#" class="btn btn-success" wire:click="acceptClassroom({{ $classroom->id }})">Accept</a>
+                            @if(Auth::user()->hasRole('admin'))
+                                @if($classroom->isPending())
+                                    <a href="#" class="btn btn-success"
+                                       wire:click="acceptClassroom({{ $classroom->id }})">Accept</a>
+                                @endif
+                                <a href="#" class="btn btn-danger"
+                                   wire:click="deleteClassroom({{ $classroom->id }})">Delete</a>
                             @endif
-                            <a href="#" class="btn btn-danger"
-                               wire:click="deleteClassroom({{ $classroom->id }})">Delete</a>
-                            <a href="#" class="btn btn-primary">Detail</a>
+                            <a href="{{ Auth::user()->hasRole('admin') ? route('dashboard.admin.classroom.show', $classroom) : route('dashboard.assistant.classroom.show', $classroom) }}" class="btn btn-primary">Detail</a>
                         </td>
                     </tr>
                 @endforeach
             </table>
         </div>
+    </div>
+    <div class="card-footer text-right">
+        {{ $classrooms->links() }}
     </div>
 </div>

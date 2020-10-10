@@ -4,40 +4,26 @@ namespace App\Http\Livewire;
 
 use App\Abstracts\LivewireTable;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Livewire\Component;
+use Livewire\WithPagination;
 
-class StudentTable extends LivewireTable
+class StudentTable extends Component
 {
-    public $students;
+    use WithPagination;
 
-    public function mount()
-    {
-        $this->total = User::role('student')->count();
-        $this->getData();
-    }
+    protected $paginationTheme = 'bootstrap';
 
-    public function getData()
+    public $search;
+
+    public function updatingSearch()
     {
-        $query = User::role('student');
-        $search = $this->search;
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('username', 'like', "%$search%")
-                    ->orWhere('name', 'like', "%$search%");
-            });
-            $this->total = $query->count();
-        } else {
-            $this->total = User::role('student')->count();
-        }
-        $this->students = $query
-            ->skip(($this->currentPage - 1) * $this->limit)
-            ->limit($this->limit)
-            ->get();
-        $this->totalPage = ceil($this->total / $this->limit);
+        $this->resetPage();
     }
 
     public function render()
     {
-        return view('livewire.student-table');
+        $students = UserRepository::getStudents($this->search)->paginate(10);
+        return view('livewire.student-table', compact('students'));
     }
 }

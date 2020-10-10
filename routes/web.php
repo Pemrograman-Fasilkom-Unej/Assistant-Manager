@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Assistant\DashboardController as AssistantDashboardController;
-use App\Http\Controllers\Assistant\DashboardController as StudentDashboardController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/login');
 
 Route::post('/AKn3hd29JF2/webhook', \App\Http\Controllers\Telegram\MainController::class)->name('telegram.webhook');
 
@@ -28,6 +26,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         $user = \Illuminate\Support\Facades\Auth::user();
         if ($user->hasRole('admin')) {
             return redirect()->route('dashboard.admin.overview');
+        } else if ($user->hasRole('assistant')) {
+            return redirect()->route('dashboard.assistant.overview');
         } else {
             return redirect()->route('dashboard.student.overview');
         }
@@ -38,6 +38,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         'prefix' => 'dashboard',
         'as' => 'dashboard.'
     ], function () {
+        Route::view('/profile', 'coming-soon')->name('profile');
+        Route::view('/coming-soon', 'coming-soon')->name('coming-soon');
+
+
         // Dashboard Admin Controller
         Route::group([
             'middleware' => ['role:admin'],
@@ -50,11 +54,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
             Route::get('/classroom', [\App\Http\Controllers\Admin\ClassroomController::class, 'index'])->name('classroom.index');
             Route::get('/classroom/create', [\App\Http\Controllers\Admin\ClassroomController::class, 'create'])->name('classroom.create');
+            Route::get('/classroom/{classroom:slug}', [\App\Http\Controllers\Admin\ClassroomController::class, 'show'])->name('classroom.show');
 
             Route::get('/assignment', [\App\Http\Controllers\Admin\AssignmentController::class, 'index'])->name('assignment.index');
             Route::get('/assignment/create', [\App\Http\Controllers\Admin\AssignmentController::class, 'create'])->name('assignment.create');
             Route::post('/assignment', \App\Actions\Academic\CreateAssignment::class)->name('assignment.store');
             Route::get('/assignment/{assignment:token}', [\App\Http\Controllers\Admin\AssignmentController::class, 'show'])->name('assignment.show');
+            Route::delete('/assignment/{assignment:token}', \App\Actions\Academic\DeleteAssignment::class)->name('assignment.delete');
 
             Route::get('/student', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('student.index');
 
@@ -70,7 +76,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         ], function () {
             Route::get('/', AssistantDashboardController::class)->name('overview');
 
-            Route::post('/assignment', [\App\Http\Controllers\Admin\AssignmentController::class, 'store'])->name('assignment.store');
+            Route::get('/student', [\App\Http\Controllers\Assistant\StudentController::class, 'index'])->name('student.index');
+
+            Route::get('/classroom', [\App\Http\Controllers\Assistant\ClassroomController::class, 'index'])->name('classroom.index');
+            Route::get('/classroom/create', [\App\Http\Controllers\Assistant\ClassroomController::class, 'create'])->name('classroom.create');
+            Route::get('/classroom/{classroom:slug}', [\App\Http\Controllers\Assistant\ClassroomController::class, 'show'])->name('classroom.show');
+
+            Route::get('/assignment', [\App\Http\Controllers\Assistant\AssignmentController::class, 'index'])->name('assignment.index');
+            Route::get('/assignment/create', [\App\Http\Controllers\Assistant\AssignmentController::class, 'create'])->name('assignment.create');
+            Route::post('/assignment', \App\Actions\Academic\CreateAssignment::class)->name('assignment.store');
+            Route::get('/assignment/{assignment:token}', [\App\Http\Controllers\Assistant\AssignmentController::class, 'index'])->name('assignment.show');
+            Route::delete('/assignment/{assignment:token}', \App\Actions\Academic\DeleteAssignment::class)->name('assignment.delete');
+
+            Route::get('/link', [\App\Http\Controllers\Assistant\LinkController::class, 'index'])->name('link.index');
         });
 
         // Dashboard Student Controller
@@ -81,7 +99,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         ], function () {
             Route::get('/', StudentDashboardController::class)->name('overview');
 
-            Route::post('/assignment/{assignment:token}/submit', [\App\Http\Controllers\Admin\AssignmentController::class, 'store'])->name('assignment.submit');
+            Route::get('/classroom', [\App\Http\Controllers\Student\ClassroomController::class, 'index'])->name('classroom.index');
+            Route::post('/classroom', [\App\Http\Controllers\Student\ClassroomController::class, 'store'])->name('classroom.store');
+            Route::get('/classroom/{classroom:slug}', [\App\Http\Controllers\Student\ClassroomController::class, 'show'])->name('classroom.show');
+
+            Route::get('/assignment', [\App\Http\Controllers\Student\AssignmentController::class, 'index'])->name('assignment.index');
+            Route::get('/assignment/{assignment:token}', [\App\Http\Controllers\Student\AssignmentController::class, 'show'])->name('assignment.show');
+            Route::post('/assignment/{assignment:token}/submit', [\App\Http\Controllers\Student\AssignmentController::class, 'store'])->name('assignment.submit');
         });
 
     });
@@ -95,20 +119,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::get('/test', function () {
-
+    return \App\Models\Classroom::first()->schedule;
     $files = Storage::cloud()->files('asu');
     $zip = new \League\Flysystem\Filesystem(new \League\Flysystem\ZipArchive\ZipArchiveAdapter(public_path('downloadable/asd.zip')));
-    foreach ($files as $file){
+    foreach ($files as $file) {
         $zip->put($file, Storage::cloud()->get($file));
     }
 
     $zip->getAdapter()->getArchive()->close();
-    return ;
+    return;
 
     return Storage::cloud()->downloadBucket("test/asu");
-    return \App\Repositories\AssignmentRepository::getAssistantAssignments()->forPage(1,1);
+    return \App\Repositories\AssignmentRepository::getAssistantAssignments()->forPage(1, 1);
     return \Telegram\Bot\Laravel\Facades\Telegram::getMe();
-    return \App\Models\Classroom::whereHas('assistants', function($q){
+    return \App\Models\Classroom::whereHas('assistants', function ($q) {
         $q->where('assistant_id', 463);
     })->get();
 //    dd(\Illuminate\Support\Facades\Storage::cloud());
