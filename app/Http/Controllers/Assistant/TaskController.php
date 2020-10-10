@@ -10,6 +10,7 @@ use App\Task;
 use App\TaskSubmission;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -37,12 +38,12 @@ class TaskController extends Controller
      * Show the form for creating a new resource.
      *
      * @param Classes $class
-     * @return \Illuminate\Http\Response|\Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function create(Classes $class)
     {
         abort_unless(Auth::user()->can('view', $class), 403);
-        if($class->status !== 1){
+        if ($class->status !== 1){
             return redirect()->back()->with('error', 'Kelas sudah tidak dapat diberi tugas');
         }
 
@@ -62,7 +63,6 @@ class TaskController extends Controller
     {
         abort_unless(Auth::user()->can('view', $class), 403);
 
-        $datatypes = Task::FILE_TYPES;
         $this->validate($request, [
             'title' => 'required|min:5|max:64',
             'description' => 'required|min:3',
@@ -70,16 +70,13 @@ class TaskController extends Controller
             'deadline' => 'required'
         ]);
 
-        foreach ($request->datatypes as $datatype) {
-            if (!in_array($datatype, $datatypes)) {
-                return redirect()->back()->withInput($request->toArray())->with('errors', 'Something error about datatypes');
-            }
+        if (! validateFileTypes($request->datatypes, Task::FILE_TYPES)) {
+            return redirect()->back()->withInput($request->toArray())->with('errors', 'Something error about datatypes');
         }
 
-        $deadline = Carbon::parse($request->deadline);
-        $token = md5(Str::random(32));
-        Storage::disk('minio')->makeDirectory("tasks/$token");
-        $link = AssistantShortlink::storeLink(route('task.show', $token));
+        $deadline   = Carbon::parse($request->deadline);
+        $token      = md5(Str::random(32));
+        $link       = $this->createShortlinkAndFolder($token);
         Task::create([
             'user_id' => Auth::id(),
             'class_id' => $class->id,
@@ -127,7 +124,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $this->authorize('view', $task);
+        $this->authorize('update', $task);
         $datatypes = Task::FILE_TYPES;
         return view('dashboard.assistant.task.edit', compact('task', 'datatypes'));
     }
@@ -151,11 +148,9 @@ class TaskController extends Controller
             'deadline' => 'required'
         ]);
 
-        foreach ($request->datatypes as $datatype) {
-            if (!in_array($datatype, Task::FILE_TYPES)) {
-                toastr()->error('Something error about datatypes');
-                return redirect()->back()->withInput($request->toArray())->with('errors', 'Something error about datatypes');
-            }
+        if (! validateFileTypes($request->datatypes, Task::FILE_TYPES)) {
+            toastr()->error('Something error about datatypes');
+            return redirect()->back()->withInput($request->toArray())->with('errors', 'Something error about datatypes');
         }
 
         $task->update([
@@ -234,5 +229,26 @@ class TaskController extends Controller
     public function preview(Request $request)
     {
         return view('dashboard.assistant.task.preview', compact('request'));
+    }
+
+    /**
+     * Create shortlink & task folder in disk.
+     * If the current environment is not production
+     * theh, it will produce the local url instead.
+     *
+     * @param $token
+     * @return string
+     * @throws \Exception
+     */
+    private function createShortLinkAndFolder($token): string
+    {
+        if (App::environment(['prod', 'production'])) {
+            Storage::disk('minio')->makeDirectory("tasks/$token");
+            $link = AssistantShortlink::storeLink(route('task.show', $token));
+        } else {
+            $link = route('task.show', $token);
+        }
+
+        return $link;
     }
 }

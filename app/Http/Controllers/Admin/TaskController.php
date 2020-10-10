@@ -59,7 +59,6 @@ class TaskController extends Controller
      */
     public function store(Request $request, Classes $class)
     {
-        $datatypes = Task::FILE_TYPES;
         $this->validate($request, [
             'title' => 'required|min:5|max:64',
             'description' => 'required|min:3',
@@ -67,17 +66,15 @@ class TaskController extends Controller
             'deadline' => 'required'
         ]);
 
-        foreach ($request->datatypes as $datatype) {
-            if (!in_array($datatype, $datatypes)) {
-                return redirect()->back()->withInput($request->toArray())->with('errors', 'Something error about datatypes');
-            }
+        if (! validateFileTypes($request->datatypes, Task::FILE_TYPES)) {
+            return redirect()->back()->withInput($request->toArray())->with('errors', 'Something error about datatypes');
         }
 
         $deadline = Carbon::parse($request->deadline);
         $token = md5(Str::random(32));
         Storage::disk('minio')->makeDirectory("tasks/$token");
         $link = AssistantShortlink::storeLink(route('task.show', $token));
-        $task = Task::create([
+        Task::create([
             'user_id' => Auth::id(),
             'class_id' => $class->id,
             'title' => $request->title,
@@ -127,18 +124,15 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
-        $datatypes = Task::FILE_TYPES;
         $this->validate($request, [
             'description' => 'required|min:3',
             'datatypes' => 'required',
             'deadline' => 'required'
         ]);
 
-        foreach ($request->datatypes as $datatype) {
-            if (!in_array($datatype, $datatypes)) {
-                toastr()->error('Something error about datatypes');
-                return redirect()->back()->withInput($request->toArray())->with('errors', 'Something error about datatypes');
-            }
+        if (! validateFileTypes($request->datatype, Task::FILE_TYPES)) {
+            toastr()->error('Something error about datatypes');
+            return redirect()->back()->withInput($request->toArray())->with('errors', 'Something error about datatypes');
         }
 
         $task->update([

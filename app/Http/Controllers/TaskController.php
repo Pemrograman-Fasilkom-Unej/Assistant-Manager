@@ -60,7 +60,7 @@ class TaskController extends Controller
             return json_response(0, "Tugas tidak ditemukan");
         }
 
-        if (!in_array($file->getClientOriginalExtension(), explode('|', $task->data_types))) {
+        if (! validateFileTypes($file->getClientOriginalExtension(), $task->datatype_list)) {
             return json_response(0, "Format File Salah");
         }
 

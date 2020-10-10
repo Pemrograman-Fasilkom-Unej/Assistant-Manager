@@ -76,11 +76,16 @@ class Task extends Model
         return $this->hasMany('App\TaskSubmission');
     }
 
+    public function getDataTypeListAttribute()
+    {
+        return explode('|', $this->data_types);
+    }
+
     public function getFileTypeFormatAttribute(){
         $temp = [];
-        foreach (explode("|", $this->data_types) as $type){
-            array_push($temp, ".$type");
+        foreach ($this->getDataTypeListAttribute() as $type){
+            $temp[] = ".$type";
         }
-        return implode(",", $temp);
+        return implode(',', $temp);
     }
 }
