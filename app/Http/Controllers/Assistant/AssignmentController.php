@@ -22,4 +22,13 @@ class AssignmentController extends Controller
     {
         return view('dashboard.assistant.assignment.create');
     }
+
+    public function edit(Assignment $assignment){
+
+    }
+
+    public function preview(Assignment $assignment)
+    {
+        return view('dashboard.assistant.classroom.preview', compact('assignment'));
+    }
 }

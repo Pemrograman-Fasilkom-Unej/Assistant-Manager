@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         'prefix' => 'dashboard',
         'as' => 'dashboard.'
     ], function () {
-        Route::view('/profile', 'coming-soon')->name('profile');
+        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
         Route::view('/coming-soon', 'coming-soon')->name('coming-soon');
 
 
@@ -61,9 +61,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('/assignment', \App\Actions\Academic\CreateAssignment::class)->name('assignment.store');
             Route::get('/assignment/{assignment:token}', [\App\Http\Controllers\Admin\AssignmentController::class, 'show'])->name('assignment.show');
             Route::delete('/assignment/{assignment:token}', \App\Actions\Academic\DeleteAssignment::class)->name('assignment.delete');
+            Route::get('/assignment/{assignment:token}/preview', [\App\Http\Controllers\Admin\AssignmentController::class, 'preview'])->name('assignment.preview');
+            Route::get('/assignment/{assignment:token}/edit', [\App\Http\Controllers\Admin\AssignmentController::class, 'edit'])->name('assignment.edit');
+            Route::patch('/assignment/{assignment:token}', \App\Actions\Academic\UpdateAssignment::class)->name('assignment.update');
 
             Route::get('/student', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('student.index');
 
+            Route::get('/broadcast', [\App\Http\Controllers\Admin\BroadcastController::class, 'index'])->name('broadcast.index');
+            Route::post('/broadcast', \App\Actions\Broadcast\Telegram::class)->name('broadcast.store');
             Route::get('/links', [\App\Http\Controllers\Admin\LinkController::class, 'index'])->name('link.index');
             Route::get('/setting', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('setting.index');
         });

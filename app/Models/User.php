@@ -17,9 +17,9 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
-    use HasTeams;
     use Notifiable;
-    use TwoFactorAuthenticatable;
+
+//    use TwoFactorAuthenticatable;
     use HasRoles;
 
     /**
@@ -100,5 +100,15 @@ class User extends Authenticatable
     public function submissions()
     {
         return $this->hasMany(AssignmentSubmission::class)->orderByDesc('created_at');
+    }
+
+    public function classrooms()
+    {
+        return $this->belongsToMany(Classroom::class, 'classroom_members', 'member_id', 'classroom_id');
+    }
+
+    protected function profilePhotoDisk()
+    {
+        return 'minio';
     }
 }

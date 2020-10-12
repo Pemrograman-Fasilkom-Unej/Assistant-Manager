@@ -24,7 +24,7 @@ class StartCommand extends Command
     public function handle()
     {
         $helloMessage = "Halo 👋 !\n" .
-            "Selamat datang di Assistant Manager Bot 🤖 !\n" .
+            "*Selamat datang di Assistant* Manager Bot 🤖 !\n" .
             "Sistem ini dibuat oleh Laboratorium Pemrograman Fakultas Ilmu Komputer Universitas Jember 🏫\n" .
             "Bot ini terintegrasi langsung dengan Assistant Manager pada " . env('APP_URL') . "\n";
 

@@ -30,6 +30,16 @@ class AssignmentRepository
         ]);
     }
 
+    public static function updateAssignment(Assignment $assignment, array $data)
+    {
+        $assignment->update([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'deadline' => Carbon::parse($data['deadline']),
+            'data_type' => implode('|', $data['formats'])
+        ]);
+    }
+
     public static function getAssistantAssignments($search = null, User $user = null)
     {
         if (is_null($user)) $user = Auth::user();
@@ -84,7 +94,7 @@ class AssignmentRepository
     {
         return $assignment->classroom
             ->members()
-            ->with('submissions', function($q) use ($assignment){
+            ->with('submissions', function ($q) use ($assignment) {
                 $q->where('assignment_id', $assignment->id);
             });
     }

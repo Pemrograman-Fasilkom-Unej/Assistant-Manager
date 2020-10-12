@@ -10,6 +10,11 @@
     <section class="section">
         <div class="section-header">
             <h1>{{ $assignment->title }}</h1>
+
+            <div class="section-header-breadcrumb">
+                <button class="btn text-right btn-primary" onclick="window.location = '{{ route('dashboard.admin.assignment.preview', $assignment) }}'">Preview</button>
+                <button class="btn text-right btn-warning" onclick="window.location = '{{ route('dashboard.admin.assignment.edit', $assignment) }}'">Edit</button>
+            </div>
         </div>
 
         <div class="section-body">

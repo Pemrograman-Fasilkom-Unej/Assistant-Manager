@@ -64,7 +64,7 @@
                                 <td>
                                     <a href="{{ route('dashboard.admin.assignment.show', $assignment) }}"
                                        class="btn btn-primary">Detail</a>
-                                    <a href="#" class="btn btn-warning">Edit</a>
+                                    <a href="{{ route('dashboard.admin.assignment.edit', $assignment) }}" class="btn btn-warning">Edit</a>
                                     <a href="#" class="btn btn-danger"
                                        wire:click="deleteAssignment({{ $assignment->id }})">Delete</a>
                                 </td>

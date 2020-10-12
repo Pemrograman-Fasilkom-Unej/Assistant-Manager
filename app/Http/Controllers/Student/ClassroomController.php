@@ -21,7 +21,8 @@ class ClassroomController extends Controller
         ]);
 
         $classroom = Classroom::where('token', $request->get('token'))->first();
-        $classroom->members()->attach(Auth::id());
+
+        $classroom->members()->sync(Auth::id(), false);
 
         return redirect()->back()->with('success', 'Class has been successfully added');
     }

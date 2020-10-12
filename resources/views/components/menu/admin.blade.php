@@ -14,6 +14,7 @@
     <li class="menu-header">Utility</li>
     <li class="nav-item">
         <a href="{{ route('dashboard.admin.link.index') }}" class="nav-link"><i class="fas fa-link"></i><span>Shortlink</span></a>
+        <a href="{{ route('dashboard.admin.broadcast.index') }}" class="nav-link"><i class="fas fa-bullhorn"></i><span>Broadcast</span></a>
         <a href="{{ route('dashboard.coming-soon') }}" class="nav-link"><i class="fas fa-calendar-check"></i><span>Calendar</span></a>
         <a href="{{ route('dashboard.coming-soon') }}" class="nav-link"><i class="fas fa-bookmark"></i><span>Ticket</span></a>
         <a href="{{ route('dashboard.admin.setting.index') }}" class="nav-link"><i class="fas fa-setting fa-cogs"></i><span>Settings</span></a>

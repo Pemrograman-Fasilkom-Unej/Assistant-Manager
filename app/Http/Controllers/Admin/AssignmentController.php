@@ -19,7 +19,18 @@ class AssignmentController extends Controller
         return view('dashboard.admin.assignment.create');
     }
 
-    public function show(Assignment $assignment){
+    public function show(Assignment $assignment)
+    {
         return view('dashboard.admin.assignment.show', compact('assignment'));
+    }
+
+    public function preview(Assignment $assignment)
+    {
+        return view('dashboard.admin.classroom.preview', compact('assignment'));
+    }
+
+    public function edit(Assignment $assignment)
+    {
+        return view('dashboard.admin.assignment.edit', compact('assignment'));
     }
 }

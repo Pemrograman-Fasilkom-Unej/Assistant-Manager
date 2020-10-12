@@ -41,9 +41,9 @@ class NewAssignmentNotification extends Notification
         $assignment = $this->assignment;
         $url = route('dashboard.student.assignment.show', $assignment);
 
-        $message = 'Halo! 👋 \n' .
-            'Selamat, kamu mendapat tugas '. $assignment->title .' di kelas ' . $assignment->classroom->title . ' dari ' . $assignment->user->name . ' ❤️ \n' .
-            'Silahkan kerjakan sebelum ' . $assignment->deadline->format('d F Y - H:i') . ' ⏳ ' .
+        $message = "Halo! 👋 \n" .
+            'Selamat, kamu mendapat tugas *'. $assignment->title .'* di kelas *' . $assignment->classroom->title . '* dari ' . $assignment->user->name . " ❤️ \n" .
+            'Silahkan kerjakan sebelum *' . $assignment->deadline->format('d F Y - H:i') . "* ⏳ \n" .
             'Good Luck ✨';
 
 

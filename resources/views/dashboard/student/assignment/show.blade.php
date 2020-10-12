@@ -34,6 +34,14 @@
                                     <b class="float-right">{{ $assignment->deadline->format('d F Y - H:i') }}</b>
                                 </li>
                                 <li>
+                                    <b>Format :</b>
+                                    @foreach(explode('|', $assignment->data_type) as $type)
+                                        <div class="badge badge-info float-right mr-1">
+                                            {{ $type }}
+                                        </div>
+                                    @endforeach
+                                </li>
+                                <li>
                                     <b>Status :</b>
                                     <div
                                         class="badge badge-{{ $assignment->submissionStatus(\Auth::id())['badge'] }} float-right">
@@ -93,6 +101,17 @@
                         </div>
                     </div>
                 @endif
+
+                <div class="col-lg-12 col-md-12 col-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Description</h4>
+                        </div>
+                        <div class="card-body">
+                            {!! $assignment->description !!}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
