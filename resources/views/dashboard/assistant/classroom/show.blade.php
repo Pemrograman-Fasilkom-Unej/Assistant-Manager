@@ -98,7 +98,7 @@
                                         <td>{{ $assignment->title }}</td>
                                         <td>{{ $assignment->deadline->format('d F Y - H:i') }}</td>
                                         <td>
-                                            <a href="{{ route('dashboard.student.assignment.show', $assignment) }}" class="btn btn-primary">
+                                            <a href="{{ route('dashboard.assistant.assignment.show', $assignment) }}" class="btn btn-primary">
                                                 Detail
                                             </a>
                                         </td>

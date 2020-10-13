@@ -41,11 +41,11 @@
                 @if(Auth::user()->hasRole('admin'))
                     <x-menu.admin/>
                 @endif
-                @if(Auth::user()->hasRole('assistant'))
-                    <x-menu.assistant/>
-                @endif
                 @if(Auth::user()->hasRole('student'))
                     <x-menu.student/>
+                @endif
+                @if(Auth::user()->hasRole('assistant'))
+                    <x-menu.assistant/>
                 @endif
             </aside>
         </div>

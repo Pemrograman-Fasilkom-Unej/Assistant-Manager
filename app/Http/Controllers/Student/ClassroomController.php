@@ -22,6 +22,10 @@ class ClassroomController extends Controller
 
         $classroom = Classroom::where('token', $request->get('token'))->first();
 
+        if($classroom->assistants->contains(Auth::id())){
+            return redirect()->back()->with('success', 'You already assistant at this class');
+        }
+
         $classroom->members()->sync(Auth::id(), false);
 
         return redirect()->back()->with('success', 'Class has been successfully added');

@@ -41,7 +41,7 @@ class Assignment extends Model
     public function getPrecentageSubmissionAttribute()
     {
         try {
-            return round($this->submissions()->count() * 100 / $this->classroom->members()->count());
+            return round($this->submissions->count() * 100 / $this->classroom->members->count());
         } catch (\Exception $exception) {
             return 100;
         }

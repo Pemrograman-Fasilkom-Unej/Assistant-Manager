@@ -90,10 +90,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/assignment', [\App\Http\Controllers\Assistant\AssignmentController::class, 'index'])->name('assignment.index');
             Route::get('/assignment/create', [\App\Http\Controllers\Assistant\AssignmentController::class, 'create'])->name('assignment.create');
             Route::post('/assignment', \App\Actions\Academic\CreateAssignment::class)->name('assignment.store');
-            Route::get('/assignment/{assignment:token}', [\App\Http\Controllers\Assistant\AssignmentController::class, 'index'])->name('assignment.show');
+            Route::get('/assignment/{assignment:token}', [\App\Http\Controllers\Assistant\AssignmentController::class, 'show'])->name('assignment.show');
             Route::delete('/assignment/{assignment:token}', \App\Actions\Academic\DeleteAssignment::class)->name('assignment.delete');
+            Route::get('/assignment/{assignment:token}/preview', [\App\Http\Controllers\Assistant\AssignmentController::class, 'preview'])->name('assignment.preview');
+            Route::get('/assignment/{assignment:token}/edit', [\App\Http\Controllers\Assistant\AssignmentController::class, 'edit'])->name('assignment.edit');
+            Route::patch('/assignment/{assignment:token}', \App\Actions\Academic\UpdateAssignment::class)->name('assignment.update');
 
             Route::get('/link', [\App\Http\Controllers\Assistant\LinkController::class, 'index'])->name('link.index');
+            Route::get('/broadcast', [\App\Http\Controllers\Assistant\BroadcastController::class, 'index'])->name('broadcast.index');
+            Route::post('/broadcast', \App\Actions\Broadcast\Telegram::class)->name('broadcast.store');
         });
 
         // Dashboard Student Controller
@@ -124,7 +129,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::get('/test', function () {
-    return \App\Models\Classroom::first()->schedule;
+    return \App\Models\Classroom::first()->assistants->contains(465) ? "T" : "F";
     $files = Storage::cloud()->files('asu');
     $zip = new \League\Flysystem\Filesystem(new \League\Flysystem\ZipArchive\ZipArchiveAdapter(public_path('downloadable/asd.zip')));
     foreach ($files as $file) {

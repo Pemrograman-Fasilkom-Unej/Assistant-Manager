@@ -31,7 +31,7 @@ class ProfileInformationCard extends Component
     public function save()
     {
         $this->validate([
-            'email' => 'required|email',
+            'email' => 'nullable|email',
             'avatar' => 'nullable|image|max:1024'
         ]);
 

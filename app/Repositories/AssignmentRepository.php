@@ -45,9 +45,9 @@ class AssignmentRepository
         if (is_null($user)) $user = Auth::user();
 
         if ($user->hasRole('admin')) {
-            $query = Assignment::query();
+            $query = Assignment::with('classroom', 'submissions');
         } else {
-            $query = Assignment::with('classroom')->whereHas('classroom', function ($classroom) use ($user) {
+            $query = Assignment::with('classroom', 'submissions')->whereHas('classroom', function ($classroom) use ($user) {
                 $classroom->whereHas('assistants', function ($assistants) use ($user) {
                     $assistants->where('assistant_id', $user->id);
                 });

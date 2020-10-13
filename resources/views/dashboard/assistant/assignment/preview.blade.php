@@ -1,26 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Assignment')
+@section('title', $assignment->title . ' - Assignment Detail')
 
 @push('styles')
-
+    {{--    <link rel="stylesheet" href="{{ asset('dist/css/dropzone.min.css') }}">--}}
 @endpush
 
 @section('content')
     <section class="section">
         <div class="section-header">
             <h1>{{ $assignment->title }}</h1>
-
-            <div class="section-header-breadcrumb">
-                <button class="btn text-right btn-primary"
-                        onclick="window.location = '{{ route('dashboard.assistant.assignment.preview', $assignment) }}'">
-                    Preview
-                </button>
-                <button class="btn text-right btn-warning"
-                        onclick="window.location = '{{ route('dashboard.assistant.assignment.edit', $assignment) }}'">
-                    Edit
-                </button>
-            </div>
         </div>
 
         <div class="section-body">
@@ -31,17 +20,25 @@
                     </div>
                 </div>
             </div>
-            @livewire('assignment-detail-stats-card', compact('assignment'))
 
-            @livewire('assignment-detail-statistic-card', compact('assignment'))
-
-            @livewire('assignment-detail-submission-table', compact('assignment'))
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Description</h4>
+                        </div>
+                        <div class="card-body">
+                            {!! $assignment->description !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
-    @livewire('assignment-detail-assign-score-modal', compact('assignment'))
 @endsection
 
 @push('scripts')
+    {{--    <script src="{{ asset('dist/js/dropzone.min.js') }}"></script>--}}
     <script>
         var d = new Date($('#timer-body').data('deadline'));
         var countDownDate = new Date(d).getTime();

@@ -55,10 +55,16 @@ class Classroom extends Model
         return $this->hasMany(Assignment::class);
     }
 
-    public function getScheduleAttribute(){
+    public function getScheduleAttribute()
+    {
         $time = explode(':', $this->class_time);
         $schedule = Carbon::now();
         $schedule = $schedule->dayOfWeek === $this->class_day ? $schedule : $schedule->next($this->class_day);
         return $schedule->addHours($time[0])->addMinutes($time[1]);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
     }
 }

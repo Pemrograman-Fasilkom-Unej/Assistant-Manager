@@ -9,7 +9,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Classroom</h1>
+            <h1>Assignments</h1>
 
             <div class="section-header-breadcrumb">
                 <button class="btn text-right btn-primary"
