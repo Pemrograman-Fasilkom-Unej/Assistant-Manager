@@ -38,7 +38,7 @@ class ResetPasswordCommand extends Command
             $this->replyWithMessage([
                 'text' => "Selamat 🎉🎉🎉 \n" .
                     "Password anda berhasil di reset! \n" .
-                    "Password anda yang baru adalah : **$pass**"
+                    "Password anda yang baru adalah : $pass"
             ]);
         } else {
             $this->replyWithMessage([

@@ -40,6 +40,7 @@ return [
             'commands'            => [
                 \App\Console\Commands\Telegram\StartCommand::class,
                 \App\Console\Commands\Telegram\RegisterCommand::class,
+                \App\Console\Commands\Telegram\ResetPasswordCommand::class,
                 //Acme\Project\Commands\MyTelegramBot\BotCommand::class
             ],
         ],
