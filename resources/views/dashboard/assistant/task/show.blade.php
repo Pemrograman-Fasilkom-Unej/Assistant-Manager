@@ -329,7 +329,7 @@
     @include('components.script-select2')
     <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
     <script src="{{ asset('dist/js/countdown.js') }}"></script>
-    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="{{ asset('assets/js/plugins/jquery.form.js') }}"></script>
     <script>
         $(document).ready(function () {
             $(function () {
