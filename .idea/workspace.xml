@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e9484ba5-fc74-41d2-855b-22d78b38a50c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/public/assets/js/plugins/jquery.form.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Assistant-Manager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Assistant-Manager.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/AssistantShortlink.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/AssistantShortlink.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/LinkController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/LinkController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/admin/task/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/admin/task/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/assistant/task/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/assistant/task/show.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +17,9 @@
   </component>
   <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
-    <execution />
+    <execution>
+      <executable path="composer" />
+    </execution>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -125,7 +129,6 @@
       <path value="$PROJECT_DIR$/vendor/yoeunes/toastr" />
       <path value="$PROJECT_DIR$/vendor/yajra/laravel-datatables-oracle" />
       <path value="$PROJECT_DIR$/vendor/fzaninotto/faker" />
-      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
       <path value="$PROJECT_DIR$/vendor/aws/aws-sdk-php" />
       <path value="$PROJECT_DIR$/vendor/coraxster/flysystem-aws-s3-v3-minio" />
       <path value="$PROJECT_DIR$/vendor/mtdowling/jmespath.php" />
@@ -139,6 +142,10 @@
       <path value="$PROJECT_DIR$/vendor/markbaker/matrix" />
       <path value="$PROJECT_DIR$/vendor/phpoffice/phpspreadsheet" />
       <path value="$PROJECT_DIR$/vendor/maatwebsite/excel" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php70" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
     </include_path>
   </component>
   <component name="ProjectId" id="1eJRAEYyiZqXT49hYrUOLghhItN" />
@@ -150,9 +157,11 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../praktikum" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -163,6 +172,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -183,6 +193,7 @@
       <method v="2" />
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -230,29 +241,25 @@
       <workItem from="1594037568143" duration="40000" />
       <workItem from="1594037634911" duration="344000" />
       <workItem from="1598432562163" duration="2216000" />
+      <workItem from="1624078772763" duration="440000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="341" y="141" key="SettingsEditor" timestamp="1598433841306">
-      <screen x="0" y="23" width="1680" height="961" />
-    </state>
-    <state x="341" y="141" key="SettingsEditor/0.23.1680.961@0.23.1680.961" timestamp="1598433841306" />
-    <state width="500" height="446" key="SwitcherDM" timestamp="1598434385238">
-      <screen x="0" y="23" width="1680" height="963" />
-    </state>
-    <state width="500" height="445" key="SwitcherDM/0.23.1680.961@0.23.1680.961" timestamp="1598433838527" />
-    <state width="500" height="446" key="SwitcherDM/0.23.1680.963@0.23.1680.963" timestamp="1598434385238" />
-    <state x="505" y="234" width="670" height="679" key="search.everywhere.popup" timestamp="1598432909428">
-      <screen x="0" y="23" width="1680" height="961" />
-    </state>
-    <state x="505" y="233" width="670" height="676" key="search.everywhere.popup/0.23.1680.958@0.23.1680.958" timestamp="1594037786224" />
-    <state x="505" y="234" width="670" height="679" key="search.everywhere.popup/0.23.1680.961@0.23.1680.961" timestamp="1598432909428" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

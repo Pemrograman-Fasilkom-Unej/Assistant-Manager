@@ -216,6 +216,7 @@ class TaskController extends Controller
      */
     public function downloadFile(TaskSubmission $submission)
     {
+        abort_unless(Auth::user()->can('view', $submission->task), 403);
         $download_url = $this->generateTemporaryUrl($submission->files);
         return Redirect::away($download_url);
     }
