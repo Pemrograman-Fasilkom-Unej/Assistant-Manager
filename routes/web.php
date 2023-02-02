@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
 
-Route::get('/home', function(){
-    if(Auth::user()->is('admin')){
+Route::get('/home', function () {
+    if (Auth::user()->is('admin')) {
         return redirect('/admin/dashboard');
     } else {
         return redirect('/assistant/dashboard');
@@ -26,8 +26,8 @@ Route::get('/home', function(){
 Auth::routes();
 Route::redirect('/register', '/');
 
-Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], function(){
-    Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:admin']], function(){
+Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], function () {
+    Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:admin']], function () {
         Route::get('assistants', 'AdminController@getAssistants')->name('assistant.index');
         Route::get('classes', 'AdminController@getClasses')->name('class.index');
         Route::get('classes/{class}', 'AdminController@getClassDetail')->name('class.detail');
@@ -39,7 +39,7 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], funct
         Route::get('links', 'AdminController@getLinks')->name('links');
     });
 
-    Route::group(['prefix' => 'assistant', 'as' => 'assistant.', 'middleware' => ['auth', 'role:assistant']], function(){
+    Route::group(['prefix' => 'assistant', 'as' => 'assistant.', 'middleware' => ['auth', 'role:assistant']], function () {
         Route::get('classes', 'AssistantController@getClasses')->name('class.index');
         Route::get('tasks', 'AssistantController@getTasks')->name('task.index');
         Route::get('task/student/info/{id}', 'AssistantController@getStudentInfo')->name('student.info');
@@ -48,13 +48,13 @@ Route::group(['prefix' => 'ajax', 'as' => 'ajax.', 'namespace' => 'Ajax'], funct
     });
 });
 
-Route::group(['prefix' => 'assistant', 'namespace' => 'Assistant', 'as' => 'assistant.', 'middleware' => ['auth', 'role:assistant']], function(){
+Route::group(['prefix' => 'assistant', 'namespace' => 'Assistant', 'as' => 'assistant.', 'middleware' => ['auth', 'role:assistant']], function () {
     Route::redirect('/', '/assistant/dashboard')->name('dashboard');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
-    Route::resource('/class', 'ClassController')->except([
-        'update', 'edit', 'create', 'store'
-    ]);
+    Route::resource('/class', 'ClassController');
+    Route::post('/class/enable', 'ClassController@enableClass')->name('class.enable');
+    Route::post('/class/disable', 'ClassController@disableClass')->name('class.disable');
     Route::post('/class/{class}/add-student', 'ClassController@addStudent')->name('class.add-student');
     Route::get('/class/{class}/{student}', 'ClassController@detailStudent')->name('class.student.detail');
 
@@ -77,10 +77,9 @@ Route::group(['prefix' => 'assistant', 'namespace' => 'Assistant', 'as' => 'assi
 
     Route::get('/profile', 'ProfileController@index')->name('profile.index');
     Route::patch('/profile', 'ProfileController@update')->name('profile.update');
-
 });
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:admin']], function(){
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:admin']], function () {
     Route::redirect('/', '/admin/dashboard');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     Route::resource('/class', 'ClassController');
@@ -113,11 +112,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.', 'mi
     Route::view('/note', 'coming-soon')->name('note.index');
 });
 
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function () {
     Route::get('/export/class/{id}', 'ExportController@exportClass')->name('class.export');
 });
 
 Route::get('/task/{token}', 'TaskController@show')->name('task.show');
 Route::post('/task/{token}', 'TaskController@uploadSubmission')->name('task.upload');
 Route::post('/task/{token}/check', 'TaskController@checkStudent')->name('task.check');
-

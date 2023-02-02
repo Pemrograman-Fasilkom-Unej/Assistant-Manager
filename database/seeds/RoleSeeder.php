@@ -19,7 +19,7 @@ class RoleSeeder extends Seeder
             [
                 'role' => 'assistant',
                 'title' => 'Assistant'
-            ]
+            ],
         ];
 
         \App\Role::insert($roles);

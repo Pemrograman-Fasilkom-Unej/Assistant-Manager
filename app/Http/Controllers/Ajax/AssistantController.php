@@ -15,7 +15,7 @@ class AssistantController extends Controller
 {
     public function getClasses(Request $request)
     {
-        $classes = Classes::whereStatus(1)->whereHas('assistants', function($q){
+        $classes = Classes::whereHas('assistants', function ($q) {
             $q->where('assistant_id', Auth::id());
         });
 
@@ -35,8 +35,15 @@ class AssistantController extends Controller
                 return $q->tasks->count();
             })
             ->addColumn('action', function ($q) {
+                if ($q->status === 0) {
+                    $status = "<button class='btn btn-success btn-sm has-ripple' onclick='enableClass($q->id)'>Aktifkan</button>";
+                } else {
+                    $status = "<button class='btn btn-danger btn-sm has-ripple' onclick='disableClass($q->id)'>Nonaktifkan</button>";
+                }
                 return "
                     <a class='btn btn-primary btn-sm has-ripple' href='" . route('assistant.class.show', $q) . "'>Detail</a>
+                    <a class='btn btn-info btn-sm has-ripple' href='" . route('assistant.class.edit', $q) . "'>Edit</a>
+                    $status
                 ";
             })
             ->make(true);
@@ -91,44 +98,44 @@ class AssistantController extends Controller
             ->addColumn('_nim', function ($submission) {
                 return '<div class="d-inline-block align-middle">
                             <div class="d-inline-block">
-                                <h6 class="m-b-0">'. $submission->student->nim .'</h6>
+                                <h6 class="m-b-0">' . $submission->student->nim . '</h6>
                             </div>
                         </div>';
             })
-            ->addColumn('_name', function($submission){
+            ->addColumn('_name', function ($submission) {
                 return
-                '<div class="d-inline-block align-middle">
+                    '<div class="d-inline-block align-middle">
                     <div class="d-inline-block">
-                        <h6 class="m-b-0">'. $submission->student->name .'</h6>
+                        <h6 class="m-b-0">' . $submission->student->name . '</h6>
                     </div>
                 </div>';
             })
-            ->addColumn('_file', function($submission){
-                if(!is_null($submission->files)){
+            ->addColumn('_file', function ($submission) {
+                if (!is_null($submission->files)) {
                     return
                         '<div class="overlay-edit">
-                            <a href="'. route('assistant.task.submission.download', $submission) .'" target="_blank"
+                            <a href="' . route('assistant.task.submission.download', $submission) . '" target="_blank"
                                 class="btn btn-sm btn-icon btn-success">
                                     <i class="feather icon-download"></i>
                             </a>
                         </div>';
                 }
             })
-            ->addColumn('_comment', function($submission){
+            ->addColumn('_comment', function ($submission) {
                 return $submission->comment ?? 'No comment';
             })
-            ->addColumn('_date', function($submission){
+            ->addColumn('_date', function ($submission) {
                 return $submission->created_at->format('F, d Y h:i A');
             })
-            ->addColumn('_score', function($submission){
+            ->addColumn('_score', function ($submission) {
                 return $submission->score ?? ' - ';
             })
-            ->addColumn('_action', function($submission){
-                if(is_null($submission->score)){
+            ->addColumn('_action', function ($submission) {
+                if (is_null($submission->score)) {
                     return
-                    '<div class="overlay-edit">
+                        '<div class="overlay-edit">
                         <button type="button" class="btn btn-sm btn-icon btn-success add-score-btn" data-toggle="modal"
-                            data-id="'. $submission->id .'" data-target="#score-modal">
+                            data-id="' . $submission->id . '" data-target="#score-modal">
                                 <i class="feather icon-check-circle"></i>
                         </button>
                     </div>';
@@ -136,7 +143,7 @@ class AssistantController extends Controller
                     return
                         '<div class="overlay-edit">
                             <button type="button" class="btn btn-sm btn-icon btn-primary edit-score-btn" data-toggle="modal"
-                                data-id="'. $submission->id .'" data-target="#score-modal">
+                                data-id="' . $submission->id . '" data-target="#score-modal">
                                     <i class="feather icon-edit"></i>
                             </button>
                         </div>';
